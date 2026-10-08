@@ -2,6 +2,8 @@
 
 Status: proposta para revisão. Escopo desta entrega: desenho e aceite; nenhuma autenticação, tabela ou policy implementada. Responsável pela decisão: mantenedor do projeto; revisão de segurança e provedor ainda pendentes.
 
+Atualização posterior ao PR #5: escolha do provedor delegada ao agente e primeiro módulo da API autorizado. [ADR 0006](../adr/0006-development-identity-provider.md) define Keycloak de desenvolvimento e validação de access tokens. BFF, sessão, membership e RLS desta RFC seguem propostos; não interpretar a autenticação da API como conclusão da vertical.
+
 ## Problema e aceite
 
 A fundação possui somente endpoints operacionais. A primeira vertical precisa identificar o ator, verificar sua associação e impedir acesso a dados de outra organização. Login bem-sucedido não demonstra autorização nem isolamento.

@@ -6,9 +6,9 @@ Plataforma B2B de inteligência sobre fontes fiscais, tributárias, trabalhistas
 
 Leia [índice](docs/README.md), [arquitetura](docs/architecture/overview.md), ADRs e documentos do contexto afetado. Preserve trabalho local e Git existente. Comece por status/diff, scripts, dependências e estado do ambiente. Registre plano proporcional, riscos e critérios de aceite antes de editar.
 
-Estado autorizado: documentação primeiro; fundação técnica por etapa. A primeira vertical de negócio exige confirmação explícita. Não implementar entidades de negócio, regras, importação ou tenancy funcional antes dessa confirmação. Não transformar proposta em decisão aprovada silenciosamente.
+Estado autorizado: documentação primeiro; fundação técnica por etapa. Após PR #5, o mantenedor delegou a escolha do provedor e o avanço do primeiro módulo de autenticação da API. Escopo desta etapa: Keycloak de desenvolvimento e validação de access tokens; ver [ADR 0006](docs/adr/0006-development-identity-provider.md). Membership, importação, regras e tenancy funcional permanecem pendentes de etapa própria. Não transformar proposta em decisão aprovada silenciosamente.
 
-Próxima etapa documentada: [RFC 0001](docs/rfc/0001-identity-membership-isolation.md), threat model e matriz de TDD de identidade/membership/isolamento. Status de proposta; provedor e implementação pendentes. Consulte o plano antes de iniciar código da vertical.
+Próxima etapa documentada: [RFC 0001](docs/rfc/0001-identity-membership-isolation.md), threat model e matriz de TDD de identidade/membership/isolamento. Provedor de desenvolvimento definido; sessão BFF, membership e isolamento ainda pendentes. Consulte o plano antes de estender código da vertical.
 
 ## Arquitetura e código
 
