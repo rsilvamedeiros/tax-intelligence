@@ -42,9 +42,9 @@ node scripts/smoke-identity-provider.mjs
 
 Console local: http://127.0.0.1:8080, administrador `local_admin` e senha do ambiente. Realm `tax-intelligence`, sem usuários importados. Crie somente usuário sintético no console. Realm já existente no volume não é atualizado pelo import; atualizar clientes explicitamente e preservar dados, sem remover volumes existentes para aplicar configuração. Usuários e senhas reais não fazem parte do setup.
 
-Para habilitar a API, exporte as quatro OIDC_* de [.env.example](../../.env.example) ou adicione-as ao .env local; todas são necessárias. Use issuer e callback em 127.0.0.1, sem alternar localhost. O client web usa code + PKCE S256; implicit, password grant e service accounts estão desabilitados. O callback `/api/auth/callback` ainda não está implementado: este setup não oferece login no navegador nesta entrega. Tokens não devem ser colados em issue, PR, terminal gravado ou log.
+Para habilitar a API, exporte as quatro OIDC_* de [.env.example](../../.env.example) ou adicione-as ao .env local; todas são necessárias. Use issuer e callback em 127.0.0.1, sem alternar localhost. O client web usa code + PKCE S256; implicit, password grant e service accounts estão desabilitados. O callback `/api/auth/callback` está implementado pelo BFF; configure as variáveis abaixo para login no navegador. Tokens não devem ser colados em issue, PR, terminal gravado ou log.
 
-Smoke do provedor verifica realm importado, discovery e chaves públicas; smoke de autenticação verifica o processo compilado da API com token sintético e JWKS local. Ambos são diferentes de uma jornada real de login, prevista na etapa BFF. Imagem Keycloak e realm são de desenvolvimento, sem configuração de produção. Sem Docker local, executar o smoke real do provedor no job CI `identity-provider` e registrar o limite local.
+Smoke do provedor verifica realm importado, discovery e chaves públicas; smoke de autenticação verifica o processo compilado da API com token sintético e JWKS local. A jornada real é executada separadamente por `pnpm test:e2e:auth`, com usuário sintético criado e removido automaticamente. Imagem Keycloak e realm são de desenvolvimento, sem configuração de produção. Sem Docker local, executar o fluxo real do provedor no job CI `identity-provider` e registrar o limite local.
 
 ## Diagnóstico de falhas
 
@@ -56,3 +56,19 @@ Smoke do provedor verifica realm importado, discovery e chaves públicas; smoke 
 - Hooks: Husky exige instalação de dependências; hooks locais são complementares ao CI, não fronteira de segurança.
 
 Configuração `.env` não é versionada. API lê `.env` da raiz nos scripts preparados; frontend usa API_BASE_URL do ambiente ou default local. Para mudar o upstream da web, exportar API_BASE_URL no shell antes de iniciar Next.
+
+## Sessões BFF
+
+Exporte as quatro OIDC_* e API_BASE_URL no shell, junto de BFF_APP_ORIGIN=http://127.0.0.1:3000 e BFF_DATABASE_URL apontando para banco local migrado. Configure BFF_SESSION_ENCRYPTION_KEY com 32 bytes aleatórios em hexadecimal, sem publicar a chave. Next não carrega o .env da raiz; alternativamente configure apps/web/.env.local, ignorado pelo Git. Todos os processos BFF precisam da mesma chave. Em produção, use credencial restrita a auth_bff; sem fallback para DATABASE_URL.
+
+No PowerShell, uma chave local pode ser gerada sem sa?da no terminal:
+
+```powershell
+$taskSessionKey = New-Object byte[] 32
+$taskRng = [Security.Cryptography.RandomNumberGenerator]::Create()
+$taskRng.GetBytes($taskSessionKey)
+$taskRng.Dispose()
+$env:BFF_SESSION_ENCRYPTION_KEY = ([BitConverter]::ToString($taskSessionKey)).Replace('-', '').ToLowerInvariant()
+```
+
+Aplique `pnpm db:migrate` com DATABASE_URL local explícita antes do uso. Para a jornada automatizada, use exclusivamente TEST_DATABASE_URL com nome de banco terminado em _test, Keycloak local em 8080 e KEYCLOAK_ADMIN_PASSWORD. Execute build e migration nesse banco isolado, depois `pnpm test:e2e:auth`. O runner gera sua própria chave e usuário temporários; não utiliza usuários reais. Portas 3000/3001 devem estar livres. [Contrato](../adr/0007-bff-session-storage.md) e [validação](bff-session-validation.md).
