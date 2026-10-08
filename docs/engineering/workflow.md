@@ -31,3 +31,5 @@ Aceite demonstrado; testes relevantes executados; lint, tipos e build aplicávei
 Severidades: critical = exposição/alteração de dados entre clientes; high = bypass de acesso, cálculo errado ou corrupção; medium = falha reproduzível sem essas consequências; low = melhoria justificada. IA não aprova código crítico nem substitui testes. Comentários cosméticos não bloqueiam merge.
 
 Sem credenciais disponíveis, preparar contrato do reviewer e execução manual; não afirmar revisão independente ou automação remota já ativa. [Playbook de IA](../ai/playbook.md).
+
+Antes de declarar o PR aprovado nos checks, consultar também checks de apps externos e commit statuses, além dos workflows Actions. Se um scanner apontar interpolação em vez de credencial, registrar a evidência e conferir o novo resultado; não suprimir automaticamente o alerta nem reescrever histórico publicado para obter aprovação.

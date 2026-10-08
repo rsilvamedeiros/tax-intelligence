@@ -34,3 +34,9 @@ Testes existentes do bootstrap foram escritos junto da preparação anterior e n
 - Dependência runtime js-yaml corrigida com override restrito; achado moderado dev-only de sprintf-js permanece registrado, sem supressão.
 
 Autorrevisão pelo agente autor; revisão humana pendente no PR. Não há autenticação, tenants funcionais, diagnóstico fiscal, audit trail de negócio ou integração homologada. Readiness sem banco é permitida apenas fora de produção; produção exige URL e origem HTTPS explícitas. Spans manuais são funcionais, mas propagação distribuída e backend de métricas seguem planejados. Axe cobre parte da acessibilidade; revisão manual ainda necessária antes de jornadas de negócio.
+
+## Correção do alerta externo de segredo
+
+O check GitGuardian do PR #2 apontou um Generic Password na linha 6 do Compose, no commit de persistência. A ocorrência é a expressão de interpolação com mensagem de erro, não uma senha literal: o valor vem de POSTGRES_PASSWORD no ambiente local. A mensagem foi removida, preservando a expressão obrigatória `${POSTGRES_PASSWORD:?}`; nenhuma credencial real identificada nessa ocorrência. Sem allowlist, supressão ou alteração do histórico publicado.
+
+Validação com Compose standalone 5.6.0 oficial, SHA256 verificado, sem iniciar containers: `config --quiet` rejeitou variável ausente e vazia (exit 1) e aceitou variável sintética preenchida (exit 0). O status externo após o push deve ser conferido separadamente: aprovação dos workflows Actions não implica aprovação do GitGuardian. Uma ocorrência histórica pode exigir classificação de falso positivo pelo responsável no painel GitGuardian; não declarar resolução antes de verificar o check.
