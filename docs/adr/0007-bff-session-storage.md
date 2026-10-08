@@ -17,6 +17,8 @@ Erros de callback/entrada inválida: 400; verificação/armazenamento indisponí
 
 ## Persistência e limite arquitetural
 
+Origem externa fixa no ambiente. Host recebido deve corresponder ao host/porta dessa origem; proxy preserva esse valor. Callback é construído na origem configurada, pois Next normaliza URLs locais. Origin do logout continua exata; forwarded headers não definem redirect nem confiança.
+
 PostgreSQL, schema técnico auth_bff, entradas por hash SHA-256 do cookie aleatório de 256 bits. Payload AES-256-GCM, chave de 32 bytes no ambiente BFF_SESSION_ENCRYPTION_KEY; identificador/kind vinculados por AAD. Tentativa contém state/nonce/verifier; sessão contém access token e identidade validada. DELETE RETURNING consome tentativa atomicamente, inclusive sob concorrência. Expiração persistida e limpeza de expirados ao criar entrada, com índice de expiração.
 
 Exceção deliberada à fronteira web: somente `apps/web/server/auth/runtime.ts`, marcado server-only, pode importar @tax/database para sessões técnicas. React e demais módulos web continuam proibidos de importar banco; nenhum dado de negócio ou tabela tenant-owned é consultado pelo BFF. Pool próprio via BFF_DATABASE_URL, sem fallback DATABASE_URL. Produção exige role limitada ao schema auth_bff, credencial distinta e chave em armazenamento de segredos; migrations continuam fora do startup.

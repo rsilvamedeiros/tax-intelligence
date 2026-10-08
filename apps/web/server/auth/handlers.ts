@@ -63,8 +63,12 @@ export function createAuthHandlers(dependencies: AuthDependencies) {
       },
       { status, headers },
     );
-  const validOrigin = (request: Request) =>
-    new URL(request.url).origin === origin;
+  const validOrigin = (request: Request) => {
+    const host = request.headers.get('host');
+    return host !== null
+      ? host === new URL(origin).host
+      : new URL(request.url).origin === origin;
+  };
   const activeSession = async (request: Request) => {
     const id = readCookie(request, 'tax_session');
     const data = id ? await store.read('session', id) : undefined;
@@ -132,7 +136,8 @@ export function createAuthHandlers(dependencies: AuthDependencies) {
         )
           return finish(failure(400));
         const exchangeStarted = Date.now();
-        const tokens = await protocol.exchange(url, attempt);
+        const callbackUrl = new URL(`/api/auth/callback${url.search}`, origin);
+        const tokens = await protocol.exchange(callbackUrl, attempt);
         const identity = authenticatedIdentitySchema.parse(
           await verifyAccess(tokens.accessToken),
         );

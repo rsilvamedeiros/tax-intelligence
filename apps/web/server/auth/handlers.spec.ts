@@ -30,7 +30,7 @@ describe('BFF login and session boundary', () => {
       async (state: string, nonce: string, verifier: string) =>
         `https://identity.example.test/auth?state=${state}&nonce=${nonce}&challenge=${verifier}`,
     ),
-    exchange: jest.fn(async () => ({
+    exchange: jest.fn(async (_url: URL, _attempt: Record<string, unknown>) => ({
       accessToken: 'sensitive-access-token',
       expiresIn: 300,
       subject: 'synthetic-subject',
@@ -92,6 +92,37 @@ describe('BFF login and session boundary', () => {
       ).status,
     ).toBe(400);
     expect(entries.size).toBe(0);
+  });
+  it('uses the configured callback origin when Next normalizes the request URL', async () => {
+    const start = await handlers.login(
+      new Request('http://localhost:3000/api/auth/login', {
+        headers: { host: 'app.example.test' },
+      }),
+    );
+    expect(start.status).toBe(302);
+    const cookie = start.headers.get('set-cookie')!.split(';')[0]!;
+    const state = new URL(start.headers.get('location')!).searchParams.get(
+      'state',
+    )!;
+    const response = await handlers.callback(
+      new Request(
+        `http://localhost:3000/api/auth/callback?code=synthetic&state=${state}`,
+        { headers: { host: 'app.example.test', cookie } },
+      ),
+    );
+    expect(response.status).toBe(303);
+    expect(protocol.exchange.mock.calls[0]?.[0].origin).toBe(
+      'https://app.example.test',
+    );
+  });
+  it('rejects an untrusted Host even when the internal URL matches', async () => {
+    expect(
+      (
+        await handlers.login(
+          req('/api/auth/login', { host: 'untrusted.invalid' }),
+        )
+      ).status,
+    ).toBe(400);
   });
   it('rejects callbacks without an attempt cookie', async () => {
     expect(
