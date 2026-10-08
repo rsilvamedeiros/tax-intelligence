@@ -1,0 +1,32 @@
+{
+  "name": "@tax/web",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "dev": "next dev --hostname 127.0.0.1",
+    "build": "next build",
+    "start": "next start --hostname 127.0.0.1",
+    "typecheck": "tsc --noEmit && tsc --noEmit -p tsconfig.cypress.json",
+    "test": "jest --config jest.config.cjs",
+    "test:coverage": "jest --config jest.config.cjs --coverage",
+    "test:e2e": "cypress run --browser chrome"
+  },
+  "dependencies": {
+    "next": "16.4.0",
+    "react": "19.3.0",
+    "react-dom": "19.3.0",
+    "@tax/contracts": "workspace:*",
+    "@tax/ui": "workspace:*"
+  },
+  "devDependencies": {
+    "@types/react": "19.3.0",
+    "@types/react-dom": "19.3.0",
+    "jest-environment-jsdom": "30.5.2",
+    "@testing-library/react": "16.3.3",
+    "@testing-library/jest-dom": "7.0.1",
+    "jest-axe": "11.0.0",
+    "@types/jest-axe": "3.5.9",
+    "cypress": "16.1.1",
+    "@tax/config": "workspace:*"
+  }
+}
