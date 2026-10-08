@@ -8,6 +8,8 @@ Registro de regra real: ID, referência normativa e trecho verificável, jurisdi
 
 ## Ordem de TDD proposta
 
+Preparação de identidade e isolamento detalhada na [RFC 0001](../rfc/0001-identity-membership-isolation.md), com [ameaças](../security/identity-tenancy-threat-model.md) e [casos de teste](../engineering/identity-tenancy-test-plan.md). Provedor e implementação ainda pendentes; testes desse plano não foram executados.
+
 1. Autorização: sem identidade rejeita; tenant não associado rejeita; escolha de tenant não é confiada ao payload.
 2. Domínio puro: entrada válida, negativa, overflow/precisão, total correspondente/divergente; sem banco.
 3. Aplicação: escopo obrigatório, deduplicação e mesmo comando produz resultado equivalente.

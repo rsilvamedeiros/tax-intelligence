@@ -8,6 +8,8 @@ Leia [índice](docs/README.md), [arquitetura](docs/architecture/overview.md), AD
 
 Estado autorizado: documentação primeiro; fundação técnica por etapa. A primeira vertical de negócio exige confirmação explícita. Não implementar entidades de negócio, regras, importação ou tenancy funcional antes dessa confirmação. Não transformar proposta em decisão aprovada silenciosamente.
 
+Próxima etapa documentada: [RFC 0001](docs/rfc/0001-identity-membership-isolation.md), threat model e matriz de TDD de identidade/membership/isolamento. Status de proposta; provedor e implementação pendentes. Consulte o plano antes de iniciar código da vertical.
+
 ## Arquitetura e código
 
 - Monólito modular; presentation → application → domain; infrastructure implementa portas. Domain independente de React, Nest e ORM.
