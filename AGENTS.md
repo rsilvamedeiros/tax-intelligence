@@ -6,14 +6,15 @@ Plataforma B2B de inteligência sobre fontes fiscais, tributárias, trabalhistas
 
 Leia [índice](docs/README.md), [arquitetura](docs/architecture/overview.md), ADRs e documentos do contexto afetado. Preserve trabalho local e Git existente. Comece por status/diff, scripts, dependências e estado do ambiente. Registre plano proporcional, riscos e critérios de aceite antes de editar.
 
-Estado autorizado: documentação primeiro; fundação técnica por etapa. Após PR #5, o mantenedor delegou a escolha do provedor e o avanço do primeiro módulo de autenticação da API. Escopo desta etapa: Keycloak de desenvolvimento e validação de access tokens; ver [ADR 0006](docs/adr/0006-development-identity-provider.md). Membership, importação, regras e tenancy funcional permanecem pendentes de etapa própria. Não transformar proposta em decisão aprovada silenciosamente.
+Estado autorizado: documentação primeiro; fundação técnica por etapa. Após PR #5, o mantenedor delegou a escolha do provedor e a autenticação da API, implementada no [ADR 0006](docs/adr/0006-development-identity-provider.md). Após PR #6, autorizou a etapa de login e sessões BFF. Membership, importação, regras e tenancy funcional permanecem pendentes de etapa própria. Não transformar proposta em decisão aprovada silenciosamente.
 
-Próxima etapa documentada: [RFC 0001](docs/rfc/0001-identity-membership-isolation.md), threat model e matriz de TDD de identidade/membership/isolamento. Provedor de desenvolvimento definido; sessão BFF, membership e isolamento ainda pendentes. Consulte o plano antes de estender código da vertical.
+Etapa atual: login e sessões BFF conforme ADR 0007. Membership e isolamento seguem pendentes; consultar [RFC 0001](docs/rfc/0001-identity-membership-isolation.md), threat model e matriz de TDD antes de estender código da vertical.
 
 ## Arquitetura e código
 
 - Monólito modular; presentation → application → domain; infrastructure implementa portas. Domain independente de React, Nest e ORM.
 - Web usa ui/contracts; API usa contracts/database; contratos não importam infraestrutura; contextos não acessam internals/tabelas de outros.
+- Exceção BFF autorizada no [ADR 0007](docs/adr/0007-bff-session-storage.md): somente apps/web/server/auth/runtime.ts, com server-only, acessa database para sessões técnicas via BFF_DATABASE_URL. React não acessa banco. Etapa atual inclui login, callback, sessão e logout; membership e tenancy seguem pendentes.
 - SOLID/KISS/DRY/YAGNI e DDD pragmático. Value objects e abstrações apenas com invariantes/consumidores reais.
 - Não usar any sem justificativa localizada, dependências circulares, regras fiscais em React, service mesh, Kubernetes, microfrontends ou microsserviços antecipados.
 - API /v1, validação runtime de transporte, erro padronizado e request ID. Dinheiro exato; regra real com fonte, vigência, jurisdição, versão e evidência.
