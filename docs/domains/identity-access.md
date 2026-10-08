@@ -16,6 +16,8 @@ Login → associação → verificação de ação. Interfaces: Provedor OIDC; O
 
 ## Riscos e limites
 
+O desenho de sessão, identidade estável e validação de tokens está proposto na [RFC 0001](../rfc/0001-identity-membership-isolation.md); implementação depende de provedor e aceite da etapa.
+
 Bypass de acesso, sessão obsoleta. Não possui documentos nem aceita tenant de payload.
 
 Critério para avançar: contrato, teste negativo do risco principal e autorização da etapa. Ver [mapa](context-map.md), [vertical](../roadmap/first-vertical.md) e [segurança](../security/security-model.md).
