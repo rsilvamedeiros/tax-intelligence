@@ -32,6 +32,8 @@ Sem segredos versionados, PII real em fixtures/prompts/logs, scraping autenticad
 
 Siga [workflow](docs/engineering/workflow.md). Commits por módulo/entrega coerente com mensagem curta em inglês: feat, fix, chore, docs ou test; sem corpo, descrição, assinatura de IA ou Co-Authored-By. Preserve user.name/user.email configurados. Não criar commits quebrados apenas para separar teste e implementação.
 
+Títulos e descrições de PR, além dos comentários de revisão publicados, em inglês. Descrições concisas: problema e resultado em uma ou duas frases, validação executada e riscos relevantes. Evitar histórico da conversa, listas repetidas e seções sem conteúdo aplicável. Documentação do produto e engenharia permanece em pt-BR.
+
 Autorização vigente: executar commits separados desta entrega após checks e revisão, incluindo AGENTS e skills; abrir PR conforme solicitado, com push apenas da branch correspondente. Não pedir novamente confirmação para esses commits. Autorizações futuras podem ajustar o fluxo. PR automático autorizado não significa merge automático. A etapa de negócio continua exigindo confirmação própria. Não fazer deploy, alterar segurança remota ou transmitir obrigação sem autorização específica. Não delegar para agentes sem autorização aplicável.
 
 Revisão: estática, segurança, arquitetura, IA e humana. IA reporta evidência e severidade; não aprova mudança crítica automaticamente. [DoR/DoD](docs/engineering/workflow.md) e template de PR devem ser observados. Não afirmar revisão independente quando só houve autorrevisão.
