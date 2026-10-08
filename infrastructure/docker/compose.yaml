@@ -3,7 +3,8 @@ services:
     image: postgres:17-alpine
     environment:
       POSTGRES_USER: tax_local
-      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:?Defina uma senha apenas local}
+      # Required from the local environment; no default credential.
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:?}
       POSTGRES_DB: tax_intelligence
     ports:
       - '127.0.0.1:5432:5432'
