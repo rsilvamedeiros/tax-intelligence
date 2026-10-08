@@ -16,7 +16,11 @@ Primeira execução remota detectou que Next normaliza URLs de loopback para loc
 
 ## Limites e revisão
 
-Verificações locais concluídas: 129 testes com cobertura (65 API, 12 contratos, 21 web, 31 núcleo BFF), 11 integrações PostgreSQL 18.1 e duas jornadas operacionais Cypress/Chrome. Typecheck, lint, build, smokes OTLP/autenticação, formato e links documentais passaram. Audit sem vulnerabilidade alta/crítica; permanece um alerta moderado em dependência de desenvolvimento já registrado na etapa anterior. O login real com Keycloak será validado no job remoto desta PR.
+CodeRabbit revisou o commit 13b68e6 e apontou três achados menores: pré-requisitos do ambiente, sessão expirada ao retornar à página e CSRF desatualizado após outro login. Pré-requisitos foram explicitados; dois testes reproduziram as falhas da UI antes da correção. A interface reconsulta ao ganhar foco/visibilidade e atualiza CSRF no recheck do logout.
+
+A segunda jornada remota foi cancelada por travamento do Cypress, sem declarar login aprovado. Credenciais são agora lidas dentro do contexto cy.origin, conforme [documentação oficial do Cypress](https://docs.cypress.io/api/commands/env). Checkpoints registram somente nomes fixos de etapas; screenshots sintéticos têm retenção de sete dias e a etapa possui timeout de quatro minutos. Conferir a execução posterior para o resultado real.
+
+Verificações locais concluídas: 131 testes com cobertura (65 API, 12 contratos, 23 web, 31 núcleo BFF), 11 integrações PostgreSQL 18.1 e duas jornadas operacionais Cypress/Chrome. Typecheck, lint, build, smokes OTLP/autenticação, formato e links documentais passaram. Audit sem vulnerabilidade alta/crítica; permanece um alerta moderado em dependência de desenvolvimento já registrado na etapa anterior. O login real com Keycloak será validado no job remoto desta PR.
 
 Sessão termina antes do access token, limitada a 299 segundos e descontando a latência da troca/verificação. O teste de atraso de cinco segundos falhou antes dessa correção e passou depois. A interface oferece login quando logout detecta sessão expirada, também com Red/Green observado. Refresh token não é persistido. Logout revoga somente a sessão BFF, sem encerrar SSO no provedor. Chave de criptografia consistente é obrigatória entre instâncias; alteração invalida os registros existentes. Endpoints retornam erros sanitizados e no-store; logs de requisições Next são desabilitados para evitar código na URL.
 
