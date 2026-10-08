@@ -50,7 +50,7 @@ async function waitFor(url) {
   }
   throw new Error('Authentication application startup timeout');
 }
-try {
+async function authorizeAdmin() {
   const response = await fetch(
     `${provider}/realms/master/protocol/openid-connect/token`,
     {
@@ -68,6 +68,9 @@ try {
   if (!response.ok)
     throw new Error('Local administrator authentication failed');
   adminToken = (await response.json()).access_token;
+}
+try {
+  await authorizeAdmin();
   const username = `synthetic-${randomBytes(8).toString('hex')}`;
   const password = randomBytes(32).toString('base64url');
   const created = await admin('users', {
@@ -129,6 +132,14 @@ try {
     waitFor('http://127.0.0.1:3001/v1/health/live'),
     waitFor('http://127.0.0.1:3000'),
   ]);
+  const initial = await fetch('http://127.0.0.1:3000/api/auth/session', {
+    signal: AbortSignal.timeout(3000),
+  });
+  assert.equal(
+    initial.status,
+    401,
+    'Configured BFF must reject an absent session with 401',
+  );
   delete process.env.ELECTRON_RUN_AS_NODE;
   const result = await webRequire('cypress').run({
     project: fileURLToPath(new URL('../apps/web/', import.meta.url)),
@@ -150,6 +161,7 @@ try {
   web?.kill();
   if (userId && adminToken) {
     try {
+      await authorizeAdmin();
       await admin(`users/${userId}`, { method: 'DELETE' });
     } catch {
       console.error('Synthetic identity cleanup failed.');
