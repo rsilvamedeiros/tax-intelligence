@@ -1,5 +1,29 @@
-import { healthResponseSchema, apiErrorSchema } from './index';
+import {
+  healthResponseSchema,
+  apiErrorSchema,
+  authenticatedIdentitySchema,
+} from './index';
 describe('Operational contracts', () => {
+  it('accepts only the minimal verified identity response', () => {
+    expect(
+      authenticatedIdentitySchema.parse({
+        issuer: 'https://identity.example.test/realms/synthetic',
+        subject: 'synthetic-subject',
+      }).subject,
+    ).toBe('synthetic-subject');
+  });
+  it.each([
+    { issuer: 'invalid', subject: 'synthetic-subject' },
+    { issuer: 'https://identity.example.test', subject: '' },
+    { issuer: 'https://identity.example.test', subject: 'x'.repeat(256) },
+    {
+      issuer: 'https://identity.example.test',
+      subject: 'synthetic',
+      token: 'synthetic-sentinel',
+    },
+  ])('rejects invalid identities and extra sensitive fields', (value) => {
+    expect(authenticatedIdentitySchema.safeParse(value).success).toBe(false);
+  });
   it('accepts a live health response', () => {
     expect(
       healthResponseSchema.parse({

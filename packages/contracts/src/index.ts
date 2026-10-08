@@ -18,3 +18,10 @@ export const apiErrorSchema = z
   })
   .strict();
 export type ApiError = z.infer<typeof apiErrorSchema>;
+export const authenticatedIdentitySchema = z
+  .object({
+    issuer: z.string().url().max(2048),
+    subject: z.string().min(1).max(255),
+  })
+  .strict();
+export type AuthenticatedIdentity = z.infer<typeof authenticatedIdentitySchema>;
