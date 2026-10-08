@@ -16,6 +16,8 @@ Selecionar organização → validar associação. Interfaces: Identity; todos o
 
 ## Riscos e limites
 
+Ownership de membership, autorização por ação, revogação concorrente e contexto transacional estão propostos na [RFC 0001](../rfc/0001-identity-membership-isolation.md), sem tabelas ou policies implementadas.
+
 Acesso cruzado, contexto de pool reutilizado. Não centralizar tabelas de domínio neste contexto.
 
 Critério para avançar: contrato, teste negativo do risco principal e autorização da etapa. Ver [mapa](context-map.md), [vertical](../roadmap/first-vertical.md) e [segurança](../security/security-model.md).

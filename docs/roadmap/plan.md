@@ -17,3 +17,5 @@ Sem datas prometidas; cada etapa depende do aceite da anterior. [Plano da inspe�
 | P3         | Worker/cache/analytics ampliado                   | Gargalo medido, não apenas previsão                                |
 
 Pendências para negócio: marca, ICP de clientes, regras e fontes reais, responsável tributário, identity provider, política de retenção, hospedagem/orçamento e operação. Nenhuma dessas pendências impede revisar documentação; algumas bloqueiam piloto com dados reais.
+
+Após a fundação e o padrão de PR dos PRs #1 a #4, a próxima entrega prepara [RFC 0001](../rfc/0001-identity-membership-isolation.md), [threat model](../security/identity-tenancy-threat-model.md) e [matriz de TDD](../engineering/identity-tenancy-test-plan.md). São propostas para revisão, sem autenticação/tenancy funcional. Próximo gate de implementação: provedor e contrato de sessão definidos, autorização específica e revisão dos negativos de segurança.

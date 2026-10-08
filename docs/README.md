@@ -23,6 +23,7 @@ Documentação primeiro; código avança por etapa com aceite, testes e revisão
 - [delivery](engineering/delivery.md)
 - [validation](engineering/validation.md)
 - [validação do bootstrap](engineering/bootstrap-validation.md)
+- [Plano de testes de identidade e isolamento](engineering/identity-tenancy-test-plan.md)
 
 ## Domínios
 
@@ -32,6 +33,7 @@ Documentação primeiro; código avança por etapa com aceite, testes e revisão
 
 - [feasibility](integrations/feasibility.md)
 - [security model](security/security-model.md)
+- [Threat model de identidade e isolamento](security/identity-tenancy-threat-model.md)
 - [playbook](ai/playbook.md)
 
 ## Decisões
@@ -42,6 +44,7 @@ Documentação primeiro; código avança por etapa com aceite, testes e revisão
 - [0004 ai and fiscal rules](adr/0004-ai-and-fiscal-rules.md)
 - [0005 toolchain do bootstrap](adr/0005-bootstrap-toolchain.md)
 - [process](rfc/process.md)
+- [RFC 0001: identidade, membership e isolamento](rfc/0001-identity-membership-isolation.md)
 
 ## Roadmap
 

@@ -15,6 +15,8 @@ Modelo de projeto inspirado em [OWASP ASVS](https://owasp.org/www-project-applic
 
 ## Identidade e RBAC propostos
 
+Desenho específico da primeira vertical: [RFC 0001](../rfc/0001-identity-membership-isolation.md), [threat model](identity-tenancy-threat-model.md) e [plano de testes](../engineering/identity-tenancy-test-plan.md). Controles propostos não representam autenticação ou RLS já implementados.
+
 Não há autenticação funcional nesta etapa. OIDC de provedor ainda não escolhido. Papéis propostos: organization_admin gere associações; analyst importa e investiga; reviewer registra parecer; viewer apenas lê resultados autorizados. Permissões verificadas no caso de uso, não somente na UI. Credencial de parceiro terá escopos explícitos, rotação e limite de taxa. Membership ativa determina tenant; header isolado não autoriza.
 
 ## LGPD e dados
