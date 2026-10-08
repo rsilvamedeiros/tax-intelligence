@@ -1,0 +1,57 @@
+describe('Real Keycloak BFF login', () => {
+  it('logs in through code and PKCE, enforces CSRF, and revokes the session', () => {
+    cy.visit('/');
+    cy.contains('a', 'Entrar').click();
+    cy.env<{ authUser: string; authPassword: string }>(
+      ['authUser', 'authPassword'],
+      { log: false },
+    ).then(({ authUser: username, authPassword: password }) => {
+      cy.origin(
+        'http://127.0.0.1:8080',
+        { args: { username, password } },
+        ({ username, password }) => {
+          cy.get('#username').type(username, { log: false });
+          cy.get('#password').type(password, { log: false });
+          cy.get('#kc-login').click();
+        },
+      );
+    });
+    cy.contains('Você está conectado').should('be.visible');
+    cy.getCookie('tax_session', { log: false }).then((cookie) => {
+      expect(cookie?.httpOnly).to.equal(true);
+      expect(cookie?.value).to.match(/^[A-Za-z0-9_-]{43}$/);
+    });
+    cy.request({ url: '/api/auth/session', log: false }).then(({ body }) => {
+      expect(Object.keys(body).sort()).to.deep.equal([
+        'authenticated',
+        'csrfToken',
+        'identity',
+      ]);
+      expect(body.identity.issuer).to.equal(
+        'http://127.0.0.1:8080/realms/tax-intelligence',
+      );
+    });
+    cy.request({
+      method: 'POST',
+      url: '/api/auth/logout',
+      headers: { Origin: 'http://127.0.0.1:3000', 'x-csrf-token': 'wrong' },
+      failOnStatusCode: false,
+      log: false,
+    })
+      .its('status')
+      .should('equal', 403);
+    cy.request({ url: '/api/auth/session', log: false })
+      .its('status')
+      .should('equal', 200);
+    cy.contains('button', 'Sair').click();
+    cy.contains('a', 'Entrar').should('be.visible');
+    cy.getCookie('tax_session', { log: false }).should('be.null');
+    cy.request({
+      url: '/api/auth/session',
+      failOnStatusCode: false,
+      log: false,
+    })
+      .its('status')
+      .should('equal', 401);
+  });
+});
