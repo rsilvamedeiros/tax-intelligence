@@ -109,6 +109,52 @@ describe('Accessible account session', () => {
       await screen.findByRole('link', { name: 'Entrar' }),
     ).toBeInTheDocument();
   });
+  it('rechecks an expired session when the page becomes active', async () => {
+    jest
+      .mocked(fetch)
+      .mockResolvedValueOnce({
+        ok: true,
+        status: 200,
+        json: async () => current,
+      } as Response)
+      .mockResolvedValueOnce({ ok: false, status: 401 } as Response);
+    render(<AuthPanel />);
+    await screen.findByRole('button', { name: 'Sair' });
+    fireEvent(window, new Event('focus'));
+    expect(
+      await screen.findByRole('link', { name: 'Entrar' }),
+    ).toBeInTheDocument();
+  });
+  it('refreshes CSRF after another login replaces the cookie', async () => {
+    const replaced = { ...current, csrfToken: 'y'.repeat(43) };
+    jest
+      .mocked(fetch)
+      .mockResolvedValueOnce({
+        ok: true,
+        status: 200,
+        json: async () => current,
+      } as Response)
+      .mockResolvedValueOnce({ ok: false, status: 403 } as Response)
+      .mockResolvedValueOnce({
+        ok: true,
+        status: 200,
+        json: async () => replaced,
+      } as Response)
+      .mockResolvedValueOnce({ ok: true, status: 204 } as Response);
+    render(<AuthPanel />);
+    fireEvent.click(await screen.findByRole('button', { name: 'Sair' }));
+    await screen.findByRole('alert');
+    fireEvent.click(screen.getByRole('button', { name: 'Sair' }));
+    expect(
+      await screen.findByRole('link', { name: 'Entrar' }),
+    ).toBeInTheDocument();
+    expect(fetch).toHaveBeenLastCalledWith(
+      '/api/auth/logout',
+      expect.objectContaining({
+        headers: { 'x-csrf-token': replaced.csrfToken },
+      }),
+    );
+  });
   it('has no automatically detectable accessibility violations', async () => {
     jest
       .mocked(fetch)

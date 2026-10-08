@@ -1,5 +1,5 @@
 'use client';
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { browserSessionSchema } from '@tax/contracts';
 export function AuthPanel() {
   const [state, setState] = useState<
@@ -9,8 +9,22 @@ export function AuthPanel() {
   const [retry, setRetry] = useState(0);
   const [leaving, setLeaving] = useState(false);
   const [logoutError, setLogoutError] = useState(false);
+  const pendingSession = useRef<AbortController | null>(null);
+  useEffect(() => {
+    const recheck = () => {
+      if (!leaving && document.visibilityState === 'visible')
+        setRetry((value) => value + 1);
+    };
+    window.addEventListener('focus', recheck);
+    document.addEventListener('visibilitychange', recheck);
+    return () => {
+      window.removeEventListener('focus', recheck);
+      document.removeEventListener('visibilitychange', recheck);
+    };
+  }, [leaving]);
   useEffect(() => {
     const abort = new AbortController();
+    pendingSession.current = abort;
     void fetch('/api/auth/session', { cache: 'no-store', signal: abort.signal })
       .then(async (response) => {
         if (response.status === 401) {
@@ -30,6 +44,7 @@ export function AuthPanel() {
     return () => abort.abort();
   }, [retry]);
   async function logout() {
+    pendingSession.current?.abort();
     setLeaving(true);
     setLogoutError(false);
     try {
@@ -41,7 +56,11 @@ export function AuthPanel() {
       if (!response.ok) {
         if (response.status !== 403) throw new Error('Logout unavailable');
         const current = await fetch('/api/auth/session', { cache: 'no-store' });
-        if (current.status !== 401) throw new Error('Logout unavailable');
+        if (current.status !== 401) {
+          if (current.ok)
+            setCsrf(browserSessionSchema.parse(await current.json()).csrfToken);
+          throw new Error('Logout unavailable');
+        }
       }
       setCsrf('');
       setState('anonymous');
