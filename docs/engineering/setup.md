@@ -1,8 +1,8 @@
 # Setup local e troubleshooting
 
-Pré-requisitos da stack: Node 24 LTS, pnpm 10.24.0 e Git. PostgreSQL 17 para integração; Docker opcional para desenvolvimento, necessário apenas se optar por Compose. O bootstrap está preparado, mas ainda não passou por aceite técnico.
+Pré-requisitos da stack: Node 24 LTS, pnpm 10.24.0 e Git; Chrome para E2E. PostgreSQL 17 para integração; Docker opcional para desenvolvimento, necessário apenas se optar por Compose. Binários locais PostgreSQL também podem criar instância de teste independente; testes locais desta etapa usaram PostgreSQL 18.1. [Resultados técnicos](bootstrap-validation.md).
 
-Após aceite da etapa técnica:
+Comandos da fundação:
 
 ```powershell
 pnpm install --frozen-lockfile
@@ -10,6 +10,8 @@ Copy-Item .env.example .env
 pnpm build
 pnpm dev
 ```
+
+Verificações: `pnpm lint`, `pnpm typecheck`, `pnpm test:coverage`, `pnpm build`, `pnpm test:smoke`, `pnpm test:e2e`. Smoke valida exporter OTLP contra um collector local temporário. E2E usa Chrome por padrão; `E2E_BROWSER` pode selecionar outro browser instalado. E2E não lê .env nem usa DATABASE_URL: exporte TEST_DATABASE_URL se quiser readiness com banco real. Sem essa variável, usa o modo bootstrap sem banco. Migração e integração exigem build de database; não usam banco de produção.
 
 Web: http://127.0.0.1:3000. API: http://127.0.0.1:3001/v1/health/live. Swagger local: http://127.0.0.1:3001/docs. Não usar esses endereços como integração governamental.
 

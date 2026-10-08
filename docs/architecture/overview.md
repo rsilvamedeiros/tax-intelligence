@@ -40,4 +40,4 @@ Domain não importa Nest, ORM, React ou transporte. Application define portas qu
 
 ## Estado concreto
 
-Apenas endpoints operacionais e tela de disponibilidade estão em preparação. Não há implementação de identity, tenancy, importação, diagnóstico, auditoria de negócio ou autorização. A separação de camadas será materializada por caso de uso, não por diretórios vazios. [Mapa de contextos](../domains/context-map.md), [contratos](api.md), [persistência](persistence.md), [evolução](evolution.md).
+Endpoints operacionais e tela de disponibilidade estão implementados com testes iniciais. Não há implementação de identity, tenancy, importação, diagnóstico, auditoria de negócio ou autorização. A separação de camadas será materializada por caso de uso, não por diretórios vazios. [Evidências técnicas](../engineering/bootstrap-validation.md), [toolchain](../adr/0005-bootstrap-toolchain.md), [mapa de contextos](../domains/context-map.md), [contratos](api.md), [persistência](persistence.md), [evolução](evolution.md).
