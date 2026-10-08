@@ -12,6 +12,10 @@ Autorização vigente do usuário: fazer commits separados desta entrega, inclui
 
 Agrupamento sugerido da documentação para revisão: `docs: define product scope` (produto/roadmap), `docs: define platform architecture` (contextos/ADRs/integrações), `docs: establish engineering workflow` (TDD/segurança/entrega), `docs: add agent engineering skills` (AGENTS/playbook/skills) e `docs: connect foundation documentation` (índices/guias/templates/evidências). Validar o conjunto do PR após esses commits; não misturar apps, dependências ou migrations nesses grupos. O validador documental pode acompanhar o último grupo com `chore: add documentation validation`.
 
+## Descrições de PR
+
+Títulos, descrições de PR e comentários de revisão publicados devem ser escritos em inglês. Descrições curtas: problema e resultado em uma ou duas frases, checks realmente executados e riscos relevantes. Usar o [template](../../.github/pull_request_template.md) proporcionalmente à mudança, removendo seções sem conteúdo aplicável. Evitar histórico da conversa, repetição e checklists genéricos no corpo do PR. A documentação do repositório continua em pt-BR.
+
 ## Definition of Ready
 
 Domínio e owner identificados; exemplo observável; critérios de aceite, autorização e riscos claros; contrato e fonte normativa quando pertinentes; dados sintéticos e estratégia de teste disponíveis; dependências externas explicitadas.
