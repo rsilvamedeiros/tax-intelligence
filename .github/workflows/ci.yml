@@ -125,6 +125,30 @@ jobs:
       - run: pnpm install --frozen-lockfile --ignore-scripts
       - run: pnpm audit:dependencies
 
+  identity-provider:
+    runs-on: ubuntu-latest
+    timeout-minutes: 8
+    steps:
+      - uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803 # v6
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@249970729cb0ef3589644e2896645e5dc5ba9c38 # v6
+        with:
+          node-version: '24'
+      - name: Generate ephemeral development credentials
+        shell: bash
+        run: |
+          task_identity_password=$(openssl rand -hex 32)
+          echo "::add-mask::$task_identity_password"
+          printf 'KEYCLOAK_ADMIN_PASSWORD=%s\nPOSTGRES_PASSWORD=%s\n' "$task_identity_password" "$task_identity_password" >> "$GITHUB_ENV"
+      - name: Start development identity provider
+        run: docker compose -f infrastructure/docker/compose.yaml --profile identity up -d identity
+      - name: Validate imported realm and signing metadata
+        run: node scripts/smoke-identity-provider.mjs
+      - name: Stop development identity provider
+        if: always()
+        run: docker compose -f infrastructure/docker/compose.yaml --profile identity down --volumes
+
   secret-scan:
     runs-on: ubuntu-latest
     timeout-minutes: 5
