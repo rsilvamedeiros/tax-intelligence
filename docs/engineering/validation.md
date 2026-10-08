@@ -12,6 +12,10 @@ Preparadas: visão/MVP/NFRs, arquitetura, quatro ADRs, onze contextos, matriz de
 | ESLint em `scripts/validate-docs.mjs --max-warnings=0`      | Aprovado; verificação restrita ao validador documental                                                            |
 | `git diff --check`                                          | Aprovado para alterações rastreadas; arquivos novos ainda não staged                                              |
 
+Na preparação dos commits, `git diff --cached --check` também passou em cada grupo, incluindo os arquivos novos. Hooks locais executaram formatação/lint dos arquivos staged e Commitlint. O workflow documental foi parseado como YAML; permissões `contents: read` e comando do validador foram conferidos. Resultado do Actions remoto depende da abertura do PR e não é presumido.
+
+Uma cópia isolada da árvore staged, exportada por `git archive`, passou no validador documental, Prettier e verificador das 16 skills. Isso confirma que os arquivos destinados ao PR não dependem dos apps, dependências ou documentos locais não versionados para essas verificações.
+
 O validador detectou inicialmente links para este registro antes de o arquivo existir; após sua criação, todos os destinos internos passaram. PyYAML foi instalado somente em `.local/python-libs` para executar o verificador de skills, sem modificar dependências do produto.
 
 Fontes externas foram consultadas para formato de skills, ciclo Node e mapeamento inicial de serviços oficiais; consulta documental não significa homologação de integração. Diagramas Mermaid foram revisados como texto, sem renderização automatizada nesta etapa.

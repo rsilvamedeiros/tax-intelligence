@@ -1,0 +1,24 @@
+name: Entrega por etapa
+description: Definir contexto, aceite e validação de uma entrega.
+title: '[Task] '
+body:
+  - type: textarea
+    id: context
+    attributes:
+      label: Contexto, módulo e problema
+    validations:
+      required: true
+  - type: textarea
+    id: acceptance
+    attributes:
+      label: Critérios de aceite observáveis
+    validations:
+      required: true
+  - type: textarea
+    id: risks
+    attributes:
+      label: Riscos, autorização e dependências
+  - type: textarea
+    id: tests
+    attributes:
+      label: Estratégia TDD, testes e evidências

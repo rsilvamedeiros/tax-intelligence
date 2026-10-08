@@ -1,0 +1,55 @@
+# Documentação TAX INTELLIGENCE
+
+Documentação primeiro; código avança por etapa com aceite, testes e revisão. **Decisão registrada** é escolha técnica desta etapa; **proposta** aguarda avaliação/autorização; **hipótese** precisa de evidência; **pendência** ainda sem resolução. Nenhum estado equivale a aprovação de produção.
+
+## Produto
+
+- [strategy](product/strategy.md)
+
+## Arquitetura
+
+- [overview](architecture/overview.md)
+- [api](architecture/api.md)
+- [frontend](architecture/frontend.md)
+- [persistence](architecture/persistence.md)
+- [evolution](architecture/evolution.md)
+
+## Engenharia
+
+- [repository assessment](engineering/repository-assessment.md)
+- [workflow](engineering/workflow.md)
+- [testing](engineering/testing.md)
+- [setup](engineering/setup.md)
+- [delivery](engineering/delivery.md)
+- [validation](engineering/validation.md)
+
+## Domínios
+
+- [context map](domains/context-map.md)
+
+## Integrações, segurança e IA
+
+- [feasibility](integrations/feasibility.md)
+- [security model](security/security-model.md)
+- [playbook](ai/playbook.md)
+
+## Decisões
+
+- [0001 modular monolith](adr/0001-modular-monolith.md)
+- [0002 postgresql drizzle](adr/0002-postgresql-drizzle.md)
+- [0003 tenant isolation](adr/0003-tenant-isolation.md)
+- [0004 ai and fiscal rules](adr/0004-ai-and-fiscal-rules.md)
+- [process](rfc/process.md)
+
+## Roadmap
+
+- [plan](roadmap/plan.md)
+- [first vertical](roadmap/first-vertical.md)
+
+## Operação e agentes
+
+- [AGENTS](../AGENTS.md) e [contribuição](../CONTRIBUTING.md)
+- [Skills e política de IA](ai/playbook.md)
+- [Observabilidade](../infrastructure/observability/README.md)
+- [Planejamento Terraform](../infrastructure/terraform/README.md)
+- [Reporte de segurança](../SECURITY.md)
