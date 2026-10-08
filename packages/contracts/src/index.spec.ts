@@ -2,8 +2,27 @@ import {
   healthResponseSchema,
   apiErrorSchema,
   authenticatedIdentitySchema,
+  browserSessionSchema,
 } from './index';
 describe('Operational contracts', () => {
+  it('allows only minimal browser session fields and a valid CSRF token', () => {
+    const session = {
+      authenticated: true,
+      identity: {
+        issuer: 'https://identity.example.test',
+        subject: 'synthetic',
+      },
+      csrfToken: 'x'.repeat(43),
+    };
+    expect(browserSessionSchema.safeParse(session).success).toBe(true);
+    for (const value of [
+      { ...session, accessToken: 'synthetic' },
+      { ...session, csrfToken: 'invalid' },
+      { ...session, authenticated: false },
+    ]) {
+      expect(browserSessionSchema.safeParse(value).success).toBe(false);
+    }
+  });
   it('accepts only the minimal verified identity response', () => {
     expect(
       authenticatedIdentitySchema.parse({
