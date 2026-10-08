@@ -34,7 +34,11 @@
         "OIDC_ISSUER",
         "OIDC_JWKS_URL",
         "OIDC_AUDIENCE",
-        "OIDC_CLIENT_ID"
+        "OIDC_CLIENT_ID",
+        "BFF_APP_ORIGIN",
+        "BFF_DATABASE_URL",
+        "BFF_SESSION_ENCRYPTION_KEY",
+        "API_BASE_URL"
       ],
       "dependsOn": ["^build"],
       "cache": false,

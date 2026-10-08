@@ -76,4 +76,13 @@ export default tseslint.config(
       ],
     },
   },
+  {
+    files: ['apps/web/server/auth/runtime.ts'],
+    rules: {
+      'no-restricted-imports': [
+        'error',
+        { patterns: ['@nestjs/*', 'pg', 'drizzle-orm'] },
+      ],
+    },
+  },
 );
