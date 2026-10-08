@@ -2,7 +2,7 @@
 
 Base: `/v1`; versão do contrato independente da versão do pacote. Swagger em desenvolvimento, não publicado por padrão em produção. Contratos compartilhados em `packages/contracts`; schemas runtime devem rejeitar campos inesperados. Mudanças incompatíveis exigem nova versão ou janela de migração documentada.
 
-## Fronteira operacional em preparação
+## Fronteira operacional implementada
 
 | Endpoint             | Resultado                             | Autorização                                         |
 | -------------------- | ------------------------------------- | --------------------------------------------------- |

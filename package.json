@@ -1,0 +1,67 @@
+{
+  "name": "tax-intelligence",
+  "version": "0.1.0",
+  "private": true,
+  "packageManager": "pnpm@10.24.0",
+  "engines": {
+    "node": ">=24 <25",
+    "pnpm": ">=10 <11"
+  },
+  "scripts": {
+    "dev": "turbo dev",
+    "lint": "eslint . --max-warnings=0",
+    "format": "prettier --write .",
+    "format:check": "prettier --check .",
+    "typecheck": "turbo typecheck",
+    "test": "turbo test",
+    "test:coverage": "turbo test:coverage",
+    "test:integration": "turbo test:integration --filter=@tax/database",
+    "test:e2e": "node scripts/run-e2e.mjs",
+    "test:smoke": "node scripts/smoke-telemetry.mjs",
+    "build": "turbo build",
+    "db:migrate": "pnpm --filter @tax/database migrate",
+    "audit:dependencies": "pnpm audit --audit-level=high",
+    "validate:docs": "node scripts/validate-docs.mjs",
+    "prepare": "husky"
+  },
+  "devDependencies": {
+    "turbo": "2.11.7",
+    "prettier": "3.9.9",
+    "typescript-eslint": "8.71.1",
+    "husky": "9.1.7",
+    "lint-staged": "17.6.0",
+    "@commitlint/cli": "21.2.3",
+    "@commitlint/config-conventional": "21.2.3",
+    "jest": "30.5.2",
+    "@types/jest": "30.0.0",
+    "@swc/core": "1.16.13",
+    "@swc/jest": "0.2.39",
+    "eslint-plugin-react-hooks": "7.1.1",
+    "typescript": "5.9.3",
+    "eslint": "10.12.0",
+    "@types/node": "24.19.1"
+  },
+  "lint-staged": {
+    "*.{ts,tsx,js,mjs,cjs}": [
+      "eslint --fix",
+      "prettier --write"
+    ],
+    "*.{json,yaml,yml,md,css}": "prettier --write"
+  },
+  "pnpm": {
+    "overrides": {
+      "@nestjs/swagger>js-yaml": "5.4.1"
+    },
+    "onlyBuiltDependencies": [
+      "@nestjs/core",
+      "@swc/core",
+      "cypress",
+      "unrs-resolver"
+    ],
+    "ignoredBuiltDependencies": [
+      "@parcel/watcher",
+      "@scarf/scarf",
+      "protobufjs"
+    ]
+  }
+}

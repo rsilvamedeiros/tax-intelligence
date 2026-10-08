@@ -22,6 +22,7 @@ Documentação primeiro; código avança por etapa com aceite, testes e revisão
 - [setup](engineering/setup.md)
 - [delivery](engineering/delivery.md)
 - [validation](engineering/validation.md)
+- [validação do bootstrap](engineering/bootstrap-validation.md)
 
 ## Domínios
 
@@ -39,6 +40,7 @@ Documentação primeiro; código avança por etapa com aceite, testes e revisão
 - [0002 postgresql drizzle](adr/0002-postgresql-drizzle.md)
 - [0003 tenant isolation](adr/0003-tenant-isolation.md)
 - [0004 ai and fiscal rules](adr/0004-ai-and-fiscal-rules.md)
+- [0005 toolchain do bootstrap](adr/0005-bootstrap-toolchain.md)
 - [process](rfc/process.md)
 
 ## Roadmap

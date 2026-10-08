@@ -1,0 +1,12 @@
+{
+  "extends": "../../packages/config/tsconfig.base.json",
+  "compilerOptions": {
+    "noEmit": true,
+    "declaration": false,
+    "module": "esnext",
+    "moduleResolution": "bundler",
+    "types": ["cypress", "node"],
+    "lib": ["es2022", "dom"]
+  },
+  "include": ["cypress.config.ts", "cypress/**/*.ts"]
+}

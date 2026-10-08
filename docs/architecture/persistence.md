@@ -2,7 +2,7 @@
 
 PostgreSQL como fonte transacional; Drizzle selecionado para consultas tipadas e SQL explícito ([ADR 0002](../adr/0002-postgresql-drizzle.md)). MongoDB não adotado: documentos brutos podem iniciar em JSONB quando houver necessidade aprovada. Redis/BullMQ dependem de cache medido ou trabalhos que excedam o orçamento de uma requisição.
 
-Migration inicial proposta cria apenas schema `platform` e journal técnico do migrador; sem tabelas de negócio. Aplicar migrations por comando separado, nunca implicitamente ao iniciar API. Não editar migrations aplicadas; mudanças aditivas primeiro, backfill controlado e remoção em release posterior. Credencial de migration deve ser distinta da aplicação em produção.
+Migration inicial cria apenas schema `platform` e journal técnico do migrador; sem tabelas de negócio. Aplicar migrations por comando separado, nunca implicitamente ao iniciar API. Não editar migrations aplicadas; mudanças aditivas primeiro, backfill controlado e remoção em release posterior. Credencial de migration deve ser distinta da aplicação em produção.
 
 ## Modelo proposto da primeira vertical
 

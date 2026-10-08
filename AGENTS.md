@@ -1,6 +1,6 @@
 # TAX INTELLIGENCE — instruções do repositório
 
-Plataforma B2B de inteligência sobre fontes fiscais, tributárias, trabalhistas e financeiras. Documentação em pt-BR; código e identificadores em inglês. Base: pnpm/Turborepo, Node 24 LTS, Next.js/React, NestJS, TypeScript strict, PostgreSQL/Drizzle. Stack registrada, bootstrap ainda em revisão. Sem ERP novo ou cálculo fiscal inventado.
+Plataforma B2B de inteligência sobre fontes fiscais, tributárias, trabalhistas e financeiras. Documentação em pt-BR; código e identificadores em inglês. Base: pnpm/Turborepo, Node 24 LTS, Next.js/React, NestJS 11, TypeScript strict, PostgreSQL/Drizzle. Fundação operacional com endpoints de health e testes; veja [validação técnica](docs/engineering/bootstrap-validation.md). Sem ERP novo ou cálculo fiscal inventado.
 
 ## Contexto obrigatório
 
@@ -22,7 +22,7 @@ Entenda tarefa → identifique contexto → consulte docs/ADRs → planeje aceit
 
 Siga [TDD](docs/engineering/testing.md). Não afirmar TDD se testes foram escritos depois da implementação. Não remover teste/reduzir cobertura para passar. Testes de persistência usam PostgreSQL real isolado via TEST_DATABASE_URL; mocks só nas fronteiras apropriadas. Dados sintéticos. Testes negativos de autorização/tenant são bloqueantes quando o domínio for implementado. Documentação é validada por links, formato e coerência, sem testes artificiais de conteúdo textual.
 
-Comandos da fundação preparada: `pnpm lint`, `pnpm typecheck`, `pnpm test`, `pnpm test:coverage`, `pnpm test:integration`, `pnpm build`, `pnpm test:e2e`, `pnpm format:check`, `pnpm audit:dependencies`. Validação documental independente: `node scripts/validate-docs.mjs`. Antes de executar, confira se ambiente e scripts estão disponíveis; falha/bloqueio deve constar no relatório. Nunca declarar aprovação sem execução.
+Comandos: `pnpm lint`, `pnpm typecheck`, `pnpm test`, `pnpm test:coverage`, `pnpm test:integration`, `pnpm build`, `pnpm test:smoke`, `pnpm test:e2e`, `pnpm format:check`, `pnpm audit:dependencies`. Integração exige TEST_DATABASE_URL; E2E usa apenas essa URL e nunca .env/DATABASE_URL. Smoke e E2E exigem build prévio; Chrome é o browser padrão. Validação documental independente: `node scripts/validate-docs.mjs`. Antes de executar, confira se ambiente e scripts estão disponíveis; falha/bloqueio deve constar no relatório. Nunca declarar aprovação sem execução.
 
 ## Segurança e IA
 
