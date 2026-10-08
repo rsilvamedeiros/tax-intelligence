@@ -1,0 +1,24 @@
+{
+  "name": "@tax/database",
+  "version": "0.1.0",
+  "private": true,
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "build": "tsc -p tsconfig.json",
+    "typecheck": "tsc --noEmit -p tsconfig.json",
+    "migrate": "node dist/migrate.js",
+    "test:integration": "jest --config jest.config.cjs --runInBand"
+  },
+  "devDependencies": {
+    "@tax/config": "workspace:*",
+    "@types/pg": "8.23.1"
+  },
+  "dependencies": {
+    "pg": "8.23.1",
+    "drizzle-orm": "0.45.4"
+  }
+}
