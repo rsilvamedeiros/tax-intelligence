@@ -25,3 +25,10 @@ export const authenticatedIdentitySchema = z
   })
   .strict();
 export type AuthenticatedIdentity = z.infer<typeof authenticatedIdentitySchema>;
+export const browserSessionSchema = z
+  .object({
+    authenticated: z.literal(true),
+    identity: authenticatedIdentitySchema,
+    csrfToken: z.string().regex(/^[A-Za-z0-9_-]{43}$/),
+  })
+  .strict();

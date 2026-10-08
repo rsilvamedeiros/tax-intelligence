@@ -12,3 +12,4 @@ export function createDatabase(connectionString: string) {
   return { pool, db: drizzle(pool) };
 }
 export type Database = ReturnType<typeof createDatabase>;
+export { SessionStore } from './session-store';

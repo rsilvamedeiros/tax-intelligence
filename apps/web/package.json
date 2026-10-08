@@ -7,26 +7,29 @@
     "build": "next build",
     "start": "next start --hostname 127.0.0.1",
     "typecheck": "tsc --noEmit && tsc --noEmit -p tsconfig.cypress.json",
-    "test": "jest --config jest.config.cjs",
-    "test:coverage": "jest --config jest.config.cjs --coverage",
+    "test": "jest --config jest.config.cjs && jest --config jest.server.config.cjs --runInBand",
+    "test:coverage": "jest --config jest.config.cjs --coverage && jest --config jest.server.config.cjs --coverage --runInBand",
     "test:e2e": "cypress run --browser chrome"
   },
   "dependencies": {
+    "@tax/contracts": "workspace:*",
+    "@tax/database": "workspace:*",
+    "@tax/ui": "workspace:*",
     "next": "16.4.0",
+    "openid-client": "6.8.8",
     "react": "19.3.0",
     "react-dom": "19.3.0",
-    "@tax/contracts": "workspace:*",
-    "@tax/ui": "workspace:*"
+    "server-only": "0.0.1"
   },
   "devDependencies": {
+    "@tax/config": "workspace:*",
+    "@testing-library/jest-dom": "7.0.1",
+    "@testing-library/react": "16.3.3",
+    "@types/jest-axe": "3.5.9",
     "@types/react": "19.3.0",
     "@types/react-dom": "19.3.0",
-    "jest-environment-jsdom": "30.5.2",
-    "@testing-library/react": "16.3.3",
-    "@testing-library/jest-dom": "7.0.1",
-    "jest-axe": "11.0.0",
-    "@types/jest-axe": "3.5.9",
     "cypress": "16.1.1",
-    "@tax/config": "workspace:*"
+    "jest-axe": "11.0.0",
+    "jest-environment-jsdom": "30.5.2"
   }
 }

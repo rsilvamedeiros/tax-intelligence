@@ -20,7 +20,9 @@ describe('Foundation journey', () => {
       statusCode: 200,
       body: { status: 'ok', service: 'tax-intelligence-api' },
     }).as('healthy');
-    cy.contains('button', 'Tentar novamente').click();
+    cy.contains('section', 'Status da plataforma')
+      .contains('button', 'Tentar novamente')
+      .click();
     cy.wait('@healthy');
     cy.get('[role="status"]').should('contain', 'API disponível');
   });

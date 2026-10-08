@@ -1,8 +1,8 @@
 # Plano de TDD — identidade, membership e isolamento
 
-Status: testes planejados, não executados. Esta entrega define aceite, sem testes artificiais sobre texto e sem implementação de negócio. [RFC 0001](../rfc/0001-identity-membership-isolation.md) e [ameaças](../security/identity-tenancy-threat-model.md).
+Status: matriz de referência, com execução parcial descrita abaixo. Sem testes artificiais sobre texto. [RFC 0001](../rfc/0001-identity-membership-isolation.md) e [ameaças](../security/identity-tenancy-threat-model.md).
 
-Atualização após escolha do provedor: casos de assinatura/issuer/audience/algoritmo/tempo de AUTH-01, substituição de ID token de AUTH-06, JWKS/rotação de AUTH-07 e privacidade de logs/respostas de PRIVACY-01 estão exercitados nos testes HTTP da API. Sessão, claims persistidas, CSRF, traces autenticados, revogação, membership, RLS e E2E-01 seguem pendentes. [Evidências da etapa](authentication-validation.md); não declarar esses cenários completos com base em verificação de token apenas.
+Atualização após escolha do provedor: casos de assinatura/issuer/audience/algoritmo/tempo de AUTH-01, substituição de ID token de AUTH-06, JWKS/rotação de AUTH-07 e privacidade de logs/respostas de PRIVACY-01 estão exercitados nos testes HTTP da API. Etapa BFF cobre state/nonce/assinatura, verifier encaminhado, replay do callback, returnTo, expiração, CSRF e revogação local persistida; ver [validação BFF](bff-session-validation.md). Rejeição pelo provedor de verifier incorreto, traces autenticados, membership, RLS e E2E-01 completo seguem pendentes. [Evidências da API](authentication-validation.md); não declarar toda a matriz completa com base em autenticação apenas.
 
 ## Fixtures e ambiente
 

@@ -61,6 +61,9 @@ try {
     project: fileURLToPath(new URL('../apps/web/', import.meta.url)),
     browser: process.env.E2E_BROWSER ?? 'chrome',
     headless: true,
+    spec: fileURLToPath(
+      new URL('../apps/web/cypress/e2e/foundation.cy.ts', import.meta.url),
+    ),
   });
   process.exitCode = 'failures' in result || result.totalFailed > 0 ? 1 : 0;
 } catch (error) {

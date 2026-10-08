@@ -17,6 +17,7 @@
     "test:coverage": "turbo test:coverage",
     "test:integration": "turbo test:integration --filter=@tax/database",
     "test:e2e": "node scripts/run-e2e.mjs",
+    "test:e2e:auth": "node scripts/run-auth-e2e.mjs",
     "test:smoke": "node scripts/smoke-telemetry.mjs && node scripts/smoke-authentication.mjs",
     "build": "turbo build",
     "db:migrate": "pnpm --filter @tax/database migrate",

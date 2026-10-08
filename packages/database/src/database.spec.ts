@@ -5,7 +5,7 @@ describe('PostgreSQL foundation (requires TEST_DATABASE_URL)', () => {
   let database: Database;
   beforeAll(() => {
     const url = process.env.TEST_DATABASE_URL;
-    if (!url)
+    if (!url || !new URL(url).pathname.endsWith('_test'))
       throw new Error(
         'TEST_DATABASE_URL obrigatória; este teste nunca usa banco de produção.',
       );
