@@ -12,6 +12,8 @@ Required checks propostos: `documentation`, `quality`, `database-integration`, `
 
 ## Entrega e versionamento
 
+Job `identity-provider` inicia Keycloak de desenvolvimento com senhas efêmeras mascaradas, importa realm versionado e confere discovery/PKCE/JWKS. Não prova login BFF nem autorização de tenant. `quality` também executa smoke do processo compilado com access token RSA sintético. Conferir esses jobs e checks externos antes de declarar o PR verde.
+
 Versão inicial da fundação: 0.1.0 planejada; SemVer para releases, sem promessa de API estável durante 0.x. Conventional Commits orienta changelog, mas não libera produção automaticamente. Ambiente de staging com dados sintéticos precede produção; release requer runbook, snapshot/backup testado, health/readiness, smoke test, plano de rollback e aprovação humana.
 
 Rollback de app deve manter compatibilidade com schema expandido; rollback destrutivo de migration não é pressuposto. Ensaio de restore comprova backup. CD depende de escolha de provedor, orçamento, segredos, ambientes e autorização. AI reviewer poderá ser integrado via GitHub Actions/serviço após credenciais e política de dados aprovadas; nunca realizar auto-merge baseado apenas em IA.

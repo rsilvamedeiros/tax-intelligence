@@ -24,6 +24,7 @@ Documentação primeiro; código avança por etapa com aceite, testes e revisão
 - [validation](engineering/validation.md)
 - [validação do bootstrap](engineering/bootstrap-validation.md)
 - [Plano de testes de identidade e isolamento](engineering/identity-tenancy-test-plan.md)
+- [Validação da autenticação da API](engineering/authentication-validation.md)
 
 ## Domínios
 
@@ -43,6 +44,7 @@ Documentação primeiro; código avança por etapa com aceite, testes e revisão
 - [0003 tenant isolation](adr/0003-tenant-isolation.md)
 - [0004 ai and fiscal rules](adr/0004-ai-and-fiscal-rules.md)
 - [0005 toolchain do bootstrap](adr/0005-bootstrap-toolchain.md)
+- [0006 provedor de desenvolvimento e autenticação da API](adr/0006-development-identity-provider.md)
 - [process](rfc/process.md)
 - [RFC 0001: identidade, membership e isolamento](rfc/0001-identity-membership-isolation.md)
 

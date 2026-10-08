@@ -17,7 +17,7 @@ Modelo de projeto inspirado em [OWASP ASVS](https://owasp.org/www-project-applic
 
 Desenho específico da primeira vertical: [RFC 0001](../rfc/0001-identity-membership-isolation.md), [threat model](identity-tenancy-threat-model.md) e [plano de testes](../engineering/identity-tenancy-test-plan.md). Controles propostos não representam autenticação ou RLS já implementados.
 
-Não há autenticação funcional nesta etapa. OIDC de provedor ainda não escolhido. Papéis propostos: organization_admin gere associações; analyst importa e investiga; reviewer registra parecer; viewer apenas lê resultados autorizados. Permissões verificadas no caso de uso, não somente na UI. Credencial de parceiro terá escopos explícitos, rotação e limite de taxa. Membership ativa determina tenant; header isolado não autoriza.
+Verificação de access tokens está implementada na API, com Keycloak escolhido para desenvolvimento ([ADR 0006](../adr/0006-development-identity-provider.md)). Login web, sessão BFF e autorização por membership ainda não estão implementados; provedor e operação de produção permanecem pendentes. Papéis propostos: organization_admin gere associações; analyst importa e investiga; reviewer registra parecer; viewer apenas lê resultados autorizados. Permissões verificadas no caso de uso, não somente na UI. Credencial de parceiro terá escopos explícitos, rotação e limite de taxa. Membership ativa determina tenant; header isolado não autoriza.
 
 ## LGPD e dados
 

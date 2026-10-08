@@ -29,6 +29,23 @@ pnpm test:integration
 
 Credenciais acima são locais e demonstrativas. Não reutilizar em produção. Comando createdb será necessário uma única vez; banco existente deve ser preservado.
 
+## Keycloak de desenvolvimento
+
+Requer Docker disponível. Perfil `identity` é opcional; iniciar somente o serviço identity não inicia PostgreSQL. Compose valida também a variável POSTGRES_PASSWORD do arquivo, mesmo nesse perfil. Gere credenciais locais sem versioná-las:
+
+```powershell
+$env:KEYCLOAK_ADMIN_PASSWORD = [Guid]::NewGuid().ToString('N')
+if (-not $env:POSTGRES_PASSWORD) { $env:POSTGRES_PASSWORD = [Guid]::NewGuid().ToString('N') }
+docker compose -f infrastructure/docker/compose.yaml --profile identity up -d identity
+node scripts/smoke-identity-provider.mjs
+```
+
+Console local: http://127.0.0.1:8080, administrador `local_admin` e senha do ambiente. Realm `tax-intelligence`, sem usuários importados. Crie somente usuário sintético no console. Realm já existente no volume não é atualizado pelo import; atualizar clientes explicitamente e preservar dados, sem remover volumes existentes para aplicar configuração. Usuários e senhas reais não fazem parte do setup.
+
+Para habilitar a API, exporte as quatro OIDC_* de [.env.example](../../.env.example) ou adicione-as ao .env local; todas são necessárias. Use issuer e callback em 127.0.0.1, sem alternar localhost. O client web usa code + PKCE S256; implicit, password grant e service accounts estão desabilitados. O callback `/api/auth/callback` ainda não está implementado: este setup não oferece login no navegador nesta entrega. Tokens não devem ser colados em issue, PR, terminal gravado ou log.
+
+Smoke do provedor verifica realm importado, discovery e chaves públicas; smoke de autenticação verifica o processo compilado da API com token sintético e JWKS local. Ambos são diferentes de uma jornada real de login, prevista na etapa BFF. Imagem Keycloak e realm são de desenvolvimento, sem configuração de produção. Sem Docker local, executar o smoke real do provedor no job CI `identity-provider` e registrar o limite local.
+
 ## Diagnóstico de falhas
 
 - Engine incompatível: conferir `node --version` e caminho do executável; no Windows, pnpm global pode usar Node adjacente mesmo com PATH alterado. Preferir instalação suportada ou executar pnpm.cjs explicitamente com Node 24 local.

@@ -14,6 +14,10 @@ Exemplo: `{"status":"ok","service":"tax-intelligence-api","checks":{"database":"
 
 Erro padrão: `{"statusCode":404,"code":"REQUEST_REJECTED","message":"Requisição rejeitada","requestId":"00000000-0000-4000-8000-000000000001"}`. Nunca incluir stack, SQL, tokens ou entradas. `x-request-id` só é reutilizado se UUID válido; demais valores são substituídos. Logs correlacionam o mesmo identificador.
 
+## Fronteira de identidade implementada
+
+Fronteira de identidade implementada nesta etapa: `GET /v1/auth/me` verifica Bearer JWT no perfil Keycloak e retorna somente `{issuer, subject}`, conforme schema estrito em contracts. Sem token ou token inválido: 401 com WWW-Authenticate Bearer e erro correlacionado. Configuração ausente ou verificação indisponível: 503 sanitizado. OpenAPI declara segurança Bearer e respostas. O endpoint não cria usuário, sessão, membership ou acesso a documentos; health permanece público. Configuração e limites no [ADR 0006](../adr/0006-development-identity-provider.md).
+
 ## Contratos propostos para a vertical, sem implementação
 
 `POST /v1/documents` recebe JSON sintético e `Idempotency-Key`. Tenant vem da associação autenticada, não de payload confiado. Resposta 201 com ID opaco, status e request ID; repetição equivalente retorna resultado original; mudança de conteúdo sob a mesma chave retorna 409. `GET /v1/documents/:id` e `/diagnostics/:id` consultam sempre com filtro tenant. Recurso externo ao tenant retorna 404 para impedir enumeração.
