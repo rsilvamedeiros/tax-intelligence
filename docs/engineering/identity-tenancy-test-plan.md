@@ -2,6 +2,8 @@
 
 Status: testes planejados, não executados. Esta entrega define aceite, sem testes artificiais sobre texto e sem implementação de negócio. [RFC 0001](../rfc/0001-identity-membership-isolation.md) e [ameaças](../security/identity-tenancy-threat-model.md).
 
+Atualização após escolha do provedor: casos de assinatura/issuer/audience/algoritmo/tempo de AUTH-01, substituição de ID token de AUTH-06, JWKS/rotação de AUTH-07 e privacidade de logs/respostas de PRIVACY-01 estão exercitados nos testes HTTP da API. Sessão, claims persistidas, CSRF, traces autenticados, revogação, membership, RLS e E2E-01 seguem pendentes. [Evidências da etapa](authentication-validation.md); não declarar esses cenários completos com base em verificação de token apenas.
+
 ## Fixtures e ambiente
 
 Dois tenants sintéticos A/B; actor com membership somente em A, actor em ambos, actor revogado e administrador A sem acesso B. Identidades usam issuer/subject sintéticos, sem pessoas reais. Fixar relógio nos testes de validade; gerar chaves efêmeras no processo e nunca versionar tokens utilizáveis ou chave privada.

@@ -19,6 +19,7 @@ async function bootstrap() {
       new DocumentBuilder()
         .setTitle('Tax Intelligence API')
         .setVersion('0.1.0')
+        .addBearerAuth()
         .build(),
     );
     SwaggerModule.setup('docs', app, document);

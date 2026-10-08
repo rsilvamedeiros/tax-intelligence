@@ -1,6 +1,6 @@
 # Identity and Access
 
-Status: modelo proposto; nenhum contexto de negócio implementado na fundação.
+Status: verificação criptográfica de access tokens e endpoint de identidade implementados; modelo persistido, sessão BFF e autorização de negócio ainda propostos. [ADR 0006](../adr/0006-development-identity-provider.md).
 
 ## Objetivo e responsabilidades
 
@@ -16,7 +16,7 @@ Login → associação → verificação de ação. Interfaces: Provedor OIDC; O
 
 ## Riscos e limites
 
-O desenho de sessão, identidade estável e validação de tokens está proposto na [RFC 0001](../rfc/0001-identity-membership-isolation.md); implementação depende de provedor e aceite da etapa.
+O desenho de sessão e identidade persistida está proposto na [RFC 0001](../rfc/0001-identity-membership-isolation.md); verificação de tokens implementada conforme ADR 0006, sem autorização de organização.
 
 Bypass de acesso, sessão obsoleta. Não possui documentos nem aceita tenant de payload.
 
