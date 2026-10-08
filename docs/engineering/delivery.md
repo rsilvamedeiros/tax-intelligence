@@ -2,7 +2,9 @@
 
 ## CI proposto por etapa
 
-Primeiro PR documental: validação de links e manifestos de skills, revisão de coerência e diff. PR técnico posterior: checkout, pnpm fixado, Node 24, install frozen, formato, lint, tipos, unitários/HTTP/componentes, cobertura, build, audit e secret scanning. Job separado com PostgreSQL descartável para migrations/integração; Cypress sobre build real. Sem configurar deployment nesta fase.
+Primeiro PR documental: validação de links e manifestos de skills, revisão de coerência e diff. Workflow [Documentation](../../.github/workflows/documentation.yml) implementado com job `documentation`, Node 24, actions fixadas por SHA e permissões de leitura; executa o validador sem instalar dependências do bootstrap. Execução remota só pode ser declarada após verificar o resultado do Actions.
+
+PR técnico posterior: checkout, pnpm fixado, Node 24, install frozen, formato, lint, tipos, unitários/HTTP/componentes, cobertura, build, audit e secret scanning. Job separado com PostgreSQL descartável para migrations/integração; Cypress sobre build real. Sem configurar deployment nesta fase.
 
 Cache apenas dependências e artefatos reprodutíveis, nunca segredos. Alterações em .env.example e variáveis runtime devem constar em turbo env para impedir cache incorreto. Dependências novas exigem necessidade concreta, licença, compatibilidade, manutenção e revisão do audit. Lockfile no PR técnico; versões prerelease não são padrão de produção.
 
