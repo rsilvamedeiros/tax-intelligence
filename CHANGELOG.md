@@ -2,6 +2,9 @@
 
 ## Não lançado
 
+- Listagem paginada e seleção de organização no navegador, com vínculo revalidado pela API através do BFF.
+- Jornada Keycloak/Chrome com seleção, tentativa cruzada, revogação após listagem e logout; credenciais distintas de API/BFF no banco de testes.
+
 - Login/sessões BFF e verificação de access tokens da API.
 - Consulta autenticada de organizações/memberships, sem criação automática de ator ou associação.
 - Migration aditiva de identidade/membership e integração HTTP/PostgreSQL com runtime de leitura; RLS e administração permanecem pendentes.

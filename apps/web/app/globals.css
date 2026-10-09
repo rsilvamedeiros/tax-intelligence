@@ -64,6 +64,41 @@ a:focus-visible {
   outline: 3px solid var(--ink);
   outline-offset: 4px;
 }
+.organization-list {
+  list-style: none;
+  padding: 0;
+}
+.organization-list li {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  padding: 16px 0;
+  border-bottom: 1px solid var(--border);
+}
+.organization-list strong {
+  overflow-wrap: anywhere;
+}
+.organization-list p {
+  margin: 4px 0 0;
+  color: var(--muted);
+}
+.organization-actions {
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+  margin-top: 20px;
+}
+button:disabled {
+  cursor: wait;
+  opacity: 0.7;
+}
+@media (max-width: 480px) {
+  .organization-list li {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+}
 footer {
   margin-top: 48px;
   color: var(--muted);

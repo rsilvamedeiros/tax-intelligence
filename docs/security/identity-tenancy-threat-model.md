@@ -2,6 +2,8 @@
 
 Status: proposta para a vertical com controles parciais implementados: access tokens da API, sessões BFF e consulta de memberships. A consulta usa ator verificado, filtro explícito e runtime de leitura, com revogação observada na próxima requisição após commit; não há administração, locks para efeitos ou RLS. [Validação de memberships](../engineering/membership-validation.md). Escopo futuro: [RFC 0001](../rfc/0001-identity-membership-isolation.md); evidências exigidas na [matriz de testes](../engineering/identity-tenancy-test-plan.md).
 
+Seleção no BFF/UI foi implementada no ADR 0009: token permanece server-side, URLs upstream são fixas e respostas são validadas; acesso negado após revogação não cria contexto selecionado. Atualizar/foco, troca de sessão e logout limpam dados e cancelam respostas antigas. A seleção visual não mantém grant nem substitui autorização futura de ação. [Evidências da jornada](../engineering/browser-organization-validation.md).
+
 Ativos: sessão, tokens, membership, documentos sintéticos e auditoria. Adversário considerado: usuário sem sessão, membro de outra organização, usuário revogado e cliente que altera headers/payloads. Administrador de infraestrutura e comprometimento do IdP exigem resposta operacional própria; RLS não protege contra superuser.
 
 | Fronteira/ameaça                                                  | Controle proposto                                                                          | Evidência exigida |

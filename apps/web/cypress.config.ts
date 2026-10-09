@@ -1,8 +1,12 @@
 import { defineConfig } from 'cypress';
+import { revokeBrowserMembership } from '../../scripts/browser-membership-fixtures.mjs';
 export default defineConfig({
   e2e: {
-    setupNodeEvents(on) {
+    setupNodeEvents(on, config) {
       on('task', {
+        revokeMembership(id: unknown) {
+          return revokeBrowserMembership(id, config.env.organizationIds);
+        },
         authCheckpoint(label: unknown) {
           if (
             ![

@@ -22,6 +22,10 @@ Fronteira de identidade implementada nesta etapa: `GET /v1/auth/me` verifica Bea
 
 `GET /v1/organizations` retorna `{items: [{id, name, role}], nextCursor}` somente para vínculos ativos do ator. Limit padrão 25, inteiro decimal 1–100; cursor UUID e ordenação por UUID. Identidade não provisionada recebe lista vazia. `GET /v1/organizations/:organizationId/context` retorna `{organization: {id, name}, role}`; vínculo ausente/revogado ou organização inexistente retorna o mesmo 403. Não aceita query nessa rota. Ambas exigem Bearer antes de validar entrada, rejeitam queries inesperadas com 400, usam no-store e retornam 503 sanitizado em indisponibilidade. Headers de tenant e roles do token não concedem acesso. Contratos estritos/OpenAPI em contracts; [decisão e limites](../adr/0008-membership-directory.md), [evidências](../engineering/membership-validation.md).
 
+## Fronteira BFF de organizações implementada
+
+O BFF expõe as consultas existentes como GET /api/organizations e GET /api/organizations/:organizationId/context, usando exclusivamente o token da sessão server-side. Não encaminha Authorization, cookies ou tenant fornecidos pelo navegador. Aceita somente paginação/UUID do contrato; não há proxy genérico. Retorna schemas públicos estritos, 401 para sessão rejeitada, 403 para vínculo negado e 503 sanitizado em falha. [Decisão da jornada](../adr/0009-browser-organization-selection.md).
+
 ## Contratos propostos para a vertical, sem implementação
 
 `POST /v1/documents` recebe JSON sintético e `Idempotency-Key`. Tenant vem da associação autenticada, não de payload confiado. Resposta 201 com ID opaco, status e request ID; repetição equivalente retorna resultado original; mudança de conteúdo sob a mesma chave retorna 409. `GET /v1/documents/:id` e `/diagnostics/:id` consultam sempre com filtro tenant. Recurso externo ao tenant retorna 404 para impedir enumeração.
