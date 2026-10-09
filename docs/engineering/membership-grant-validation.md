@@ -46,6 +46,10 @@ O primeiro smoke do Keycloak recém-iniciado encerrou por timeout; a repetição
 
 A primeira execução padrão da jornada autenticada encerrou com erro genérico antes do resultado Cypress. A execução diagnóstica alcançou o navegador, mas falhou no prazo de 60 segundos para carregar a página após clicar em Entrar; o screenshot também mostrou a consulta de health indisponível. Uma repetição padrão chegou ao callback BFF, que retornou 503 em vez de 303. Não houve mudança nas assertions ou no pageLoadTimeout. A máquina tinha aproximadamente 391 MB livres de 8 GB durante a investigação; isso é pressão de recursos observada, não causa comprovada. A jornada autenticada local não foi aprovada; a CI precisa ser avaliada separadamente.
 
+## Evidência remota
+
+No commit a9414f3 do [PR #13](https://github.com/rsilvamedeiros/tax-intelligence/pull/13/checks), todos os jobs da CI e o GitGuardian foram consultados e aprovados: quality, secret-scan, identity-provider, e2e, dependency-audit, database-integration e documentation. O job identity-provider executa a jornada autenticada padrão com Keycloak real; sua aprovação remota não muda o resultado das tentativas locais nem determina a causa das falhas locais. Novos commits exigem conferência dos checks correspondentes.
+
 ## Limites e rollback
 
 Bootstrap de primeiro administrador e provisionamento de identidade continuam operacionais; PUT exige ator e administrador já existentes. Não há convite, busca global, UI administrativa, acesso adicional da web ao banco, RLS ou regra fiscal. SQL arbitrário com credencial comprometida pode ignorar políticas da aplicação; grants não substituem RLS. O proprietário do banco continua podendo alterar eventos. Rollback desabilita PUT e remove grants adicionais, preservando migration/auditoria.
