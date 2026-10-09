@@ -314,6 +314,90 @@ try {
     'Audit failure must roll back revocation',
   );
   await owner.pool.query(
+    `GRANT UPDATE(role) ON organization_access.memberships TO ${role}`,
+  );
+  await owner.pool.query(
+    `GRANT INSERT ON organization_access.membership_role_changes TO ${role}`,
+  );
+  async function changeRole(
+    targetId,
+    newRole,
+    bearer = accessToken,
+    organizationId = orgs[1],
+  ) {
+    const response = await fetch(
+      `${base}/organizations/${organizationId}/memberships/${targetId}`,
+      {
+        method: 'PATCH',
+        headers: {
+          Authorization: `Bearer ${bearer}`,
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ role: newRole }),
+        signal: AbortSignal.timeout(5000),
+      },
+    );
+    assert.equal(response.headers.get('cache-control'), 'no-store');
+    return { status: response.status, text: await response.text() };
+  }
+  assert.equal(
+    (await changeRole(targetActor, 'organization_admin', targetToken)).status,
+    403,
+  );
+  assert.equal(
+    (await changeRole(otherActor, 'viewer', accessToken, orgs[2])).status,
+    403,
+  );
+  assert.equal((await changeRole(randomUUID(), 'viewer')).status, 404);
+  assert.equal((await changeRole(targetActor, 'super_admin')).status, 400);
+  assert.deepEqual(await changeRole(targetActor, 'reviewer'), {
+    status: 204,
+    text: '',
+  });
+  assert.equal((await changeRole(targetActor, 'reviewer')).status, 204);
+  assert.equal(
+    (await get(`/organizations/${orgs[1]}/context`, targetToken)).body.role,
+    'reviewer',
+  );
+  const roleEvents = await owner.pool.query(
+    'SELECT previous_role,new_role,initiating_actor_id,target_actor_id FROM organization_access.membership_role_changes WHERE organization_id=$1',
+    [orgs[1]],
+  );
+  assert.deepEqual(roleEvents.rows, [
+    {
+      previous_role: 'viewer',
+      new_role: 'reviewer',
+      initiating_actor_id: actor,
+      target_actor_id: targetActor,
+    },
+  ]);
+  await owner.pool.query(
+    `REVOKE INSERT ON organization_access.membership_role_changes FROM ${role}`,
+  );
+  assert.equal((await changeRole(targetActor, 'analyst')).status, 503);
+  assert.equal(
+    (await get(`/organizations/${orgs[1]}/context`, targetToken)).body.role,
+    'reviewer',
+  );
+  await owner.pool.query(
+    `GRANT INSERT ON organization_access.membership_role_changes TO ${role}`,
+  );
+  assert.equal(
+    (await changeRole(targetActor, 'organization_admin')).status,
+    204,
+  );
+  assert.equal((await changeRole(actor, 'viewer', targetToken)).status, 204);
+  assert.equal(
+    (await changeRole(targetActor, 'viewer')).status,
+    403,
+    'Demoted initiator must lose administrative access despite valid token',
+  );
+  assert.equal((await revoke(orgs[1], targetActor)).status, 403);
+  assert.equal(
+    (await changeRole(targetActor, 'viewer', targetToken)).status,
+    409,
+  );
+  await owner.pool.query(
     `REVOKE SELECT ON organization_access.memberships FROM ${role}`,
   );
   const unavailable = await get('/organizations');
@@ -331,7 +415,7 @@ try {
   );
   assert.ok(!logs.includes(orgs[0]) && !logs.includes(orgs[2]));
   console.log(
-    'Membership integration passed: compiled API/RSA, restricted PostgreSQL, directory, administrative revocation, idempotency, last administrator protection, atomic audit rollback and sanitized errors.',
+    'Membership integration passed: compiled API/RSA, restricted PostgreSQL, directory, revocation and role changes, valid-token permission loss, idempotency, last administrator protection, atomic audit rollback and sanitized errors.',
   );
 } finally {
   if (app && app.exitCode === null) {
@@ -346,6 +430,10 @@ try {
   }
   await new Promise((resolve) => provider.close(resolve));
   try {
+    await owner.pool.query(
+      'DELETE FROM organization_access.membership_role_changes WHERE organization_id=ANY($1::uuid[])',
+      [orgs],
+    );
     await owner.pool.query(
       'DELETE FROM organization_access.membership_revocations WHERE organization_id=ANY($1::uuid[])',
       [orgs],
