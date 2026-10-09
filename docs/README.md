@@ -30,6 +30,7 @@ Documentação primeiro; código avança por etapa com aceite, testes e revisão
 - [Validação da seleção de organização](engineering/browser-organization-validation.md)
 - [Validação da revogação administrativa](engineering/membership-revocation-validation.md)
 - [Validação da alteração de papéis](engineering/membership-role-validation.md)
+- [Validação da concessão administrativa](engineering/membership-grant-validation.md)
 
 ## Domínios
 
@@ -45,6 +46,7 @@ Documentação primeiro; código avança por etapa com aceite, testes e revisão
 ## Decisões
 
 - [0001 modular monolith](adr/0001-modular-monolith.md)
+- [0012 concessão administrativa de memberships](adr/0012-membership-grants.md)
 - [0002 postgresql drizzle](adr/0002-postgresql-drizzle.md)
 - [0003 tenant isolation](adr/0003-tenant-isolation.md)
 - [0004 ai and fiscal rules](adr/0004-ai-and-fiscal-rules.md)
