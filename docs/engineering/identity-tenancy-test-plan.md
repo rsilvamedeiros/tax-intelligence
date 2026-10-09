@@ -6,6 +6,8 @@ Atualização após escolha do provedor: casos de assinatura/issuer/audience/alg
 
 ## Fixtures e ambiente
 
+ADR 0010 exercita ACCESS-02 para viewer/admin de outra organização, ACCESS-03 com token ainda válido e ACCESS-04 por espera observada em pg_blocking_pids, revogações administrativas concorrentes e revalidação do iniciador após espera. DB-06 é demonstrado para revogação: negar INSERT de auditoria reverte revoked_at. FKs compostas da auditoria impedem referências cruzadas. São evidências de controle de acesso administrativo, sem RLS, importação ou conclusão integral da matriz. [Validação da revogação](membership-revocation-validation.md).
+
 Etapa ADR 0009 acrescenta seleção por BFF/UI à jornada real Keycloak: listado A, contexto validado, tentativa B negada, revogação após listagem seguida de seleção negada e logout seguido de 401 no BFF de organizações. Não conclui E2E-01 com efeito de negócio, ACCESS-04 ou RLS. [Validação da seleção](browser-organization-validation.md).
 
 Etapa ADR 0008 cobre seleção cruzada em rota/header de ACCESS-01 e revogação após commit em consultas de ACCESS-03. Lookup exato por issuer/subject, paginação, constraints e runtime sem escrita são exercitados em PostgreSQL real e no processo compilado com token RSA. [Evidências de memberships](membership-validation.md). ACCESS-02/04, RLS/DB-01 a DB-06 completos, traces autenticados e E2E-01 com ação de negócio permanecem pendentes.

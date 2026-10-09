@@ -2,12 +2,15 @@
 
 ## Não lançado
 
+- Revogação administrativa de membership na API, com auditoria transacional, idempotência, locks e preservação do último administrador.
+- Migration aditiva de eventos de revogação e privilégios limitados a revoked_at/INSERT de auditoria; concessão de vínculos e RLS permanecem pendentes.
+
 - Listagem paginada e seleção de organização no navegador, com vínculo revalidado pela API através do BFF.
 - Jornada Keycloak/Chrome com seleção, tentativa cruzada, revogação após listagem e logout; credenciais distintas de API/BFF no banco de testes.
 
 - Login/sessões BFF e verificação de access tokens da API.
 - Consulta autenticada de organizações/memberships, sem criação automática de ator ou associação.
-- Migration aditiva de identidade/membership e integração HTTP/PostgreSQL com runtime de leitura; RLS e administração permanecem pendentes.
+- Migration aditiva de identidade/membership e integração HTTP/PostgreSQL com runtime de leitura.
 
 - Documentação de produto, arquitetura, contextos, segurança e roadmap.
 - Decisões técnicas registradas em ADRs, com estado de revisão explícito.

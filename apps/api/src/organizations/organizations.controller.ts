@@ -1,17 +1,23 @@
 import {
   BadRequestException,
+  ConflictException,
+  Delete,
+  HttpCode,
   Controller,
   ForbiddenException,
   Get,
   Headers,
   Param,
   Query,
+  Req,
   Res,
   ServiceUnavailableException,
   UnauthorizedException,
 } from '@nestjs/common';
 import {
   ApiBearerAuth,
+  ApiConflictResponse,
+  ApiNoContentResponse,
   ApiBadRequestResponse,
   ApiForbiddenResponse,
   ApiOkResponse,
@@ -20,7 +26,7 @@ import {
   ApiServiceUnavailableResponse,
   ApiUnauthorizedResponse,
 } from '@nestjs/swagger';
-import type { Response } from 'express';
+import type { Request, Response } from 'express';
 import type { SchemaObject } from '@nestjs/swagger/dist/interfaces/open-api-spec.interface';
 import {
   organizationContextSchema,
@@ -37,6 +43,10 @@ import {
   MembershipDenied,
   OrganizationsService,
 } from './organizations.service';
+import {
+  LastAdministrator,
+  MembershipRevocationService,
+} from './membership-revocation.service';
 
 @Controller('organizations')
 @ApiBearerAuth()
@@ -56,6 +66,7 @@ export class OrganizationsController {
   constructor(
     private readonly auth: AuthService,
     private readonly organizations: OrganizationsService,
+    private readonly revocations: MembershipRevocationService,
   ) {}
   private async identity(
     authorization: string | undefined,
@@ -67,6 +78,55 @@ export class OrganizationsController {
       if (error instanceof UnauthorizedException)
         response.setHeader('WWW-Authenticate', 'Bearer');
       throw error;
+    }
+  }
+  @Delete(':organizationId/memberships/:actorId')
+  @HttpCode(204)
+  @ApiParam({
+    name: 'organizationId',
+    schema: { type: 'string', format: 'uuid' },
+  })
+  @ApiParam({ name: 'actorId', schema: { type: 'string', format: 'uuid' } })
+  @ApiNoContentResponse({
+    description:
+      'Membership revoked or already absent; administrator authorization always required',
+  })
+  @ApiForbiddenResponse({
+    description: 'No active administrative membership',
+    schema: apiErrorOpenApiSchema as SchemaObject,
+  })
+  @ApiConflictResponse({
+    description: 'The last active administrator cannot be revoked',
+    schema: apiErrorOpenApiSchema as SchemaObject,
+  })
+  async revoke(
+    @Headers('authorization') authorization: string | undefined,
+    @Param('organizationId') organizationId: string,
+    @Param('actorId') actorId: string,
+    @Query() query: unknown,
+    @Req() request: Request,
+    @Res({ passthrough: true }) response: Response,
+  ) {
+    const identity = await this.identity(authorization, response);
+    if (
+      !organizationIdSchema.safeParse(organizationId).success ||
+      !organizationIdSchema.safeParse(actorId).success ||
+      !emptyQuerySchema.safeParse(query).success ||
+      Number(request.headers['content-length'] ?? 0) !== 0 ||
+      request.headers['transfer-encoding'] !== undefined
+    )
+      throw new BadRequestException();
+    try {
+      await this.revocations.revoke(
+        identity,
+        organizationId,
+        actorId,
+        String(response.getHeader('x-request-id')),
+      );
+    } catch (error) {
+      if (error instanceof MembershipDenied) throw new ForbiddenException();
+      if (error instanceof LastAdministrator) throw new ConflictException();
+      throw new ServiceUnavailableException();
     }
   }
   @Get()

@@ -6,7 +6,9 @@ Primeiro PR documental: validação de links e manifestos de skills, revisão de
 
 Workflow [Continuous Integration](../../.github/workflows/ci.yml) implementado para PR e main: checkout, pnpm fixado, Node 24, install frozen, formato, lint, tipos, unitários/HTTP/componentes, cobertura, build, smoke OTLP, audit e secret scanning. Job separado com PostgreSQL 17 descartável para migrations/integração; Cypress/Chrome sobre build real em outro job. Artefatos de cobertura e screenshots de falha têm retenção de sete dias. Sem configurar deployment nesta fase.
 
-Job database-integration também constrói a API e executa `pnpm test:integration:membership`: RSA/JWKS efêmeros, processo compilado e conexão PostgreSQL com role de leitura distinta do migrador. Verifica seleção cruzada, revogação após commit e indisponibilidade sanitizada. Não demonstra RLS, locks de escrita nem a jornada completa BFF/UI.
+Job database-integration também constrói a API e executa `pnpm test:integration:membership`: RSA/JWKS efêmeros, processo compilado e conexão PostgreSQL distinta do migrador. A primeira fase usa role de leitura e verifica seleção cruzada, revogação após commit e indisponibilidade sanitizada. A fase administrativa abaixo acrescenta somente os privilégios de revogação. Não demonstra RLS ou a jornada completa com ação fiscal.
+
+ADR 0010 estende esse runner: depois da fase de leitura, concede somente UPDATE(revoked_at)/INSERT de auditoria e testa DELETE administrativo, idempotência, último administrador, revogação com token válido e rollback por falta de privilégio de auditoria. Concorrência e locks são demonstrados pelos testes PostgreSQL do job database-integration, sem esperar por sleep. A jornada identity-provider permanece uma regressão de login/seleção; não há administração no navegador nesta etapa.
 
 Cache apenas dependências e artefatos reprodutíveis, nunca segredos. Alterações em .env.example e variáveis runtime devem constar em turbo env para impedir cache incorreto. Dependências novas exigem necessidade concreta, licença, compatibilidade, manutenção e revisão do audit. Lockfile no PR técnico; versões prerelease não são padrão de produção.
 

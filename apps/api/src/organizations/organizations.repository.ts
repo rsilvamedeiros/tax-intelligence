@@ -3,12 +3,14 @@ import {
   createDatabase,
   IdentityStore,
   MembershipStore,
+  MembershipRevocationStore,
   type Database,
 } from '@tax/database';
 import type {
   MembershipDirectory,
   ExternalIdentity,
 } from './organizations.service';
+import type { RevocationCommand } from './membership-revocation.service';
 @Injectable()
 export class OrganizationsRepository
   implements MembershipDirectory, OnModuleDestroy
@@ -30,6 +32,9 @@ export class OrganizationsRepository
   }
   get(actorId: string, organizationId: string) {
     return new MembershipStore(this.pool()).get(actorId, organizationId);
+  }
+  revoke(command: RevocationCommand) {
+    return new MembershipRevocationStore(this.pool()).revoke(command);
   }
   async onModuleDestroy() {
     await this.database?.pool.end();
