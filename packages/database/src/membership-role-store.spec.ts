@@ -282,6 +282,7 @@ describe('Atomic membership role changes with restricted runtime', () => {
           blocked = true;
           break;
         }
+        await new Promise((resolve) => setTimeout(resolve, 20));
       }
       expect(blocked).toBe(true);
       await holder.query(
