@@ -1,5 +1,7 @@
 # Persistência e multi-tenancy
 
+Consulta administrativa do [ADR 0013](../adr/0013-administrative-membership-directory.md) combina administrador ativo e página de vínculos da organização na mesma instrução SQL/snapshot. Reutiliza PK e SELECT existentes, sem migration ou grant adicional. Inclui estado revogado, sem consultar identidade externa ou auditoria. [Evidências](../engineering/administrative-membership-directory-validation.md).
+
 PostgreSQL como fonte transacional; Drizzle selecionado para consultas tipadas e SQL explícito ([ADR 0002](../adr/0002-postgresql-drizzle.md)). MongoDB não adotado: documentos brutos podem iniciar em JSONB quando houver necessidade aprovada. Redis/BullMQ dependem de cache medido ou trabalhos que excedam o orçamento de uma requisição.
 
 Migration 0000 cria schema `platform` e journal técnico; 0001 cria sessões técnicas BFF; 0002 adiciona atores, organizações e memberships conforme [ADR 0008](../adr/0008-membership-directory.md). Não há tabelas fiscais ou policies RLS. Aplicar migrations por comando separado, nunca implicitamente ao iniciar API. Não editar migrations aplicadas; mudanças aditivas primeiro, backfill controlado e remoção em release posterior. Credencial de migration deve ser distinta da aplicação em produção.

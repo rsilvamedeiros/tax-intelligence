@@ -14,7 +14,7 @@ Ordenação ascendente por actorId; cursor exclusivo e opaco para autorização,
 
 Uma única instrução SQL parametrizada condiciona a leitura à membership administrativa ativa no mesmo snapshot PostgreSQL. Não separar autorização e listagem em consultas com janela de revogação. Resultado distingue negação de página autorizada vazia, inclusive cursor após o último membro. Revogação concorrente confirmada depois do snapshot não invalida retroativamente a resposta em andamento; a consulta seguinte é negada. Não adquirir locks de escrita para uma leitura.
 
-Utilizar PK existente (organization_id, actor_id), sem migration nem novo privilégio: SELECT de memberships já concedido ao runtime. Identidade resolve issuer/subject verificados no repositório existente. Sem acesso ao banco pelo web. SQL arbitrário com credencial técnica continua fora da garantia de isolamento de aplicação; RLS permanece pendente.
+Utilizar PK existente (organization_id, actor_id), sem migration nem novo privilégio: SELECT de memberships já concedido ao runtime. Identidade resolve issuer/subject verificados no repositório existente. Sem acesso ao banco pelo web. SQL arbitrário com credencial técnica continua fora da garantia de isolamento de aplicação; RLS permanece pendente. A consistência de leitura segue a [documentação oficial de Read Committed do PostgreSQL](https://www.postgresql.org/docs/17/transaction-iso.html#XACT-READ-COMMITTED).
 
 ## Aceite e riscos
 
