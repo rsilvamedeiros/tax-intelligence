@@ -6,12 +6,14 @@ import { createProtocol } from './protocol';
 import { readBffConfig } from './config';
 import { createTokenReader } from './session-token';
 import { createOrganizationHandlers } from '../organizations/handlers';
+import { createMembershipHandlers } from '../organizations/membership-handlers';
 
 type Handlers = ReturnType<typeof createAuthHandlers>;
 const runtimeGlobal = globalThis as typeof globalThis & {
   taxBffRuntime?: {
     auth: Handlers;
     organizations: ReturnType<typeof createOrganizationHandlers>;
+    memberships: ReturnType<typeof createMembershipHandlers>;
   };
 };
 function runtime() {
@@ -37,19 +39,35 @@ function runtime() {
       return identity;
     },
   });
+  const upstream = (
+    path: string,
+    token: string,
+    init?: { method: 'GET' | 'PUT' | 'PATCH' | 'DELETE'; body?: string },
+  ) =>
+    fetch(new URL(path, config.apiBase), {
+      method: init?.method ?? 'GET',
+      body: init?.body,
+      headers: {
+        Authorization: `Bearer ${token}`,
+        ...(init?.body === undefined
+          ? {}
+          : { 'Content-Type': 'application/json' }),
+      },
+      cache: 'no-store',
+      redirect: 'error',
+      signal: AbortSignal.timeout(3000),
+    });
   const organizations = createOrganizationHandlers({
     origin: config.origin,
     readSession: createTokenReader(store),
-    upstream(path, token) {
-      return fetch(new URL(path, config.apiBase), {
-        headers: { Authorization: `Bearer ${token}` },
-        cache: 'no-store',
-        redirect: 'error',
-        signal: AbortSignal.timeout(3000),
-      });
-    },
+    upstream,
   });
-  runtimeGlobal.taxBffRuntime = { auth: handlers, organizations };
+  const memberships = createMembershipHandlers({
+    origin: config.origin,
+    readSession: createTokenReader(store),
+    upstream,
+  });
+  runtimeGlobal.taxBffRuntime = { auth: handlers, organizations, memberships };
   return runtimeGlobal.taxBffRuntime;
 }
 export async function handleAuth(action: keyof Handlers, request: Request) {
@@ -58,6 +76,30 @@ export async function handleAuth(action: keyof Handlers, request: Request) {
   } catch {
     return Response.json(
       { message: 'Autenticação indisponível' },
+      {
+        status: 503,
+        headers: {
+          'Cache-Control': 'no-store',
+          'Referrer-Policy': 'no-referrer',
+        },
+      },
+    );
+  }
+}
+export async function handleMemberships(
+  action: keyof ReturnType<typeof createMembershipHandlers>,
+  request: Request,
+  organizationId: string,
+  actorId?: string,
+) {
+  try {
+    const handlers = runtime().memberships;
+    return action === 'list'
+      ? await handlers.list(request, organizationId)
+      : await handlers[action](request, organizationId, actorId ?? '');
+  } catch {
+    return Response.json(
+      { message: 'Administração de membros indisponível' },
       {
         status: 503,
         headers: {
