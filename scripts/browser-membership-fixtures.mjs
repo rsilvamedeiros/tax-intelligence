@@ -17,10 +17,20 @@ export async function createBrowserMembershipFixture(issuer, subject) {
   const url = testDatabase();
   const owner = createDatabase(url);
   const ids = [randomUUID(), randomUUID(), randomUUID()].sort();
-  const actors = [randomUUID(), randomUUID()];
+  const actors = [randomUUID(), randomUUID(), randomUUID()];
   const roles = [];
   async function cleanup() {
     try {
+      for (const table of [
+        'membership_grants',
+        'membership_role_changes',
+        'membership_revocations',
+      ]) {
+        await owner.pool.query(
+          `DELETE FROM organization_access.${table} WHERE organization_id=ANY($1::uuid[])`,
+          [ids],
+        );
+      }
       await owner.pool.query(
         'DELETE FROM organization_access.memberships WHERE organization_id=ANY($1::uuid[])',
         [ids],
@@ -55,6 +65,12 @@ export async function createBrowserMembershipFixture(issuer, subject) {
       await owner.pool.query(
         `GRANT SELECT ON identity_access.actors, organization_access.organizations, organization_access.memberships TO ${role}`,
       );
+      await owner.pool.query(
+        `GRANT UPDATE(role, revoked_at), INSERT(organization_id, actor_id, role) ON organization_access.memberships TO ${role}`,
+      );
+      await owner.pool.query(
+        `GRANT INSERT ON organization_access.membership_grants, organization_access.membership_role_changes, organization_access.membership_revocations TO ${role}`,
+      );
     } else {
       await owner.pool.query(`GRANT USAGE ON SCHEMA auth_bff TO ${role}`);
       await owner.pool.query(
@@ -70,8 +86,16 @@ export async function createBrowserMembershipFixture(issuer, subject) {
     const apiUrl = await runtimeRole('api');
     const bffUrl = await runtimeRole('bff');
     await owner.pool.query(
-      'INSERT INTO identity_access.actors(id,issuer,subject) VALUES($1,$2,$3),($4,$2,$5)',
-      [actors[0], issuer, subject, actors[1], `${subject}-synthetic-other`],
+      'INSERT INTO identity_access.actors(id,issuer,subject) VALUES($1,$2,$3),($4,$2,$5),($6,$2,$7)',
+      [
+        actors[0],
+        issuer,
+        subject,
+        actors[1],
+        `${subject}-synthetic-other`,
+        actors[2],
+        `${subject}-synthetic-admin`,
+      ],
     );
     for (const [index, id] of ids.entries()) {
       await owner.pool.query(
@@ -80,10 +104,14 @@ export async function createBrowserMembershipFixture(issuer, subject) {
       );
       await owner.pool.query(
         'INSERT INTO organization_access.memberships(organization_id,actor_id,role) VALUES($1,$2,$3)',
-        [id, index === 2 ? actors[1] : actors[0], 'viewer'],
+        [
+          id,
+          index === 2 ? actors[1] : actors[0],
+          index === 0 ? 'organization_admin' : 'viewer',
+        ],
       );
     }
-    return { ids, apiUrl, bffUrl, cleanup };
+    return { ids, actors, apiUrl, bffUrl, cleanup };
   } catch (error) {
     await cleanup();
     throw error;

@@ -83,6 +83,129 @@ describe('Real Keycloak BFF login', () => {
       expect(body.identity.issuer).to.equal(
         'http://127.0.0.1:8080/realms/tax-intelligence',
       );
+      cy.env<{ organizationIds: string[]; actorIds: string[] }>(
+        ['organizationIds', 'actorIds'],
+        { log: false },
+      ).then(({ organizationIds: ids, actorIds: actors }) => {
+        const collection = `/api/organizations/${ids[0]}/memberships`;
+        const member = `${collection}/${actors[1]}`;
+        const headers = {
+          Origin: 'http://127.0.0.1:3000',
+          'x-csrf-token': body.csrfToken,
+        };
+        const mutate = (
+          method: 'PUT' | 'PATCH' | 'DELETE',
+          url: string,
+          role?: string,
+          expected = 204,
+        ) =>
+          cy
+            .request({
+              method,
+              url,
+              headers,
+              ...(role === undefined ? {} : { body: { role } }),
+              failOnStatusCode: false,
+              log: false,
+            })
+            .its('status')
+            .should('equal', expected);
+        cy.request({ url: collection, log: false }).then(
+          ({ body: page, headers: responseHeaders }) => {
+            expect(page).to.deep.equal({
+              items: [
+                {
+                  actorId: actors[0],
+                  role: 'organization_admin',
+                  status: 'active',
+                },
+              ],
+              nextCursor: null,
+            });
+            expect(responseHeaders['cache-control']).to.equal('no-store');
+          },
+        );
+        cy.request({
+          method: 'PUT',
+          url: member,
+          headers: { ...headers, 'x-csrf-token': 'wrong' },
+          body: { role: 'viewer' },
+          failOnStatusCode: false,
+          log: false,
+        })
+          .its('status')
+          .should('equal', 403);
+        cy.request({
+          method: 'DELETE',
+          url: member,
+          headers: { ...headers, Origin: 'https://attacker.invalid' },
+          failOnStatusCode: false,
+          log: false,
+        })
+          .its('status')
+          .should('equal', 403);
+        cy.request({
+          url: `/api/organizations/${ids[2]}/memberships`,
+          failOnStatusCode: false,
+          log: false,
+        })
+          .its('status')
+          .should('equal', 403);
+        mutate(
+          'PUT',
+          `/api/organizations/${ids[2]}/memberships/${actors[0]}`,
+          'viewer',
+          403,
+        );
+        mutate('PUT', member, 'viewer');
+        mutate('PUT', member, 'viewer');
+        mutate('PATCH', member, 'analyst');
+        cy.request({ url: collection, log: false }).then(({ body: page }) => {
+          expect(page.items).to.have.length(2);
+          expect(
+            page.items.find(
+              (entry: { actorId: string }) => entry.actorId === actors[1],
+            ),
+          ).to.deep.equal({
+            actorId: actors[1],
+            role: 'analyst',
+            status: 'active',
+          });
+        });
+        cy.request({ url: collection + '?limit=1', log: false }).then(
+          ({ body: page }) => {
+            expect(page.items).to.have.length(1);
+            expect(page.nextCursor).to.equal(page.items[0].actorId);
+            cy.request({
+              url: `${collection}?limit=1&cursor=${page.nextCursor}`,
+              log: false,
+            }).then(({ body: next }) => {
+              expect(next.items).to.have.length(1);
+              expect(next.nextCursor).to.equal(null);
+            });
+          },
+        );
+        mutate('DELETE', member);
+        mutate('DELETE', member);
+        mutate('PUT', member, 'viewer', 409);
+        cy.request({ url: collection, log: false }).then(({ body: page }) => {
+          expect(
+            page.items.find(
+              (entry: { actorId: string }) => entry.actorId === actors[1],
+            ),
+          ).to.deep.equal({
+            actorId: actors[1],
+            role: 'analyst',
+            status: 'revoked',
+          });
+        });
+        mutate('PUT', `${collection}/${actors[2]}`, 'organization_admin');
+        mutate('PATCH', `${collection}/${actors[0]}`, 'viewer');
+        cy.request({ url: collection, failOnStatusCode: false, log: false })
+          .its('status')
+          .should('equal', 403);
+        mutate('PATCH', `${collection}/${actors[2]}`, 'viewer', 403);
+      });
     });
     cy.request({
       method: 'POST',
