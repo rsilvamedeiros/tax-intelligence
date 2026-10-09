@@ -1,4 +1,7 @@
-import { authenticatedIdentitySchema } from '@tax/contracts';
+import {
+  authenticatedIdentitySchema,
+  browserSessionSchema,
+} from '@tax/contracts';
 import { readCookie, type AuthStore } from './handlers';
 export function createTokenReader(store: AuthStore) {
   return async (request: Request) => {
@@ -8,10 +11,13 @@ export function createTokenReader(store: AuthStore) {
       !data ||
       typeof data.accessToken !== 'string' ||
       !data.accessToken ||
-      typeof data.csrfToken !== 'string' ||
+      !browserSessionSchema.shape.csrfToken.safeParse(data.csrfToken).success ||
       !authenticatedIdentitySchema.safeParse(data.identity).success
     )
       return undefined;
-    return { accessToken: data.accessToken };
+    return {
+      accessToken: data.accessToken,
+      csrfToken: browserSessionSchema.shape.csrfToken.parse(data.csrfToken),
+    };
   };
 }
