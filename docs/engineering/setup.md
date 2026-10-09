@@ -58,9 +58,11 @@ GRANT SELECT ON identity_access.actors, organization_access.organizations,
   organization_access.memberships TO tax_api_membership;
 ```
 
-Não conceder escrita, acesso a auth_bff ou usar a credencial do migrador na API. A credencial BFF permanece separada. Login não cria Actor: vínculos devem ser provisionados de forma controlada, por issuer/subject exatos, sem dados reais nesta etapa. Não há endpoint de administração nem seleção no navegador ainda. Ator não provisionado recebe lista vazia e contexto 403; storage indisponível retorna 503.
+Não conceder escrita, acesso a auth_bff ou usar a credencial do migrador na API. A credencial BFF permanece separada. Login não cria Actor: vínculos devem ser provisionados de forma controlada, por issuer/subject exatos, sem dados reais nesta etapa. Não há endpoint de administração. Após login, o navegador lista organizações e consulta contexto na seleção através do BFF; nenhuma seleção fica em cookie ou localStorage. Ator não provisionado recebe estado vazio e contexto 403; storage indisponível retorna 503.
 
 Para validar sem provisionamento manual, configure apenas TEST_DATABASE_URL em um banco isolado terminado em _test e execute `pnpm build`, `pnpm test:integration` e `pnpm test:integration:membership`. Os testes exigem uma credencial operacional capaz de criar/remover roles de teste: criam conexões de runtime distintas e restritas, fixtures sintéticas, token RSA efêmero e removem suas fixtures/roles ao terminar. Não usam DATABASE_URL como fallback. [Escopo e evidências](membership-validation.md).
+
+`pnpm test:e2e:auth` agora também cria vínculos sintéticos para a identidade Keycloak de teste e configura roles distintas para API (leitura de identidade/memberships) e BFF (somente sessões). A tarefa Cypress de revogação executa no Node de testes, delegada a scripts/browser-membership-fixtures.mjs, com allowlist de UUIDs gerados pelo runner e TEST_DATABASE_URL obrigatória. Nenhum endpoint de teste/administração é incluído na aplicação. Fixtures e roles são removidas no encerramento. [Validação da seleção](browser-organization-validation.md).
 
 ## Diagnóstico de falhas
 

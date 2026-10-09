@@ -1,6 +1,6 @@
 # Organizations and Tenancy
 
-Status: consulta autenticada de organizações e memberships implementada conforme [ADR 0008](../adr/0008-membership-directory.md). Administração, auditoria, seleção no BFF/UI e isolamento RLS permanecem propostos.
+Status: consulta autenticada de organizações/memberships e seleção no BFF/UI implementadas conforme [ADR 0008](../adr/0008-membership-directory.md) e [ADR 0009](../adr/0009-browser-organization-selection.md). Administração, auditoria e isolamento RLS permanecem propostos.
 
 ## Objetivo e responsabilidades
 

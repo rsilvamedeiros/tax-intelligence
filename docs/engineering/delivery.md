@@ -14,7 +14,7 @@ Required checks propostos: `documentation`, `quality`, `database-integration`, `
 
 ## Entrega e versionamento
 
-Job `identity-provider` inicia Keycloak de desenvolvimento com senhas efêmeras mascaradas, importa realm versionado e confere discovery/PKCE/JWKS. Também aplica migrations de sessões em PostgreSQL efêmero e executa login/logout pelo formulário real com conta sintética. Não demonstra autorização de tenant. `quality` também executa smoke do processo compilado com access token RSA sintético. Conferir esses jobs e checks externos antes de declarar o PR verde.
+Job `identity-provider` inicia Keycloak de desenvolvimento com senhas efêmeras mascaradas, importa realm versionado e confere discovery/PKCE/JWKS. Aplica migrations em PostgreSQL efêmero e executa login, seleção de organização, tentativa cruzada, revogação após listagem e logout pelo navegador real com conta sintética. API e BFF usam roles distintas e restritas; o runner controla somente fixtures próprias. Não demonstra RLS ou efeitos de negócio. `quality` também executa smoke do processo compilado com access token RSA sintético. Conferir esses jobs e checks externos antes de declarar o PR verde.
 
 Versão inicial da fundação: 0.1.0 planejada; SemVer para releases, sem promessa de API estável durante 0.x. Conventional Commits orienta changelog, mas não libera produção automaticamente. Ambiente de staging com dados sintéticos precede produção; release requer runbook, snapshot/backup testado, health/readiness, smoke test, plano de rollback e aprovação humana.
 
