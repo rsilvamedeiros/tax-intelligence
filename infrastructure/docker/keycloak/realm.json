@@ -33,6 +33,15 @@
       "optionalClientScopes": [],
       "protocolMappers": [
         {
+          "name": "access-subject",
+          "protocol": "openid-connect",
+          "protocolMapper": "oidc-sub-mapper",
+          "config": {
+            "access.token.claim": "true",
+            "introspection.token.claim": "false"
+          }
+        },
+        {
           "name": "api-audience",
           "protocol": "openid-connect",
           "protocolMapper": "oidc-audience-mapper",

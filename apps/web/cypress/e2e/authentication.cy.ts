@@ -1,5 +1,21 @@
 describe('Real Keycloak BFF login', () => {
   it('logs in through code and PKCE, enforces CSRF, and revokes the session', () => {
+    cy.request({ url: '/', log: false })
+      .its('headers.x-frame-options')
+      .should('equal', 'DENY');
+    cy.intercept(
+      'GET',
+      'http://127.0.0.1:3000/api/auth/callback*',
+      (request) => {
+        request.on('before:response', (response) => {
+          expect(
+            response.statusCode,
+            'BFF callback redirects after login',
+          ).to.equal(303);
+          expect(response.headers.location).to.equal('http://127.0.0.1:3000/');
+        });
+      },
+    );
     cy.visit('/');
     cy.task('authCheckpoint', 'app_loaded', { log: false });
     cy.contains('a', 'Entrar').click();
