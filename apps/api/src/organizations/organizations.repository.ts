@@ -5,6 +5,7 @@ import {
   MembershipStore,
   MembershipRevocationStore,
   MembershipRoleStore,
+  MembershipGrantStore,
   type Database,
 } from '@tax/database';
 import type {
@@ -13,6 +14,7 @@ import type {
 } from './organizations.service';
 import type { RevocationCommand } from './membership-revocation.service';
 import type { RoleChangeCommand } from './membership-role.service';
+import type { GrantCommand } from './membership-grant.service';
 @Injectable()
 export class OrganizationsRepository
   implements MembershipDirectory, OnModuleDestroy
@@ -40,6 +42,9 @@ export class OrganizationsRepository
   }
   changeRole(command: RoleChangeCommand) {
     return new MembershipRoleStore(this.pool()).changeRole(command);
+  }
+  grant(command: GrantCommand) {
+    return new MembershipGrantStore(this.pool()).grant(command);
   }
   async onModuleDestroy() {
     await this.database?.pool.end();

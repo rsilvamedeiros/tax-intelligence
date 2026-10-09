@@ -3,6 +3,7 @@ import {
   Body,
   NotFoundException,
   Patch,
+  Put,
   ConflictException,
   Delete,
   HttpCode,
@@ -59,6 +60,12 @@ import {
   MembershipNotFound,
 } from './membership-role.service';
 
+import {
+  MembershipGrantService,
+  GrantTargetNotFound,
+  MembershipGrantConflict,
+} from './membership-grant.service';
+
 @Controller('organizations')
 @ApiBearerAuth()
 @ApiBadRequestResponse({
@@ -79,6 +86,7 @@ export class OrganizationsController {
     private readonly organizations: OrganizationsService,
     private readonly revocations: MembershipRevocationService,
     private readonly roles: MembershipRoleService,
+    private readonly grants: MembershipGrantService,
   ) {}
   private async identity(
     authorization: string | undefined,
@@ -90,6 +98,67 @@ export class OrganizationsController {
       if (error instanceof UnauthorizedException)
         response.setHeader('WWW-Authenticate', 'Bearer');
       throw error;
+    }
+  }
+  @Put(':organizationId/memberships/:actorId')
+  @HttpCode(204)
+  @ApiParam({
+    name: 'organizationId',
+    schema: { type: 'string', format: 'uuid' },
+  })
+  @ApiParam({ name: 'actorId', schema: { type: 'string', format: 'uuid' } })
+  @ApiBody({
+    required: true,
+    schema: membershipRoleChangeOpenApiSchema as SchemaObject,
+  })
+  @ApiNoContentResponse({
+    description:
+      'Membership granted or already equal; active administrator required',
+  })
+  @ApiForbiddenResponse({
+    description: 'No active administrative membership',
+    schema: apiErrorOpenApiSchema as SchemaObject,
+  })
+  @ApiNotFoundResponse({
+    description: 'Target actor does not exist',
+    schema: apiErrorOpenApiSchema as SchemaObject,
+  })
+  @ApiConflictResponse({
+    description:
+      'Membership revoked or role differs; use PATCH for role changes',
+    schema: apiErrorOpenApiSchema as SchemaObject,
+  })
+  async grantMembership(
+    @Headers('authorization') authorization: string | undefined,
+    @Param('organizationId') organizationId: string,
+    @Param('actorId') actorId: string,
+    @Query() query: unknown,
+    @Body() body: unknown,
+    @Res({ passthrough: true }) response: Response,
+  ) {
+    const identity = await this.identity(authorization, response);
+    const parsed = membershipRoleChangeSchema.safeParse(body);
+    if (
+      !parsed.success ||
+      !organizationIdSchema.safeParse(organizationId).success ||
+      !organizationIdSchema.safeParse(actorId).success ||
+      !emptyQuerySchema.safeParse(query).success
+    )
+      throw new BadRequestException();
+    try {
+      await this.grants.grant(
+        identity,
+        organizationId,
+        actorId,
+        parsed.data.role,
+        String(response.getHeader('x-request-id')),
+      );
+    } catch (error) {
+      if (error instanceof MembershipDenied) throw new ForbiddenException();
+      if (error instanceof GrantTargetNotFound) throw new NotFoundException();
+      if (error instanceof MembershipGrantConflict)
+        throw new ConflictException();
+      throw new ServiceUnavailableException();
     }
   }
   @Patch(':organizationId/memberships/:actorId')
