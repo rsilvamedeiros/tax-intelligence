@@ -2,7 +2,7 @@
 
 Tax Intelligence Platform: fundação de uma plataforma B2B de inteligência tributária, fiscal, trabalhista e financeira sobre sistemas existentes.
 
-**Etapa atual: revogação administrativa de memberships.** API verifica administrador ativo, preserva o último administrador e grava a revogação com auditoria na mesma transação. Login/sessões BFF e seleção de organizações continuam disponíveis. [Evidências desta etapa](docs/engineering/membership-revocation-validation.md). Concessão/troca de roles, administração no navegador, RLS e vertical fiscal permanecem pendentes; marca comercial pendente. Não houve deploy.
+**Etapa atual: alteração administrativa de papéis.** API altera papéis de vínculos existentes e revoga acesso, com auditoria atômica, locks e preservação do último administrador. Login/sessões BFF e seleção de organizações continuam disponíveis. [Evidências desta etapa](docs/engineering/membership-role-validation.md). Concessão de vínculos, administração no navegador, RLS e vertical fiscal permanecem pendentes; marca comercial pendente. Não houve deploy.
 
 - [Documentação navegável](docs/README.md)
 - [Avaliação do repositório e plano por etapas](docs/engineering/repository-assessment.md)

@@ -2,6 +2,9 @@
 
 ## Não lançado
 
+- Alteração administrativa de papéis de memberships existentes, com auditoria atômica, idempotência e preservação do último administrador.
+- Protocolo transacional compartilhado entre mudança de papel e revogação; migration aditiva e concorrência cruzada verificada em PostgreSQL.
+
 - Revogação administrativa de membership na API, com auditoria transacional, idempotência, locks e preservação do último administrador.
 - Migration aditiva de eventos de revogação e privilégios limitados a revoked_at/INSERT de auditoria; concessão de vínculos e RLS permanecem pendentes.
 

@@ -6,6 +6,8 @@ Atualização após escolha do provedor: casos de assinatura/issuer/audience/alg
 
 ## Fixtures e ambiente
 
+ADR 0011 estende ACCESS-02/03 com mudança de papéis e perda de acesso administrativo usando token ainda válido. Mudança de papel concorrente com revogação preserva administrador; permissão perdida durante espera em lock é revalidada, cobrindo ACCESS-04 para esses efeitos. Auditoria indisponível reverte role (DB-06 parcial). Não comprova RLS, concessão de vínculos ou ação fiscal. [Validação de papéis](membership-role-validation.md).
+
 ADR 0010 exercita ACCESS-02 para viewer/admin de outra organização, ACCESS-03 com token ainda válido e ACCESS-04 por espera observada em pg_blocking_pids, revogações administrativas concorrentes e revalidação do iniciador após espera. DB-06 é demonstrado para revogação: negar INSERT de auditoria reverte revoked_at. FKs compostas da auditoria impedem referências cruzadas. São evidências de controle de acesso administrativo, sem RLS, importação ou conclusão integral da matriz. [Validação da revogação](membership-revocation-validation.md).
 
 Etapa ADR 0009 acrescenta seleção por BFF/UI à jornada real Keycloak: listado A, contexto validado, tentativa B negada, revogação após listagem seguida de seleção negada e logout seguido de 401 no BFF de organizações. Não conclui E2E-01 com efeito de negócio, ACCESS-04 ou RLS. [Validação da seleção](browser-organization-validation.md).

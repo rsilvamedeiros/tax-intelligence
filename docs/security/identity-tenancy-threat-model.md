@@ -23,4 +23,6 @@ ADR 0010 acrescenta controle administrativo à revogação: iniciador verificado
 
 Limites: autorização local não detecta instantaneamente conta revogada no IdP; SLA depende do provedor e ciclo dos tokens. Operação autorizada antes de revogação pode concluir conforme locks definidos na RFC. Cada limite precisa de aceite humano antes da implementação.
 
+ADR 0011 acrescenta mudança de papéis com a mesma autorização/locks da revogação. Viewer não se promove; administrador rebaixado perde permissão na próxima operação mesmo com JWT válido. Alvo revogado não é reativado, último administrador é preservado e falha de auditoria reverte role. Grants de coluna e INSERT não protegem runtime comprometido com SQL arbitrário. [Evidências](../engineering/membership-role-validation.md).
+
 Critérios bloqueantes: acesso cruzado, credencial exposta, callback reutilizável, permissão derivada de entrada não confiável, escrita parcial ou role runtime capaz de ignorar RLS. Mitigação só pode ser marcada implementada após teste executado. Ausência de falhas no scanner não comprova ausência de todas as exposições.

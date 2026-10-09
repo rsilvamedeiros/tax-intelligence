@@ -10,6 +10,8 @@ Job database-integration também constrói a API e executa `pnpm test:integratio
 
 ADR 0010 estende esse runner: depois da fase de leitura, concede somente UPDATE(revoked_at)/INSERT de auditoria e testa DELETE administrativo, idempotência, último administrador, revogação com token válido e rollback por falta de privilégio de auditoria. Concorrência e locks são demonstrados pelos testes PostgreSQL do job database-integration, sem esperar por sleep. A jornada identity-provider permanece uma regressão de login/seleção; não há administração no navegador nesta etapa.
 
+ADR 0011 acrescenta uma fase posterior com UPDATE(role)/INSERT de auditoria de papéis: PATCH administrativo, repetição sem evento, promoção, rebaixamento, perda de permissão com token válido e rollback da alteração quando a auditoria falha. Testes PostgreSQL verificam disputa entre rebaixamento e revogação e revalidação do iniciador após esperar o lock compartilhado. Veja [evidências da etapa](membership-role-validation.md).
+
 Cache apenas dependências e artefatos reprodutíveis, nunca segredos. Alterações em .env.example e variáveis runtime devem constar em turbo env para impedir cache incorreto. Dependências novas exigem necessidade concreta, licença, compatibilidade, manutenção e revisão do audit. Lockfile no PR técnico; versões prerelease não são padrão de produção.
 
 Required checks propostos: `documentation`, `quality`, `database-integration`, `e2e`, `dependency-audit`, `secret-scan`, conforme jobs forem implementados. Não exigir checks inexistentes. Branch protection: impedir push direto em main, exigir review humano, dismiss stale reviews e checks atuais. Essas configurações **não foram aplicadas remotamente**.
