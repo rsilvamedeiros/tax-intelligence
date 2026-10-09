@@ -6,6 +6,8 @@ Primeiro PR documental: validação de links e manifestos de skills, revisão de
 
 Workflow [Continuous Integration](../../.github/workflows/ci.yml) implementado para PR e main: checkout, pnpm fixado, Node 24, install frozen, formato, lint, tipos, unitários/HTTP/componentes, cobertura, build, smoke OTLP, audit e secret scanning. Job separado com PostgreSQL 17 descartável para migrations/integração; Cypress/Chrome sobre build real em outro job. Artefatos de cobertura e screenshots de falha têm retenção de sete dias. Sem configurar deployment nesta fase.
 
+Job database-integration também constrói a API e executa `pnpm test:integration:membership`: RSA/JWKS efêmeros, processo compilado e conexão PostgreSQL com role de leitura distinta do migrador. Verifica seleção cruzada, revogação após commit e indisponibilidade sanitizada. Não demonstra RLS, locks de escrita nem a jornada completa BFF/UI.
+
 Cache apenas dependências e artefatos reprodutíveis, nunca segredos. Alterações em .env.example e variáveis runtime devem constar em turbo env para impedir cache incorreto. Dependências novas exigem necessidade concreta, licença, compatibilidade, manutenção e revisão do audit. Lockfile no PR técnico; versões prerelease não são padrão de produção.
 
 Required checks propostos: `documentation`, `quality`, `database-integration`, `e2e`, `dependency-audit`, `secret-scan`, conforme jobs forem implementados. Não exigir checks inexistentes. Branch protection: impedir push direto em main, exigir review humano, dismiss stale reviews e checks atuais. Essas configurações **não foram aplicadas remotamente**.

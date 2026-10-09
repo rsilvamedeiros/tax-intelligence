@@ -1,8 +1,8 @@
 # RFC 0001 — Identidade, membership e isolamento
 
-Status: proposta para revisão. Escopo desta entrega: desenho e aceite; nenhuma autenticação, tabela ou policy implementada. Responsável pela decisão: mantenedor do projeto; revisão de segurança e provedor ainda pendentes.
+Status: proposta de referência com implementação parcial por etapas. A autenticação da API, sessões BFF e consulta de memberships foram implementadas nos ADRs 0006–0008. Administração, auditoria/locks, permissões de negócio, RLS e jornada completa permanecem pendentes. Responsável pela decisão e revisão de segurança: mantenedor do projeto.
 
-Atualização posterior ao PR #5: escolha do provedor delegada ao agente e primeiro módulo da API autorizado. [ADR 0006](../adr/0006-development-identity-provider.md) define Keycloak de desenvolvimento e validação de access tokens. BFF, sessão, membership e RLS desta RFC seguem propostos; não interpretar a autenticação da API como conclusão da vertical.
+Atualização posterior ao PR #8: [ADR 0008](../adr/0008-membership-directory.md) delimita a consulta de vínculos ativos com role de leitura. A próxima leitura após revogação confirmada nega acesso; uma leitura em andamento pode concluir pelo snapshot. Locks abaixo continuam propostos para operações com efeitos. Não interpretar autenticação e lookup de membership como conclusão da vertical.
 
 ## Problema e aceite
 
