@@ -168,7 +168,16 @@ jobs:
         env:
           DATABASE_URL: ${{ env.TEST_DATABASE_URL }}
       - name: Exercise real browser login and logout
+        timeout-minutes: 4
         run: pnpm test:e2e:auth
+      - name: Upload authentication failure screenshots
+        if: failure()
+        uses: actions/upload-artifact@b7c566a772e6b6bfb58ed0dc250532a479d7789f # v6
+        with:
+          name: authentication-e2e-failures
+          path: apps/web/cypress/screenshots
+          if-no-files-found: ignore
+          retention-days: 7
       - name: Stop development identity provider
         if: always()
         run: docker compose -f infrastructure/docker/compose.yaml --profile identity down --volumes
