@@ -73,6 +73,15 @@ Para validar sem provisionamento manual, configure apenas TEST_DATABASE_URL em u
 
 `pnpm test:e2e:auth` agora também cria vínculos sintéticos para a identidade Keycloak de teste e configura roles distintas para API (leitura de identidade/memberships) e BFF (somente sessões). A tarefa Cypress de revogação executa no Node de testes, delegada a scripts/browser-membership-fixtures.mjs, com allowlist de UUIDs gerados pelo runner e TEST_DATABASE_URL obrigatória. Nenhum endpoint de teste/administração é incluído na aplicação. Fixtures e roles são removidas no encerramento. [Validação da seleção](browser-organization-validation.md).
 
+Para habilitar alteração administrativa de papéis, aplicar migration 0004 e adicionar os grants do [ADR 0011](../adr/0011-membership-role-changes.md):
+
+```sql
+GRANT UPDATE (role) ON organization_access.memberships TO tax_api_membership;
+GRANT INSERT ON organization_access.membership_role_changes TO tax_api_membership;
+```
+
+Sem INSERT/DELETE de memberships, acesso de leitura/mutação aos eventos, identidade ou sessões BFF. A operação só altera memberships ativas existentes e não reativa revogadas. Revogação e mudança de papel compartilham lock; provisionamento operacional deve respeitá-lo. Login não cria ator e concessão de vínculos segue pendente. Rollback desabilita PATCH e remove os grants adicionais, preservando migration/auditoria.
+
 ## Diagnóstico de falhas
 
 - Engine incompatível: conferir `node --version` e caminho do executável; no Windows, pnpm global pode usar Node adjacente mesmo com PATH alterado. Preferir instalação suportada ou executar pnpm.cjs explicitamente com Node 24 local.

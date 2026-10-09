@@ -1,5 +1,8 @@
 import {
   BadRequestException,
+  Body,
+  NotFoundException,
+  Patch,
   ConflictException,
   Delete,
   HttpCode,
@@ -16,6 +19,8 @@ import {
 } from '@nestjs/common';
 import {
   ApiBearerAuth,
+  ApiBody,
+  ApiNotFoundResponse,
   ApiConflictResponse,
   ApiNoContentResponse,
   ApiBadRequestResponse,
@@ -30,6 +35,8 @@ import type { Request, Response } from 'express';
 import type { SchemaObject } from '@nestjs/swagger/dist/interfaces/open-api-spec.interface';
 import {
   organizationContextSchema,
+  membershipRoleChangeSchema,
+  membershipRoleChangeOpenApiSchema,
   organizationPageSchema,
   organizationQuerySchema,
   organizationIdSchema,
@@ -47,6 +54,10 @@ import {
   LastAdministrator,
   MembershipRevocationService,
 } from './membership-revocation.service';
+import {
+  MembershipRoleService,
+  MembershipNotFound,
+} from './membership-role.service';
 
 @Controller('organizations')
 @ApiBearerAuth()
@@ -67,6 +78,7 @@ export class OrganizationsController {
     private readonly auth: AuthService,
     private readonly organizations: OrganizationsService,
     private readonly revocations: MembershipRevocationService,
+    private readonly roles: MembershipRoleService,
   ) {}
   private async identity(
     authorization: string | undefined,
@@ -78,6 +90,64 @@ export class OrganizationsController {
       if (error instanceof UnauthorizedException)
         response.setHeader('WWW-Authenticate', 'Bearer');
       throw error;
+    }
+  }
+  @Patch(':organizationId/memberships/:actorId')
+  @HttpCode(204)
+  @ApiParam({
+    name: 'organizationId',
+    schema: { type: 'string', format: 'uuid' },
+  })
+  @ApiParam({ name: 'actorId', schema: { type: 'string', format: 'uuid' } })
+  @ApiBody({
+    required: true,
+    schema: membershipRoleChangeOpenApiSchema as SchemaObject,
+  })
+  @ApiNoContentResponse({
+    description: 'Role changed or already equal; active administrator required',
+  })
+  @ApiForbiddenResponse({
+    description: 'No active administrative membership',
+    schema: apiErrorOpenApiSchema as SchemaObject,
+  })
+  @ApiNotFoundResponse({
+    description: 'Target membership absent or revoked',
+    schema: apiErrorOpenApiSchema as SchemaObject,
+  })
+  @ApiConflictResponse({
+    description: 'The last administrator cannot be demoted',
+    schema: apiErrorOpenApiSchema as SchemaObject,
+  })
+  async changeRole(
+    @Headers('authorization') authorization: string | undefined,
+    @Param('organizationId') organizationId: string,
+    @Param('actorId') actorId: string,
+    @Query() query: unknown,
+    @Body() body: unknown,
+    @Res({ passthrough: true }) response: Response,
+  ) {
+    const identity = await this.identity(authorization, response);
+    const parsed = membershipRoleChangeSchema.safeParse(body);
+    if (
+      !parsed.success ||
+      !organizationIdSchema.safeParse(organizationId).success ||
+      !organizationIdSchema.safeParse(actorId).success ||
+      !emptyQuerySchema.safeParse(query).success
+    )
+      throw new BadRequestException();
+    try {
+      await this.roles.change(
+        identity,
+        organizationId,
+        actorId,
+        parsed.data.role,
+        String(response.getHeader('x-request-id')),
+      );
+    } catch (error) {
+      if (error instanceof MembershipDenied) throw new ForbiddenException();
+      if (error instanceof MembershipNotFound) throw new NotFoundException();
+      if (error instanceof LastAdministrator) throw new ConflictException();
+      throw new ServiceUnavailableException();
     }
   }
   @Delete(':organizationId/memberships/:actorId')

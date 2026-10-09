@@ -5,6 +5,13 @@ export const organizationRoleSchema = z.enum([
   'reviewer',
   'viewer',
 ]);
+export const membershipRoleChangeSchema = z
+  .object({ role: organizationRoleSchema })
+  .strict();
+export const membershipRoleChangeOpenApiSchema = z.toJSONSchema(
+  membershipRoleChangeSchema,
+  { target: 'openapi-3.0' },
+);
 const organizationSchema = z
   .object({
     id: z.string().uuid(),

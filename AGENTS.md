@@ -8,7 +8,7 @@ Leia [índice](docs/README.md), [arquitetura](docs/architecture/overview.md), AD
 
 Estado autorizado: documentação primeiro; fundação técnica por etapa. Após PR #5, o mantenedor delegou a escolha do provedor e a autenticação da API; após PR #6, autorizou login e sessões BFF. Após PR #8, autorizou a próxima etapa de memberships, delimitada no ADR 0008. Importação, regras e isolamento de dados de negócio permanecem pendentes de etapa própria. Não transformar proposta em decisão aprovada silenciosamente.
 
-Etapa atual autorizada após integração do PR #10: revogação administrativa de memberships na API conforme [ADR 0010](docs/adr/0010-membership-revocation.md), com auditoria transacional, locks e preservação do último administrador. Concessão/troca de roles, administração BFF/UI, RLS e ações fiscais seguem pendentes. Nenhuma ampliação de acesso ao banco pela web está autorizada.
+Etapa atual autorizada após integração do PR #11: alteração administrativa de papéis de memberships existentes conforme [ADR 0011](docs/adr/0011-membership-role-changes.md), com auditoria atômica e protocolo de locks compartilhado com revogação. Preservar último administrador e não reativar/criar vínculos. Concessão de vínculos, administração BFF/UI, RLS e ações fiscais seguem pendentes. Nenhuma ampliação de acesso ao banco pela web está autorizada.
 
 ## Arquitetura e código
 

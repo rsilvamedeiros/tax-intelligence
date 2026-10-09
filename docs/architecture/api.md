@@ -26,6 +26,10 @@ Fronteira de identidade implementada nesta etapa: `GET /v1/auth/me` verifica Bea
 
 DELETE /v1/organizations/:organizationId/memberships/:actorId exige administrador ativo na organização. UUIDs e query vazia são validados depois do Bearer; nenhum corpo é aceito, inclusive text/plain ou transporte chunked. Erros de parse JSON podem ser rejeitados pelo middleware antes do controller. Iniciador vem de issuer/subject, ignorando role no token e headers de tenant. Sucesso/repetição/alvo ausente: 204 sem corpo, sempre após autorização; último administrador: 409; acesso negado: 403 uniforme; falha de transação/auditoria: 503 sanitizado. Evento de revogação usa o requestId validado da resposta, sem identidade externa. [ADR 0010](../adr/0010-membership-revocation.md), [evidências](../engineering/membership-revocation-validation.md). Não há endpoint BFF administrativo.
 
+## Alteração administrativa de papéis implementada
+
+PATCH /v1/organizations/:organizationId/memberships/:actorId aceita exclusivamente JSON `{role}` do vocabulário fechado compartilhado; IDs UUID, query vazia e campos extras rejeitados. Iniciador deriva do Bearer verificado; administrador ativo é revalidado dentro da transação. Sucesso/repetição: 204, acesso administrativo negado: 403, alvo ausente/revogado após autorização: 404, último administrador: 409, falha de auditoria/storage: 503 sanitizado. Não cria/reativa vínculos. Schema runtime e OpenAPI provados pelo contrato HTTP. [ADR 0011](../adr/0011-membership-role-changes.md), [evidências](../engineering/membership-role-validation.md).
+
 ## Fronteira BFF de organizações implementada
 
 O BFF expõe as consultas existentes como GET /api/organizations e GET /api/organizations/:organizationId/context, usando exclusivamente o token da sessão server-side. Não encaminha Authorization, cookies ou tenant fornecidos pelo navegador. Aceita somente paginação/UUID do contrato; não há proxy genérico. Retorna schemas públicos estritos, 401 para sessão rejeitada, 403 para vínculo negado e 503 sanitizado em falha. [Decisão da jornada](../adr/0009-browser-organization-selection.md).

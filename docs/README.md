@@ -29,6 +29,7 @@ Documentação primeiro; código avança por etapa com aceite, testes e revisão
 - [Validação da consulta de memberships](engineering/membership-validation.md)
 - [Validação da seleção de organização](engineering/browser-organization-validation.md)
 - [Validação da revogação administrativa](engineering/membership-revocation-validation.md)
+- [Validação da alteração de papéis](engineering/membership-role-validation.md)
 
 ## Domínios
 
@@ -53,6 +54,7 @@ Documentação primeiro; código avança por etapa com aceite, testes e revisão
 - [0008 consulta de organizações e memberships](adr/0008-membership-directory.md)
 - [0009 seleção de organização no navegador](adr/0009-browser-organization-selection.md)
 - [0010 revogação administrativa de membership](adr/0010-membership-revocation.md)
+- [0011 alteração administrativa de papéis](adr/0011-membership-role-changes.md)
 - [process](rfc/process.md)
 - [RFC 0001: identidade, membership e isolamento](rfc/0001-identity-membership-isolation.md)
 
