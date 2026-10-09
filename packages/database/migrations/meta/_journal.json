@@ -29,6 +29,13 @@
       "when": 1791460803000,
       "tag": "0003_membership_revocations",
       "breakpoints": true
+    },
+    {
+      "idx": 4,
+      "version": "7",
+      "when": 1791460804000,
+      "tag": "0004_membership_role_changes",
+      "breakpoints": true
     }
   ]
 }
