@@ -4,8 +4,8 @@ node_modules/
 dist/
 .turbo/
 coverage/
-cypress/screenshots/
-cypress/videos/
+**/cypress/screenshots/
+**/cypress/videos/
 .env
 .env.*
 !.env.example
