@@ -46,7 +46,6 @@ Documentação primeiro; código avança por etapa com aceite, testes e revisão
 ## Decisões
 
 - [0001 modular monolith](adr/0001-modular-monolith.md)
-- [0012 concessão administrativa de memberships](adr/0012-membership-grants.md)
 - [0002 postgresql drizzle](adr/0002-postgresql-drizzle.md)
 - [0003 tenant isolation](adr/0003-tenant-isolation.md)
 - [0004 ai and fiscal rules](adr/0004-ai-and-fiscal-rules.md)
@@ -57,6 +56,7 @@ Documentação primeiro; código avança por etapa com aceite, testes e revisão
 - [0009 seleção de organização no navegador](adr/0009-browser-organization-selection.md)
 - [0010 revogação administrativa de membership](adr/0010-membership-revocation.md)
 - [0011 alteração administrativa de papéis](adr/0011-membership-role-changes.md)
+- [0012 concessão administrativa de memberships](adr/0012-membership-grants.md)
 - [process](rfc/process.md)
 - [RFC 0001: identidade, membership e isolamento](rfc/0001-identity-membership-isolation.md)
 

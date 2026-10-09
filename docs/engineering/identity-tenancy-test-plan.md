@@ -54,3 +54,5 @@ HTTP usa aplicação real; servidor OIDC/JWKS controlado para casos criptográfi
 Concorrência usa barreiras coordenadas, nunca sleep como evidência de ordenação. Capturar motivo da falha Red e resultado Green por caso; falha de ambiente/import não demonstra TDD. Não reduzir coverage, ignorar falhas ou chamar mock de prova RLS. Fixtures e estado devem ser limpos entre casos; bloquear execução contra banco não isolado.
 
 Aceite: todos os negativos críticos passam, revogação concorrente tem resultado definido, revisão de segurança humana realizada e nenhum segredo/dado real aparece em artefatos. Cobertura e CI verdes complementam esses critérios; não os substituem.
+
+ADR 0012 estende ACCESS-02/03/04 com concessão administrativa a ator existente, idempotência, conflito sem reativação, concorrência com revogação e revalidação de iniciador durante espera. DB-06 verifica rollback de INSERT do vínculo quando a auditoria falha. Identity global permite associação do mesmo ator a organizações diferentes, somente mediante administração ativa em cada destino. [Evidências](membership-grant-validation.md). Não comprova RLS ou efeitos fiscais.
