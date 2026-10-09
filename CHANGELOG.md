@@ -2,6 +2,8 @@
 
 ## Não lançado
 
+- Consulta administrativa paginada de membros ativos/revogados, com autorização na mesma instrução SQL e resposta mínima sem identidade externa.
+
 - Concessão administrativa de memberships a atores existentes, com auditoria atômica, idempotência, concorrência serializada e sem reativação.
 
 - Alteração administrativa de papéis de memberships existentes, com auditoria atômica, idempotência e preservação do último administrador.

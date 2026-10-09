@@ -42,6 +42,10 @@ DTOs de escrita: validação whitelist, rejeição de campos extras, limites de 
 
 OpenAPI deve declarar status, schemas, limites, segurança, idempotência e exemplos sintéticos antes do controller. Contract tests confrontam o endpoint com schemas e OpenAPI; não confiar apenas no tipo TypeScript.
 
+## Consulta administrativa implementada
+
+Consulta administrativa: GET /v1/organizations/:organizationId/memberships retorna somente actorId, role e status active/revoked, com limit/cursor do contrato existente. Exige administrador ativo no mesmo snapshot SQL da listagem; negação uniforme 403, falha 503 sanitizada, respostas no-store. Não expõe identidade externa ou auditoria. [ADR 0013](../adr/0013-administrative-membership-directory.md), [validação](../engineering/administrative-membership-directory-validation.md). Sem rota administrativa BFF nesta etapa.
+
 ## Concessão administrativa implementada
 
 PUT /v1/organizations/:organizationId/memberships/:actorId usa o corpo estrito de papel compartilhado com PATCH. Administrador ativo é revalidado dentro da transação. Criação/repetição do mesmo papel: 204; acesso negado: 403 antes de consultar alvo; ator inexistente após autorização: 404; vínculo revogado ou papel diferente: 409; falha SQL/auditoria: 503 sanitizado. Não cria identidade, reativa vínculo ou altera papel existente. Sem endpoint BFF administrativo. [ADR 0012](../adr/0012-membership-grants.md), [evidências](../engineering/membership-grant-validation.md).

@@ -17,3 +17,4 @@ export { IdentityStore, MembershipStore } from './membership-store';
 export { MembershipRevocationStore } from './membership-revocation-store';
 export { MembershipRoleStore } from './membership-role-store';
 export { MembershipGrantStore } from './membership-grant-store';
+export { AdministrativeMembershipStore } from './administrative-membership-store';

@@ -507,8 +507,91 @@ try {
       !logs.includes(grantSubject) &&
       !logs.includes(grantActor),
   );
+  const membersPath = `/organizations/${orgs[1]}/memberships`;
+  assert.equal(
+    (await get('/organizations/bad/memberships?limit=0', '')).status,
+    401,
+  );
+  assert.equal(
+    (await get(`${membersPath}?limit=101`, targetToken)).status,
+    400,
+  );
+  assert.equal(
+    (await get(`${membersPath}?subject=forged`, targetToken)).status,
+    400,
+  );
+  for (const bearer of [accessToken, grantToken, unprovisioned]) {
+    assert.equal(
+      (await get(membersPath, bearer, { 'x-role': 'organization_admin' }))
+        .status,
+      403,
+    );
+  }
+  assert.equal(
+    (await get(`/organizations/${orgs[2]}/memberships`, targetToken)).status,
+    403,
+  );
+  assert.equal(
+    (await get(`/organizations/${randomUUID()}/memberships`, targetToken))
+      .status,
+    403,
+  );
+  const expectedMembers = [
+    { actorId: actor, role: 'viewer', status: 'active' },
+    { actorId: targetActor, role: 'organization_admin', status: 'active' },
+    { actorId: grantActor, role: 'analyst', status: 'revoked' },
+  ].sort((a, b) => a.actorId.localeCompare(b.actorId));
+  const memberPage = await get(membersPath, targetToken);
+  assert.equal(memberPage.status, 200);
+  assert.deepEqual(memberPage.body, {
+    items: expectedMembers,
+    nextCursor: null,
+  });
+  const firstMember = await get(`${membersPath}?limit=1`, targetToken);
+  assert.deepEqual(firstMember.body, {
+    items: expectedMembers.slice(0, 1),
+    nextCursor: expectedMembers[0].actorId,
+  });
+  const remainingMembers = await get(
+    `${membersPath}?limit=2&cursor=${firstMember.body.nextCursor}`,
+    targetToken,
+  );
+  assert.deepEqual(remainingMembers.body, {
+    items: expectedMembers.slice(1),
+    nextCursor: null,
+  });
+  assert.deepEqual(
+    (
+      await get(
+        `${membersPath}?cursor=${expectedMembers.at(-1).actorId}`,
+        targetToken,
+      )
+    ).body,
+    { items: [], nextCursor: null },
+  );
+  assert.equal(
+    (await changeRole(actor, 'organization_admin', targetToken)).status,
+    204,
+  );
+  assert.equal(
+    (await changeRole(targetActor, 'viewer', targetToken)).status,
+    204,
+  );
+  assert.equal((await get(membersPath, targetToken)).status, 403);
+  assert.equal((await get(membersPath)).status, 200);
+  assert.equal((await revoke(orgs[1], targetActor)).status, 204);
+  assert.equal((await get(membersPath, targetToken)).status, 403);
   await owner.pool.query(
     `REVOKE SELECT ON organization_access.memberships FROM ${role}`,
+  );
+  const unavailableMembers = await get(
+    `/organizations/${orgs[1]}/memberships`,
+    targetToken,
+  );
+  assert.equal(unavailableMembers.status, 503);
+  assert.doesNotMatch(
+    JSON.stringify(unavailableMembers.body),
+    /SELECT|membership_http_|postgresql|password/i,
   );
   const unavailable = await get('/organizations');
   assert.equal(unavailable.status, 503);
@@ -525,7 +608,7 @@ try {
   );
   assert.ok(!logs.includes(orgs[0]) && !logs.includes(orgs[2]));
   console.log(
-    'Membership integration passed: compiled API/RSA, restricted PostgreSQL, directory, revocation, role changes and grants, valid-token permission loss, idempotency, last administrator protection, atomic audit rollback and sanitized errors.',
+    'Membership integration passed: compiled API/RSA, restricted PostgreSQL, administrative and organization directories, revocation, role changes and grants, valid-token permission loss, idempotency, last administrator protection, atomic audit rollback and sanitized errors.',
   );
 } finally {
   if (app && app.exitCode === null) {

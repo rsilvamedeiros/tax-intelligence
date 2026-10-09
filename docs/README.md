@@ -31,6 +31,7 @@ Documentação primeiro; código avança por etapa com aceite, testes e revisão
 - [Validação da revogação administrativa](engineering/membership-revocation-validation.md)
 - [Validação da alteração de papéis](engineering/membership-role-validation.md)
 - [Validação da concessão administrativa](engineering/membership-grant-validation.md)
+- [Validação da consulta administrativa de membros](engineering/administrative-membership-directory-validation.md)
 
 ## Domínios
 
@@ -57,6 +58,7 @@ Documentação primeiro; código avança por etapa com aceite, testes e revisão
 - [0010 revogação administrativa de membership](adr/0010-membership-revocation.md)
 - [0011 alteração administrativa de papéis](adr/0011-membership-role-changes.md)
 - [0012 concessão administrativa de memberships](adr/0012-membership-grants.md)
+- [0013 consulta administrativa de membros](adr/0013-administrative-membership-directory.md)
 - [process](rfc/process.md)
 - [RFC 0001: identidade, membership e isolamento](rfc/0001-identity-membership-isolation.md)
 

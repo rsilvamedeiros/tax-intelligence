@@ -16,6 +16,8 @@ Selecionar organização → validar associação. Interfaces: Identity; todos o
 
 ## Riscos e limites
 
+A consulta administrativa do [ADR 0013](../adr/0013-administrative-membership-directory.md) expõe vínculos ativos/revogados somente ao administrador ativo da organização, com paginação por UUID e resposta mínima. Não pesquisa atores globais nem cria identidades. Autorização e dados usam o mesmo snapshot SQL; RLS segue pendente.
+
 Organization e Membership possuem tabelas com FKs, unicidade e role limitada. Consultas filtram ator por issuer/subject e vínculos ativos, sem cache. A próxima consulta após commit da revogação nega acesso; leitura iniciada antes pode concluir pelo snapshot. Revogação exige administrador ativo, locks, preservação do último administrador e evento na mesma transação. Auditoria referencia iniciador/alvo na organização por FKs compostas, sem identidade externa. Outros efeitos transacionais continuam propostos na [RFC 0001](../rfc/0001-identity-membership-isolation.md). Não há policies RLS ou dados fiscais nesta entrega.
 
 Acesso cruzado, contexto de pool reutilizado. Não centralizar tabelas de domínio neste contexto.

@@ -6,6 +6,7 @@ import {
   MembershipRevocationStore,
   MembershipRoleStore,
   MembershipGrantStore,
+  AdministrativeMembershipStore,
   type Database,
 } from '@tax/database';
 import type {
@@ -36,6 +37,19 @@ export class OrganizationsRepository
   }
   get(actorId: string, organizationId: string) {
     return new MembershipStore(this.pool()).get(actorId, organizationId);
+  }
+  listMembers(
+    actorId: string,
+    organizationId: string,
+    limit: number,
+    cursor?: string,
+  ) {
+    return new AdministrativeMembershipStore(this.pool()).listMembers(
+      actorId,
+      organizationId,
+      limit,
+      cursor,
+    );
   }
   revoke(command: RevocationCommand) {
     return new MembershipRevocationStore(this.pool()).revoke(command);
