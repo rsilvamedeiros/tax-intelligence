@@ -1,7 +1,15 @@
 'use client';
-import { useEffect, useRef, useState } from 'react';
+import {
+  Fragment,
+  useCallback,
+  useEffect,
+  useRef,
+  useState,
+  type ReactNode,
+} from 'react';
 import { browserSessionSchema } from '@tax/contracts';
-export function AuthPanel() {
+import { SessionExpiryContext } from './auth-session';
+export function AuthPanel({ children }: { children?: ReactNode } = {}) {
   const [state, setState] = useState<
     'loading' | 'anonymous' | 'active' | 'unavailable'
   >('loading');
@@ -10,6 +18,11 @@ export function AuthPanel() {
   const [leaving, setLeaving] = useState(false);
   const [logoutError, setLogoutError] = useState(false);
   const pendingSession = useRef<AbortController | null>(null);
+  const expire = useCallback(() => {
+    pendingSession.current?.abort();
+    setCsrf('');
+    setState('anonymous');
+  }, []);
   useEffect(() => {
     const recheck = () => {
       if (!leaving && document.visibilityState === 'visible')
@@ -85,6 +98,13 @@ export function AuthPanel() {
           >
             {leaving ? 'Saindo…' : 'Sair'}
           </button>
+          {!leaving && (
+            <Fragment key={csrf}>
+              <SessionExpiryContext.Provider value={expire}>
+                {children}
+              </SessionExpiryContext.Provider>
+            </Fragment>
+          )}
         </>
       )}
       {state === 'unavailable' && (

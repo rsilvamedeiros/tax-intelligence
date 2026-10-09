@@ -1,5 +1,5 @@
 import { HealthPanel } from './components/health-panel';
-import { AuthPanel } from './components/auth-panel';
+import { AccessPanel } from './components/access-panel';
 export default function Home() {
   return (
     <main id="main-content">
@@ -12,7 +12,7 @@ export default function Home() {
         </p>
       </header>
       <HealthPanel />
-      <AuthPanel />
+      <AccessPanel />
       <section aria-labelledby="scope-heading">
         <h2 id="scope-heading">Próxima etapa</h2>
         <p>
