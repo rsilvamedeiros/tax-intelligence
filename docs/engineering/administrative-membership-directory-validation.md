@@ -8,4 +8,15 @@ Registrar falhas por capacidade ausente antes de implementar cada fronteira. Exe
 
 ## Evidências
 
-Implementação e verificações ainda pendentes. Nenhum resultado aprovado declarado nesta fase documental.
+Documentação e escopo em AGENTS registrados em commits antes dos testes/código.
+
+| Fronteira  | Red observado                                                            | Green inicial |
+| ---------- | ------------------------------------------------------------------------ | ------------- |
+| Contrato   | Schema provisório never e OpenAPI vazio: 2 falhas, 5 negativos já passam | 7 testes      |
+| Serviço    | Método provisório rejeita a capacidade ausente: 7 falhas                 | 7 testes      |
+| HTTP       | Rota ausente retorna 404 e não publica operação: 15 falhas               | 15 testes     |
+| PostgreSQL | Adapter provisório retorna negação: 4 falhas, 4 negativos já passam      | 8 testes      |
+
+Primeira execução PostgreSQL excedeu timeout de 5s na preparação/limpeza da fixture durante outras verificações locais. Não é Red comportamental. Repetição isolada com os mesmos limites produziu o Red legítimo descrito acima; nenhum timeout ou assertion foi relaxado.
+
+Teste adicional de leitura durante revogação não confirmada e integração com API compilada foram escritos após a implementação; são verificação complementar, não TDD retroativo. Regressões completas e revisão remota ainda pendentes.

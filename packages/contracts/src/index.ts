@@ -8,6 +8,26 @@ export const organizationRoleSchema = z.enum([
 export const membershipRoleChangeSchema = z
   .object({ role: organizationRoleSchema })
   .strict();
+export const administrativeMembershipPageSchema = z
+  .object({
+    items: z
+      .array(
+        z
+          .object({
+            actorId: z.string().uuid(),
+            role: organizationRoleSchema,
+            status: z.enum(['active', 'revoked']),
+          })
+          .strict(),
+      )
+      .max(100),
+    nextCursor: z.string().uuid().nullable(),
+  })
+  .strict();
+export const administrativeMembershipPageOpenApiSchema = z.toJSONSchema(
+  administrativeMembershipPageSchema,
+  { target: 'openapi-3.0' },
+);
 export const membershipRoleChangeOpenApiSchema = z.toJSONSchema(
   membershipRoleChangeSchema,
   { target: 'openapi-3.0' },

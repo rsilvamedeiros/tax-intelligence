@@ -6,6 +6,8 @@ Atualização posterior ao PR #8: [ADR 0008](../adr/0008-membership-directory.md
 
 ## Problema e aceite
 
+Consulta administrativa paginada de membros implementada no [ADR 0013](../adr/0013-administrative-membership-directory.md): apenas administrador ativo, autorização e página na mesma instrução SQL, resposta mínima sem identidade externa. Não amplia acesso SQL da web nem implementa UI administrativa/RLS. [Evidências](../engineering/administrative-membership-directory-validation.md).
+
 A fundação original possuía somente endpoints operacionais; os controles implementados posteriormente estão identificados no status acima. A primeira vertical precisa identificar o ator, verificar sua associação e impedir acesso a dados de outra organização. Login bem-sucedido não demonstra autorização nem isolamento.
 
 Aceite do desenho: identidade estável, fronteira de sessão explícita, autorização por ação, revogação definida e testes negativos reproduzíveis. A implementação depende de escolha do provedor, aceite desta proposta e autorização específica da etapa. Ver [threat model](../security/identity-tenancy-threat-model.md) e [matriz de testes](../engineering/identity-tenancy-test-plan.md).

@@ -36,6 +36,8 @@ import type { Request, Response } from 'express';
 import type { SchemaObject } from '@nestjs/swagger/dist/interfaces/open-api-spec.interface';
 import {
   organizationContextSchema,
+  administrativeMembershipPageSchema,
+  administrativeMembershipPageOpenApiSchema,
   membershipRoleChangeSchema,
   membershipRoleChangeOpenApiSchema,
   organizationPageSchema,
@@ -47,6 +49,7 @@ import {
   apiErrorOpenApiSchema,
 } from '@tax/contracts';
 import { AuthService } from '../auth';
+import { AdministrativeMembershipService } from './administrative-membership.service';
 import {
   MembershipDenied,
   OrganizationsService,
@@ -87,6 +90,7 @@ export class OrganizationsController {
     private readonly revocations: MembershipRevocationService,
     private readonly roles: MembershipRoleService,
     private readonly grants: MembershipGrantService,
+    private readonly administrativeMemberships: AdministrativeMembershipService,
   ) {}
   private async identity(
     authorization: string | undefined,
@@ -98,6 +102,55 @@ export class OrganizationsController {
       if (error instanceof UnauthorizedException)
         response.setHeader('WWW-Authenticate', 'Bearer');
       throw error;
+    }
+  }
+  @Get(':organizationId/memberships')
+  @ApiParam({
+    name: 'organizationId',
+    schema: { type: 'string', format: 'uuid' },
+  })
+  @ApiQuery({
+    name: 'limit',
+    required: false,
+    schema: { type: 'integer', minimum: 1, maximum: 100, default: 25 },
+  })
+  @ApiQuery({
+    name: 'cursor',
+    required: false,
+    schema: { type: 'string', format: 'uuid' },
+  })
+  @ApiOkResponse({
+    schema: administrativeMembershipPageOpenApiSchema as SchemaObject,
+  })
+  @ApiForbiddenResponse({
+    description: 'No active administrative membership',
+    schema: apiErrorOpenApiSchema as SchemaObject,
+  })
+  async listMembers(
+    @Headers('authorization') authorization: string | undefined,
+    @Param('organizationId') organizationId: string,
+    @Query() query: unknown,
+    @Res({ passthrough: true }) response: Response,
+  ) {
+    const identity = await this.identity(authorization, response);
+    const parsed = organizationQuerySchema.safeParse(query);
+    if (
+      !parsed.success ||
+      !organizationIdSchema.safeParse(organizationId).success
+    )
+      throw new BadRequestException();
+    try {
+      return administrativeMembershipPageSchema.parse(
+        await this.administrativeMemberships.list(
+          identity,
+          organizationId,
+          parsed.data.limit,
+          parsed.data.cursor,
+        ),
+      );
+    } catch (error) {
+      if (error instanceof MembershipDenied) throw new ForbiddenException();
+      throw new ServiceUnavailableException();
     }
   }
   @Put(':organizationId/memberships/:actorId')
