@@ -26,6 +26,7 @@ const role = `membership_http_${randomBytes(8).toString('hex')}`;
 const password = randomBytes(32).toString('hex');
 const actor = randomUUID();
 const otherActor = randomUUID();
+const targetActor = randomUUID();
 const orgs = [randomUUID(), randomUUID(), randomUUID()].sort();
 const subject = `synthetic-${randomUUID()}`;
 const { privateKey, publicKey } = generateKeyPairSync('rsa', {
@@ -220,6 +221,98 @@ try {
     (await get('/organizations')).body.items.map((row) => row.id),
     [orgs[1]],
   );
+  // The read-only runtime is upgraded only with the revocation privileges.
+  await owner.pool.query(
+    `GRANT UPDATE(revoked_at) ON organization_access.memberships TO ${role}`,
+  );
+  await owner.pool.query(
+    `GRANT INSERT ON organization_access.membership_revocations TO ${role}`,
+  );
+  async function revoke(
+    organizationId,
+    targetId,
+    bearer = accessToken,
+    requestId = randomUUID(),
+  ) {
+    const response = await fetch(
+      `${base}/organizations/${organizationId}/memberships/${targetId}`,
+      {
+        method: 'DELETE',
+        headers: {
+          ...(bearer ? { Authorization: `Bearer ${bearer}` } : {}),
+          'x-request-id': requestId,
+        },
+        signal: AbortSignal.timeout(5000),
+      },
+    );
+    assert.equal(response.headers.get('cache-control'), 'no-store');
+    return { status: response.status, text: await response.text() };
+  }
+  assert.equal((await revoke('bad', 'bad', '')).status, 401);
+  assert.equal(
+    (await revoke(orgs[1], otherActor)).status,
+    403,
+    'JWT admin role must not authorize a viewer',
+  );
+  await owner.pool.query(
+    'UPDATE organization_access.memberships SET role=$1 WHERE organization_id=$2 AND actor_id=$3',
+    ['organization_admin', orgs[1], actor],
+  );
+  await owner.pool.query(
+    'INSERT INTO identity_access.actors VALUES($1,$2,$3)',
+    [targetActor, issuer, 'synthetic-target'],
+  );
+  await owner.pool.query(
+    'INSERT INTO organization_access.memberships VALUES($1,$2,$3,NULL)',
+    [orgs[1], targetActor, 'viewer'],
+  );
+  const targetToken = token('synthetic-target');
+  assert.equal(
+    (await get(`/organizations/${orgs[1]}/context`, targetToken)).status,
+    200,
+  );
+  assert.equal((await revoke(orgs[2], otherActor)).status, 403);
+  assert.equal((await revoke(randomUUID(), otherActor)).status, 403);
+  const correlation = randomUUID();
+  const revoked = await revoke(orgs[1], targetActor, accessToken, correlation);
+  assert.deepEqual(revoked, { status: 204, text: '' });
+  assert.equal(
+    (await get(`/organizations/${orgs[1]}/context`, targetToken)).status,
+    403,
+    'Valid token must not preserve revoked access',
+  );
+  assert.equal((await revoke(orgs[1], targetActor)).status, 204);
+  assert.equal((await revoke(orgs[1], randomUUID())).status, 204);
+  assert.equal((await revoke(orgs[1], actor)).status, 409);
+  const events = await owner.pool.query(
+    'SELECT initiating_actor_id,target_actor_id,request_id FROM organization_access.membership_revocations WHERE organization_id=$1',
+    [orgs[1]],
+  );
+  assert.deepEqual(events.rows, [
+    {
+      initiating_actor_id: actor,
+      target_actor_id: targetActor,
+      request_id: correlation,
+    },
+  ]);
+  await owner.pool.query(
+    'UPDATE organization_access.memberships SET revoked_at=NULL WHERE organization_id=$1 AND actor_id=$2',
+    [orgs[1], targetActor],
+  );
+  await owner.pool.query(
+    `REVOKE INSERT ON organization_access.membership_revocations FROM ${role}`,
+  );
+  const auditFailure = await revoke(orgs[1], targetActor);
+  assert.equal(auditFailure.status, 503);
+  assert.doesNotMatch(
+    auditFailure.text,
+    /INSERT|membership_http_|postgresql|password/i,
+  );
+  assert.equal(
+    (await get(`/organizations/${orgs[1]}/context`, targetToken)).status,
+    200,
+    'Audit failure must roll back revocation',
+  );
   await owner.pool.query(
     `REVOKE SELECT ON organization_access.memberships FROM ${role}`,
   );
@@ -232,11 +325,13 @@ try {
   assert.ok(
     !logs.includes(accessToken) &&
       !logs.includes(subject) &&
-      !logs.includes(password),
+      !logs.includes(password) &&
+      !logs.includes(targetToken) &&
+      !logs.includes(targetActor),
   );
   assert.ok(!logs.includes(orgs[0]) && !logs.includes(orgs[2]));
   console.log(
-    'Membership integration passed: compiled API, signed RSA tokens, restricted PostgreSQL connection, pagination, cross-organization denial, committed revocation and sanitized errors.',
+    'Membership integration passed: compiled API/RSA, restricted PostgreSQL, directory, administrative revocation, idempotency, last administrator protection, atomic audit rollback and sanitized errors.',
   );
 } finally {
   if (app && app.exitCode === null) {
@@ -252,6 +347,10 @@ try {
   await new Promise((resolve) => provider.close(resolve));
   try {
     await owner.pool.query(
+      'DELETE FROM organization_access.membership_revocations WHERE organization_id=ANY($1::uuid[])',
+      [orgs],
+    );
+    await owner.pool.query(
       'DELETE FROM organization_access.memberships WHERE organization_id=ANY($1::uuid[])',
       [orgs],
     );
@@ -261,7 +360,7 @@ try {
     );
     await owner.pool.query(
       'DELETE FROM identity_access.actors WHERE id=ANY($1::uuid[])',
-      [[actor, otherActor]],
+      [[actor, otherActor, targetActor]],
     );
     if (roleCreated) {
       await owner.pool.query(`DROP OWNED BY ${role}`);
