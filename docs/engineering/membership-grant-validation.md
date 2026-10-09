@@ -50,6 +50,10 @@ A primeira execução padrão da jornada autenticada encerrou com erro genérico
 
 No commit a9414f3 do [PR #13](https://github.com/rsilvamedeiros/tax-intelligence/pull/13/checks), todos os jobs da CI e o GitGuardian foram consultados e aprovados: quality, secret-scan, identity-provider, e2e, dependency-audit, database-integration e documentation. O job identity-provider executa a jornada autenticada padrão com Keycloak real; sua aprovação remota não muda o resultado das tentativas locais nem determina a causa das falhas locais. Novos commits exigem conferência dos checks correspondentes.
 
+## Revisão externa
+
+CodeRabbit concluiu a revisão dos 29 arquivos no commit 802b981. Apontou uma inconsistência menor: o status inicial do threat model ainda descrevia concessão como pendente. O status e a referência de validação foram sincronizados com o ADR 0012, mantendo criação de atores, administração BFF/UI, efeitos fiscais e RLS como pendentes. Correção documental; código de produção e testes permanecem iguais.
+
 ## Limites e rollback
 
 Bootstrap de primeiro administrador e provisionamento de identidade continuam operacionais; PUT exige ator e administrador já existentes. Não há convite, busca global, UI administrativa, acesso adicional da web ao banco, RLS ou regra fiscal. SQL arbitrário com credencial comprometida pode ignorar políticas da aplicação; grants não substituem RLS. O proprietário do banco continua podendo alterar eventos. Rollback desabilita PUT e remove grants adicionais, preservando migration/auditoria.
