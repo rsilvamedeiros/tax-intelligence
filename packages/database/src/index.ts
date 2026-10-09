@@ -13,3 +13,4 @@ export function createDatabase(connectionString: string) {
 }
 export type Database = ReturnType<typeof createDatabase>;
 export { SessionStore } from './session-store';
+export { IdentityStore, MembershipStore } from './membership-store';
