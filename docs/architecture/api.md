@@ -32,6 +32,8 @@ PATCH /v1/organizations/:organizationId/memberships/:actorId aceita exclusivamen
 
 ## Fronteira BFF de organizações implementada
 
+Administração no BFF implementada no [ADR 0014](../adr/0014-administrative-membership-bff.md): GET /api/organizations/:organizationId/memberships e PUT/PATCH/DELETE /api/organizations/:organizationId/memberships/:actorId. Sessão server-side fornece Bearer; mutações exigem Origin/CSRF e payload estrito limitado a 1024 bytes. API revalida administrador ativo; 204 sem corpo e erros previstos sanitizados. Sem proxy genérico, token no browser ou acesso SQL de domínio pela web. [Validação](../engineering/administrative-membership-bff-validation.md).
+
 O BFF expõe as consultas existentes como GET /api/organizations e GET /api/organizations/:organizationId/context, usando exclusivamente o token da sessão server-side. Não encaminha Authorization, cookies ou tenant fornecidos pelo navegador. Aceita somente paginação/UUID do contrato; não há proxy genérico. Retorna schemas públicos estritos, 401 para sessão rejeitada, 403 para vínculo negado e 503 sanitizado em falha. [Decisão da jornada](../adr/0009-browser-organization-selection.md).
 
 ## Contratos propostos para a vertical, sem implementação
@@ -44,8 +46,8 @@ OpenAPI deve declarar status, schemas, limites, segurança, idempotência e exem
 
 ## Consulta administrativa implementada
 
-Consulta administrativa: GET /v1/organizations/:organizationId/memberships retorna somente actorId, role e status active/revoked, com limit/cursor do contrato existente. Exige administrador ativo no mesmo snapshot SQL da listagem; negação uniforme 403, falha 503 sanitizada, respostas no-store. Não expõe identidade externa ou auditoria. [ADR 0013](../adr/0013-administrative-membership-directory.md), [validação](../engineering/administrative-membership-directory-validation.md). Sem rota administrativa BFF nesta etapa.
+Consulta administrativa: GET /v1/organizations/:organizationId/memberships retorna somente actorId, role e status active/revoked, com limit/cursor do contrato existente. Exige administrador ativo no mesmo snapshot SQL da listagem; negação uniforme 403, falha 503 sanitizada, respostas no-store. Não expõe identidade externa ou auditoria. [ADR 0013](../adr/0013-administrative-membership-directory.md), [validação](../engineering/administrative-membership-directory-validation.md). Exposição no BFF segue o ADR 0014.
 
 ## Concessão administrativa implementada
 
-PUT /v1/organizations/:organizationId/memberships/:actorId usa o corpo estrito de papel compartilhado com PATCH. Administrador ativo é revalidado dentro da transação. Criação/repetição do mesmo papel: 204; acesso negado: 403 antes de consultar alvo; ator inexistente após autorização: 404; vínculo revogado ou papel diferente: 409; falha SQL/auditoria: 503 sanitizado. Não cria identidade, reativa vínculo ou altera papel existente. Sem endpoint BFF administrativo. [ADR 0012](../adr/0012-membership-grants.md), [evidências](../engineering/membership-grant-validation.md).
+PUT /v1/organizations/:organizationId/memberships/:actorId usa o corpo estrito de papel compartilhado com PATCH. Administrador ativo é revalidado dentro da transação. Criação/repetição do mesmo papel: 204; acesso negado: 403 antes de consultar alvo; ator inexistente após autorização: 404; vínculo revogado ou papel diferente: 409; falha SQL/auditoria: 503 sanitizado. Não cria identidade, reativa vínculo ou altera papel existente. BFF administrativo definido no ADR 0014. [ADR 0012](../adr/0012-membership-grants.md), [evidências](../engineering/membership-grant-validation.md).

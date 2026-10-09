@@ -18,6 +18,8 @@ Required checks propostos: `documentation`, `quality`, `database-integration`, `
 
 ## Entrega e versionamento
 
+ADR 0014 estende a mesma jornada identity-provider com BFF administrativo, CSRF/origem, concessão idempotente, mudança de papel, revogação e perda de acesso administrativa. Fixture concede à role API apenas os privilégios já definidos nos ADRs 0010–0012; role BFF mantém somente auth_bff. Cleanup remove eventos/vínculos/atores das organizações sintéticas próprias. [Evidências](administrative-membership-bff-validation.md).
+
 ADR 0013 estende a integração da API compilada com consulta administrativa paginada, estado revogado e negação com token ainda válido após rebaixamento/revogação. Reutiliza privilégios de leitura; não cria migration ou configuração de entrega. [Evidências](administrative-membership-directory-validation.md).
 
 Job `identity-provider` inicia Keycloak de desenvolvimento com senhas efêmeras mascaradas, importa realm versionado e confere discovery/PKCE/JWKS. Aplica migrations em PostgreSQL efêmero e executa login, seleção de organização, tentativa cruzada, revogação após listagem e logout pelo navegador real com conta sintética. API e BFF usam roles distintas e restritas; o runner controla somente fixtures próprias. Não demonstra RLS ou efeitos de negócio. `quality` também executa smoke do processo compilado com access token RSA sintético. Conferir esses jobs e checks externos antes de declarar o PR verde.
