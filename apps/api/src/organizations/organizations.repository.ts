@@ -4,6 +4,7 @@ import {
   IdentityStore,
   MembershipStore,
   MembershipRevocationStore,
+  MembershipRoleStore,
   type Database,
 } from '@tax/database';
 import type {
@@ -11,6 +12,7 @@ import type {
   ExternalIdentity,
 } from './organizations.service';
 import type { RevocationCommand } from './membership-revocation.service';
+import type { RoleChangeCommand } from './membership-role.service';
 @Injectable()
 export class OrganizationsRepository
   implements MembershipDirectory, OnModuleDestroy
@@ -35,6 +37,9 @@ export class OrganizationsRepository
   }
   revoke(command: RevocationCommand) {
     return new MembershipRevocationStore(this.pool()).revoke(command);
+  }
+  changeRole(command: RoleChangeCommand) {
+    return new MembershipRoleStore(this.pool()).changeRole(command);
   }
   async onModuleDestroy() {
     await this.database?.pool.end();
