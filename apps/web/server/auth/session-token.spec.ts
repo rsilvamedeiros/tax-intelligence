@@ -17,7 +17,7 @@ describe('Server-only access session reader', () => {
   it('reads only valid server session payloads', async () => {
     const data = {
       accessToken: 'server-only',
-      csrfToken: 'synthetic',
+      csrfToken: 'a'.repeat(43),
       identity: {
         issuer: 'https://identity.example.invalid',
         subject: 'synthetic',
@@ -26,6 +26,7 @@ describe('Server-only access session reader', () => {
     read.mockResolvedValue(data);
     expect(await reader(request('tax_session=opaque'))).toEqual({
       accessToken: 'server-only',
+      csrfToken: data.csrfToken,
     });
     for (const payload of [
       undefined,
@@ -38,4 +39,18 @@ describe('Server-only access session reader', () => {
       expect(await reader(request('tax_session=opaque'))).toBeUndefined();
     }
   });
+  it.each(['', 'a'.repeat(42), '!'.repeat(43)])(
+    'rejects malformed session CSRF %#',
+    async (csrfToken) => {
+      read.mockResolvedValue({
+        accessToken: 'server-only',
+        csrfToken,
+        identity: {
+          issuer: 'https://identity.example.invalid',
+          subject: 'synthetic',
+        },
+      });
+      expect(await reader(request('tax_session=opaque'))).toBeUndefined();
+    },
+  );
 });

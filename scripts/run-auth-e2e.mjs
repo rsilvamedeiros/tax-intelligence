@@ -155,6 +155,7 @@ try {
       authUser: username,
       authPassword: password,
       organizationIds: membership.ids,
+      actorIds: membership.actors,
     },
   });
   process.exitCode = 'failures' in result || result.totalFailed > 0 ? 1 : 0;

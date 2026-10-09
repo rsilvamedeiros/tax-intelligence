@@ -44,4 +44,12 @@ Revisão local do diff: parâmetros SQL, autorização com página vazia, snapsh
 
 Sem migration, novo grant SQL, dependência ou acesso DB pela web. BFF/UI administrativos, reativação e RLS continuam pendentes. Leitura em andamento pode concluir pelo snapshot; paginação entre requisições não congela concessões concorrentes. Deploy e merge automático não realizados.
 
-Checks remotos e revisão independente ainda pendentes; registrar evidência antes de declarar o PR pronto.
+Instalação congelada (`pnpm install --frozen-lockfile`) aprovada, sem alteração de lockfile ou dependências.
+
+## CI e revisão remota
+
+[PR #14](https://github.com/rsilvamedeiros/tax-intelligence/pull/14), branch feat/administrative-membership-directory. No commit 269d91d, os sete jobs Actions (documentation, quality, database-integration, e2e, dependency-audit, secret-scan, identity-provider) e GitGuardian concluíram com sucesso. GitGuardian analisou os seis commits sem encontrar segredos. O job identity-provider executou a jornada padrão com Keycloak real; este é o resultado remoto, não execução local.
+
+[CodeRabbit](https://github.com/rsilvamedeiros/tax-intelligence/pull/14#issuecomment-6085034914) concluiu a revisão efetiva dos 26 arquivos até 269d91d, sem comentários acionáveis, com confirmação de conclusão e commit status success. Não confundir status success de revisão pulada com revisão efetiva; aqui o relatório identifica os arquivos e commits analisados.
+
+O commit final acrescenta somente este registro documental; código de produção e testes permanecem no conteúdo revisado. Aprovação humana continua necessária para a mudança de autorização. Nenhum merge/deploy realizado pela tarefa.

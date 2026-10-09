@@ -1,5 +1,7 @@
 # Roadmap e backlog priorizado
 
+BFF administrativo implementado conforme [ADR 0014](../adr/0014-administrative-membership-bff.md), com token server-side, Origin/CSRF e autorização revalidada pela API. Não concede acesso SQL de domínio ao web nem implementa UI administrativa. [Validação](../engineering/administrative-membership-bff-validation.md).
+
 Sem datas prometidas; cada etapa depende do aceite da anterior. [Plano da inspeção](../engineering/repository-assessment.md).
 
 | Prioridade | Entrega                                           | Dependência/aceite                                                 |
@@ -18,6 +20,6 @@ Sem datas prometidas; cada etapa depende do aceite da anterior. [Plano da inspe�
 
 Pendências para negócio: marca, ICP de clientes, regras e fontes reais, responsável tributário, identity provider de produção, política de retenção, hospedagem/orçamento e operação. Keycloak de desenvolvimento e a fronteira de tokens da API estão definidos no [ADR 0006](../adr/0006-development-identity-provider.md). Nenhuma dessas pendências impede revisar documentação; algumas bloqueiam piloto com dados reais.
 
-Consulta administrativa de membros completa a preparação da API para administração no navegador conforme [ADR 0013](../adr/0013-administrative-membership-directory.md). BFF/UI administrativa e RLS ainda requerem etapas próprias.
+Consulta administrativa de membros completa a preparação da API para UI administrativa no navegador conforme [ADR 0013](../adr/0013-administrative-membership-directory.md). UI administrativa e RLS ainda requerem etapas próprias.
 
-Após a fundação, RFC/threat model e matriz de TDD orientaram autenticação da API, login/sessões BFF, consulta/seleção de organizações e revogação administrativa com auditoria/locks, conforme ADRs 0006–0010. Alteração de papéis existentes foi implementada no [ADR 0011](../adr/0011-membership-role-changes.md). Concessão a atores existentes foi implementada no [ADR 0012](../adr/0012-membership-grants.md), sem reativação ou criação de identidade. Próximas etapas devem completar isolamento RLS e administração no navegador antes de importação fiscal; cada módulo exige seu contrato, negativos e aceite. [RFC 0001](../rfc/0001-identity-membership-isolation.md), [ameaças](../security/identity-tenancy-threat-model.md), [matriz de TDD](../engineering/identity-tenancy-test-plan.md). A vertical fiscal não foi autorizada por essas entregas de identidade/acesso.
+Após a fundação, RFC/threat model e matriz de TDD orientaram autenticação da API, login/sessões BFF, consulta/seleção de organizações e revogação administrativa com auditoria/locks, conforme ADRs 0006–0010. Alteração de papéis existentes foi implementada no [ADR 0011](../adr/0011-membership-role-changes.md). Concessão a atores existentes foi implementada no [ADR 0012](../adr/0012-membership-grants.md), sem reativação ou criação de identidade. Próximas etapas devem completar isolamento RLS e UI administrativa no navegador antes de importação fiscal; cada módulo exige seu contrato, negativos e aceite. [RFC 0001](../rfc/0001-identity-membership-isolation.md), [ameaças](../security/identity-tenancy-threat-model.md), [matriz de TDD](../engineering/identity-tenancy-test-plan.md). A vertical fiscal não foi autorizada por essas entregas de identidade/acesso.

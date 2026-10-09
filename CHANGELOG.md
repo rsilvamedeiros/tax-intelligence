@@ -2,6 +2,8 @@
 
 ## Não lançado
 
+- BFF administrativo de memberships com token server-side, Origin/CSRF, payload limitado e respostas sanitizadas; jornada real estendida para operações administrativas.
+
 - Consulta administrativa paginada de membros ativos/revogados, com autorização na mesma instrução SQL e resposta mínima sem identidade externa.
 
 - Concessão administrativa de memberships a atores existentes, com auditoria atômica, idempotência, concorrência serializada e sem reativação.
