@@ -9,8 +9,11 @@ describe('Real Keycloak BFF login', () => {
         ['authUser', 'authPassword'],
         { log: false },
       ).then(({ authUser: username, authPassword: password }) => {
+        cy.task('authCheckpoint', 'credentials_ready', { log: false });
         cy.get('#username').type(username, { log: false });
+        cy.task('authCheckpoint', 'username_entered', { log: false });
         cy.get('#password').type(password, { log: false });
+        cy.task('authCheckpoint', 'credentials_entered', { log: false });
         cy.get('#kc-login').click();
       });
     });

@@ -5,9 +5,14 @@ export default defineConfig({
       on('task', {
         authCheckpoint(label: unknown) {
           if (
-            !['app_loaded', 'provider_ready', 'session_active'].includes(
-              String(label),
-            )
+            ![
+              'app_loaded',
+              'provider_ready',
+              'credentials_ready',
+              'username_entered',
+              'credentials_entered',
+              'session_active',
+            ].includes(String(label))
           )
             throw new Error('Unknown authentication checkpoint');
           console.info(`Authentication E2E checkpoint: ${label}`);
