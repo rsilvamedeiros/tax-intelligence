@@ -34,4 +34,8 @@ Revisão local: sessão/CSRF vinculados, bytes limitados em stream, host/origin,
 
 UI administrativa, criação de identidade, reativação e RLS permanecem pendentes. BFF segue sem acesso SQL de domínio, sem migration/dependência nova. Timeout/erro de rede pode ocorrer após commit da API: usar idempotência existente e consultar novamente. Nenhum merge/deploy automático.
 
-Checks remotos e revisão efetiva ainda pendentes. Registrar resultados reais e conferir também commit statuses externos.
+Na [PR #15](https://github.com/rsilvamedeiros/tax-intelligence/pull/15), o commit `1ce46cd5cd5ba3423d9cf3e5876a246fed272ba4` passou nos sete jobs de Actions: documentação, quality, integração PostgreSQL, identity-provider, E2E, audit e secret-scan. GitGuardian aprovou os sete commits sem segredos detectados.
+
+A revisão automática do CodeRabbit foi pulada pela política do serviço para repositórios com menos de dez estrelas. A solicitação manual processou os 25 arquivos entre a base `44472add68f9c08d61dff86ba9a70ded17504a45` e aquele commit: [relatório sem comentários acionáveis](https://github.com/rsilvamedeiros/tax-intelligence/pull/15#issuecomment-6086860317) e [execução concluída](https://github.com/rsilvamedeiros/tax-intelligence/pull/15#issuecomment-6086863983). Conferido o status externo, além dos checks de Actions. Aprovação humana permanece necessária.
+
+Este registro posterior altera apenas documentação; não atribuir a revisão do commit anterior a código novo. Os checks do commit documental devem ser conferidos novamente antes da entrega.
