@@ -42,6 +42,10 @@ Keycloak real: discovery/PKCE/JWKS aprovados. Chrome: três jornadas aprovadas, 
 
 Formato, links e manifests: aprovados, com 76 Markdown e 16 skills. Instalação frozen aprovada; audit sem alto/crítico, com um alerta moderado preexistente.
 
+## Revisão externa
+
+CodeRabbit revisou os 32 arquivos e apontou dois ajustes menores: explicitar INSERT versus mutação dos eventos existentes e espaçar consultas sem sucesso do polling de locks. Ambos foram aplicados. O teste continua exigindo evidência de bloqueio em `pg_blocking_pids`; o intervalo de polling não comprova ordenação por si só. Essas correções documental e de robustez do teste não alteram o contrato ou código de produção.
+
 ## Limites
 
 A auditoria é protegida pelos grants do runtime, não contra o proprietário do banco. SQL arbitrário com a credencial técnica continua sendo risco; RLS permanece pendente. O protocolo compartilhado protege os caminhos administrativos implementados, não escritas externas que ignorem esse protocolo. Concessão de vínculos, administração no BFF/UI e ações fiscais exigem etapas próprias.
