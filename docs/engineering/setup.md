@@ -42,6 +42,8 @@ node scripts/smoke-identity-provider.mjs
 
 Console local: http://127.0.0.1:8080, administrador `local_admin` e senha do ambiente. Realm `tax-intelligence`, sem usuários importados. Crie somente usuário sintético no console. Realm já existente no volume não é atualizado pelo import; atualizar clientes explicitamente e preservar dados, sem remover volumes existentes para aplicar configuração. Usuários e senhas reais não fazem parte do setup.
 
+Para realms criados antes da correção do login BFF, abra Clients → tax-intelligence-web → Client scopes → tax-intelligence-web-dedicated no console. Adicione o mapper Subject (sub), com Add to access token habilitado e Add to token introspection desabilitado, conforme [perfil do token](../adr/0006-development-identity-provider.md). Preserve o mapper de audience e os usuários existentes. Sem esse mapper, a API rejeita o access token sem subject e o callback retorna 503.
+
 Para habilitar a API, exporte as quatro OIDC_* de [.env.example](../../.env.example) ou adicione-as ao .env local; todas são necessárias. Use issuer e callback em 127.0.0.1, sem alternar localhost. O client web usa code + PKCE S256; implicit, password grant e service accounts estão desabilitados. O callback `/api/auth/callback` está implementado pelo BFF; configure as variáveis abaixo para login no navegador. Tokens não devem ser colados em issue, PR, terminal gravado ou log.
 
 Smoke do provedor verifica realm importado, discovery e chaves públicas; smoke de autenticação verifica o processo compilado da API com token sintético e JWKS local. A jornada real é executada separadamente por `pnpm test:e2e:auth`, com usuário sintético criado e removido automaticamente. Imagem Keycloak e realm são de desenvolvimento, sem configuração de produção. Sem Docker local, executar o fluxo real do provedor no job CI `identity-provider` e registrar o limite local.
@@ -61,7 +63,7 @@ Configuração `.env` não é versionada. API lê `.env` da raiz nos scripts pre
 
 Exporte as quatro OIDC_* e API_BASE_URL no shell, junto de BFF_APP_ORIGIN=http://127.0.0.1:3000 e BFF_DATABASE_URL apontando para banco local migrado. Configure BFF_SESSION_ENCRYPTION_KEY com 32 bytes aleatórios em hexadecimal, sem publicar a chave. Next não carrega o .env da raiz; alternativamente configure apps/web/.env.local, ignorado pelo Git. Todos os processos BFF precisam da mesma chave. Em produção, use credencial restrita a auth_bff; sem fallback para DATABASE_URL.
 
-No PowerShell, uma chave local pode ser gerada sem sa?da no terminal:
+No PowerShell, uma chave local pode ser gerada sem imprimir a chave no terminal:
 
 ```powershell
 $taskSessionKey = New-Object byte[] 32
