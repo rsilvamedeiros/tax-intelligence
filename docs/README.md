@@ -27,6 +27,7 @@ Documentação primeiro; código avança por etapa com aceite, testes e revisão
 - [Validação da autenticação da API](engineering/authentication-validation.md)
 - [Validação das sessões BFF](engineering/bff-session-validation.md)
 - [Validação da consulta de memberships](engineering/membership-validation.md)
+- [Validação da seleção de organização](engineering/browser-organization-validation.md)
 
 ## Domínios
 
@@ -49,6 +50,7 @@ Documentação primeiro; código avança por etapa com aceite, testes e revisão
 - [0006 provedor de desenvolvimento e autenticação da API](adr/0006-development-identity-provider.md)
 - [0007 armazenamento de sessões BFF](adr/0007-bff-session-storage.md)
 - [0008 consulta de organizações e memberships](adr/0008-membership-directory.md)
+- [0009 seleção de organização no navegador](adr/0009-browser-organization-selection.md)
 - [process](rfc/process.md)
 - [RFC 0001: identidade, membership e isolamento](rfc/0001-identity-membership-isolation.md)
 
