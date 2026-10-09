@@ -35,6 +35,41 @@ describe('Real Keycloak BFF login', () => {
     });
     cy.contains('Você está conectado').should('be.visible');
     cy.task('authCheckpoint', 'session_active', { log: false });
+    cy.contains('button', 'Selecionar').should('be.visible');
+    cy.contains('strong', 'Synthetic A').should('be.visible');
+    cy.contains('strong', 'Synthetic B').should('not.exist');
+    cy.contains('li', 'Synthetic A').find('button').click();
+    cy.contains('Organização selecionada: Synthetic A').should('be.visible');
+    cy.env<{ organizationIds: string[] }>(['organizationIds'], {
+      log: false,
+    }).then(({ organizationIds: ids }) => {
+      cy.request({ url: '/api/organizations?limit=1', log: false }).then(
+        ({ body }) => {
+          expect(body.items).to.have.length(1);
+          expect(body.nextCursor).to.equal(ids[0]);
+        },
+      );
+      cy.request({
+        url: `/api/organizations/${ids[2]}/context`,
+        failOnStatusCode: false,
+        log: false,
+      })
+        .its('status')
+        .should('equal', 403);
+      cy.task('revokeMembership', ids[1], { log: false });
+      cy.contains('li', 'Synthetic Revoked').find('button').click();
+      cy.contains('Acesso a esta organização indisponível').should(
+        'be.visible',
+      );
+      cy.contains('Organização selecionada:').should('not.exist');
+      cy.request({
+        url: `/api/organizations/${ids[1]}/context`,
+        failOnStatusCode: false,
+        log: false,
+      })
+        .its('status')
+        .should('equal', 403);
+    });
     cy.getCookie('tax_session', { log: false }).then((cookie) => {
       expect(cookie?.httpOnly).to.equal(true);
       expect(cookie?.value).to.match(/^[A-Za-z0-9_-]{43}$/);
@@ -63,6 +98,14 @@ describe('Real Keycloak BFF login', () => {
       .should('equal', 200);
     cy.contains('button', 'Sair').click();
     cy.contains('a', 'Entrar').should('be.visible');
+    cy.contains('strong', 'Synthetic A').should('not.exist');
+    cy.request({
+      url: '/api/organizations',
+      failOnStatusCode: false,
+      log: false,
+    })
+      .its('status')
+      .should('equal', 401);
     cy.getCookie('tax_session', { log: false }).should('be.null');
     cy.request({
       url: '/api/auth/session',

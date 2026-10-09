@@ -3,6 +3,7 @@ import { randomBytes } from 'node:crypto';
 import { createRequire } from 'node:module';
 import { spawn } from 'node:child_process';
 import { fileURLToPath } from 'node:url';
+import { createBrowserMembershipFixture } from './browser-membership-fixtures.mjs';
 
 const provider = 'http://127.0.0.1:8080';
 const realm = 'tax-intelligence';
@@ -23,6 +24,7 @@ let userId;
 let adminToken;
 let api;
 let web;
+let membership;
 async function admin(path, options = {}) {
   const response = await fetch(`${provider}/admin/realms/${realm}/${path}`, {
     ...options,
@@ -94,6 +96,7 @@ try {
       temporary: false,
     }),
   });
+  membership = await createBrowserMembershipFixture(issuer, userId);
   const env = {
     ...process.env,
     NODE_ENV: 'test',
@@ -106,7 +109,7 @@ try {
     OTEL_EXPORTER_OTLP_TRACES_ENDPOINT: '',
   };
   api = spawn(process.execPath, ['apps/api/dist/main.js'], {
-    env: { ...env, PORT: '3001', DATABASE_URL: database },
+    env: { ...env, PORT: '3001', DATABASE_URL: membership.apiUrl },
     stdio: 'ignore',
   });
   web = spawn(
@@ -122,7 +125,7 @@ try {
       env: {
         ...env,
         BFF_APP_ORIGIN: 'http://127.0.0.1:3000',
-        BFF_DATABASE_URL: database,
+        BFF_DATABASE_URL: membership.bffUrl,
         BFF_SESSION_ENCRYPTION_KEY: randomBytes(32).toString('hex'),
       },
       stdio: 'ignore',
@@ -148,7 +151,11 @@ try {
     spec: fileURLToPath(
       new URL('../apps/web/cypress/e2e/authentication.cy.ts', import.meta.url),
     ),
-    env: { authUser: username, authPassword: password },
+    env: {
+      authUser: username,
+      authPassword: password,
+      organizationIds: membership.ids,
+    },
   });
   process.exitCode = 'failures' in result || result.totalFailed > 0 ? 1 : 0;
 } catch {
@@ -159,6 +166,12 @@ try {
 } finally {
   api?.kill();
   web?.kill();
+  try {
+    await membership?.cleanup();
+  } catch {
+    console.error('Synthetic membership cleanup failed.');
+    process.exitCode = 1;
+  }
   if (userId && adminToken) {
     try {
       await authorizeAdmin();
