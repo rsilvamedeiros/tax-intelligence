@@ -81,6 +81,10 @@ jobs:
           cache: pnpm
       - run: pnpm install --frozen-lockfile
       - run: pnpm test:integration
+      - name: Build membership API and dependencies
+        run: pnpm exec turbo build --filter=@tax/api...
+      - name: Verify membership API with restricted PostgreSQL access
+        run: pnpm test:integration:membership
 
   e2e:
     runs-on: ubuntu-latest
