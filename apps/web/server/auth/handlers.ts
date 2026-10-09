@@ -1,6 +1,13 @@
 import { randomBytes, timingSafeEqual } from 'node:crypto';
 import { authenticatedIdentitySchema } from '@tax/contracts';
 export class InvalidLoginError extends Error {}
+export function readCookie(request: Request, name: string) {
+  const matches = (request.headers.get('cookie') ?? '')
+    .split(';')
+    .map((value) => value.trim())
+    .filter((value) => value.startsWith(`${name}=`));
+  return matches.length === 1 ? matches[0]!.slice(name.length + 1) : '';
+}
 export interface AuthStore {
   insert(
     kind: 'attempt' | 'session',
@@ -39,13 +46,6 @@ export function createAuthHandlers(dependencies: AuthDependencies) {
   const opaque = () => randomBytes(32).toString('base64url');
   const cookie = (name: string, value: string, ttl: number) =>
     `${name}=${value}; Path=/; HttpOnly; SameSite=Lax; Max-Age=${ttl}${secure ? '; Secure' : ''}`;
-  const readCookie = (request: Request, name: string) => {
-    const matches = (request.headers.get('cookie') ?? '')
-      .split(';')
-      .map((value) => value.trim())
-      .filter((value) => value.startsWith(`${name}=`));
-    return matches.length === 1 ? matches[0]!.slice(name.length + 1) : '';
-  };
   const equal = (a: string, b: string) => {
     const left = Buffer.from(a),
       right = Buffer.from(b);

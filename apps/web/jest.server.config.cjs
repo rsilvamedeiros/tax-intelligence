@@ -10,7 +10,7 @@ module.exports = {
   transformIgnorePatterns: [
     '/node_modules/(?!.*(openid-client|oauth4webapi|jose)/)',
   ],
-  collectCoverageFrom: ['server/auth/**/*.ts', '!server/auth/runtime.ts'],
+  collectCoverageFrom: ['server/**/*.ts', '!server/auth/runtime.ts'],
   coverageDirectory: 'coverage/server',
   coverageThreshold: {
     global: { lines: 80, functions: 80, statements: 80, branches: 70 },
