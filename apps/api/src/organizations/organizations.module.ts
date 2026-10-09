@@ -5,11 +5,18 @@ import { OrganizationsRepository } from './organizations.repository';
 import { OrganizationsService } from './organizations.service';
 import { MembershipRevocationService } from './membership-revocation.service';
 import { MembershipRoleService } from './membership-role.service';
+import { MembershipGrantService } from './membership-grant.service';
 @Module({
   imports: [AuthModule],
   controllers: [OrganizationsController],
   providers: [
     OrganizationsRepository,
+    {
+      provide: MembershipGrantService,
+      inject: [OrganizationsRepository],
+      useFactory: (repository: OrganizationsRepository) =>
+        new MembershipGrantService(repository),
+    },
     {
       provide: MembershipRoleService,
       inject: [OrganizationsRepository],

@@ -27,6 +27,7 @@ const password = randomBytes(32).toString('hex');
 const actor = randomUUID();
 const otherActor = randomUUID();
 const targetActor = randomUUID();
+const grantActor = randomUUID();
 const orgs = [randomUUID(), randomUUID(), randomUUID()].sort();
 const subject = `synthetic-${randomUUID()}`;
 const { privateKey, publicKey } = generateKeyPairSync('rsa', {
@@ -397,6 +398,115 @@ try {
     (await changeRole(targetActor, 'viewer', targetToken)).status,
     409,
   );
+  const grantSubject = `synthetic-grant-${randomUUID()}`;
+  await owner.pool.query(
+    'INSERT INTO identity_access.actors(id,issuer,subject) VALUES($1,$2,$3)',
+    [grantActor, issuer, grantSubject],
+  );
+  const grantToken = token(grantSubject);
+  await owner.pool.query(
+    `GRANT INSERT(organization_id,actor_id,role) ON organization_access.memberships TO ${role}`,
+  );
+  await owner.pool.query(
+    `GRANT INSERT ON organization_access.membership_grants TO ${role}`,
+  );
+  async function grantMembership(
+    targetId,
+    newRole,
+    bearer = targetToken,
+    organizationId = orgs[1],
+  ) {
+    const response = await fetch(
+      `${base}/organizations/${organizationId}/memberships/${targetId}`,
+      {
+        method: 'PUT',
+        headers: {
+          Authorization: `Bearer ${bearer}`,
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ role: newRole }),
+        signal: AbortSignal.timeout(5000),
+      },
+    );
+    assert.equal(response.headers.get('cache-control'), 'no-store');
+    return { status: response.status, text: await response.text() };
+  }
+  assert.equal(
+    (await get(`/organizations/${orgs[1]}/context`, grantToken)).status,
+    403,
+  );
+  assert.equal(
+    (await grantMembership(grantActor, 'organization_admin', grantToken))
+      .status,
+    403,
+  );
+  assert.equal(
+    (await grantMembership(randomUUID(), 'viewer', accessToken)).status,
+    403,
+  );
+  assert.equal((await grantMembership(randomUUID(), 'viewer')).status, 404);
+  assert.equal((await grantMembership(grantActor, 'super_admin')).status, 400);
+  assert.equal(
+    (await grantMembership(grantActor, 'viewer', targetToken, orgs[2])).status,
+    403,
+  );
+  await owner.pool.query(
+    `REVOKE INSERT ON organization_access.membership_grants FROM ${role}`,
+  );
+  assert.equal((await grantMembership(grantActor, 'analyst')).status, 503);
+  assert.equal(
+    (await get(`/organizations/${orgs[1]}/context`, grantToken)).status,
+    403,
+  );
+  await owner.pool.query(
+    `GRANT INSERT ON organization_access.membership_grants TO ${role}`,
+  );
+  assert.deepEqual(await grantMembership(grantActor, 'analyst'), {
+    status: 204,
+    text: '',
+  });
+  assert.equal((await grantMembership(grantActor, 'analyst')).status, 204);
+  assert.equal(
+    (await get(`/organizations/${orgs[1]}/context`, grantToken)).body.role,
+    'analyst',
+  );
+  assert.equal(
+    (await grantMembership(grantActor, 'organization_admin')).status,
+    409,
+  );
+  const grantEvents = await owner.pool.query(
+    'SELECT initiating_actor_id,target_actor_id,granted_role FROM organization_access.membership_grants WHERE organization_id=$1',
+    [orgs[1]],
+  );
+  assert.deepEqual(grantEvents.rows, [
+    {
+      initiating_actor_id: targetActor,
+      target_actor_id: grantActor,
+      granted_role: 'analyst',
+    },
+  ]);
+  await owner.pool.query(
+    `GRANT INSERT ON organization_access.membership_revocations TO ${role}`,
+  );
+  const revokedGrant = await fetch(
+    `${base}/organizations/${orgs[1]}/memberships/${grantActor}`,
+    {
+      method: 'DELETE',
+      headers: { Authorization: `Bearer ${targetToken}` },
+      signal: AbortSignal.timeout(5000),
+    },
+  );
+  assert.equal(revokedGrant.status, 204);
+  assert.equal((await grantMembership(grantActor, 'analyst')).status, 409);
+  assert.equal(
+    (await get(`/organizations/${orgs[1]}/context`, grantToken)).status,
+    403,
+  );
+  assert.ok(
+    !logs.includes(grantToken) &&
+      !logs.includes(grantSubject) &&
+      !logs.includes(grantActor),
+  );
   await owner.pool.query(
     `REVOKE SELECT ON organization_access.memberships FROM ${role}`,
   );
@@ -415,7 +525,7 @@ try {
   );
   assert.ok(!logs.includes(orgs[0]) && !logs.includes(orgs[2]));
   console.log(
-    'Membership integration passed: compiled API/RSA, restricted PostgreSQL, directory, revocation and role changes, valid-token permission loss, idempotency, last administrator protection, atomic audit rollback and sanitized errors.',
+    'Membership integration passed: compiled API/RSA, restricted PostgreSQL, directory, revocation, role changes and grants, valid-token permission loss, idempotency, last administrator protection, atomic audit rollback and sanitized errors.',
   );
 } finally {
   if (app && app.exitCode === null) {
@@ -430,6 +540,10 @@ try {
   }
   await new Promise((resolve) => provider.close(resolve));
   try {
+    await owner.pool.query(
+      'DELETE FROM organization_access.membership_grants WHERE organization_id=ANY($1::uuid[])',
+      [orgs],
+    );
     await owner.pool.query(
       'DELETE FROM organization_access.membership_role_changes WHERE organization_id=ANY($1::uuid[])',
       [orgs],
@@ -448,7 +562,7 @@ try {
     );
     await owner.pool.query(
       'DELETE FROM identity_access.actors WHERE id=ANY($1::uuid[])',
-      [[actor, otherActor, targetActor]],
+      [[actor, otherActor, targetActor, grantActor]],
     );
     if (roleCreated) {
       await owner.pool.query(`DROP OWNED BY ${role}`);

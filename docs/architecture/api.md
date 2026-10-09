@@ -41,3 +41,7 @@ O BFF expõe as consultas existentes como GET /api/organizations e GET /api/orga
 DTOs de escrita: validação whitelist, rejeição de campos extras, limites de tamanho e profundidade; valores monetários em unidade inteira ou decimal exato, nunca float. Separar autenticação (401), autorização de ação (403), recurso fora de escopo (404), conflito (409), entrada inválida (400/422 conforme contrato aprovado) e falha operacional (503).
 
 OpenAPI deve declarar status, schemas, limites, segurança, idempotência e exemplos sintéticos antes do controller. Contract tests confrontam o endpoint com schemas e OpenAPI; não confiar apenas no tipo TypeScript.
+
+## Concessão administrativa implementada
+
+PUT /v1/organizations/:organizationId/memberships/:actorId usa o corpo estrito de papel compartilhado com PATCH. Administrador ativo é revalidado dentro da transação. Criação/repetição do mesmo papel: 204; acesso negado: 403 antes de consultar alvo; ator inexistente após autorização: 404; vínculo revogado ou papel diferente: 409; falha SQL/auditoria: 503 sanitizado. Não cria identidade, reativa vínculo ou altera papel existente. Sem endpoint BFF administrativo. [ADR 0012](../adr/0012-membership-grants.md), [evidências](../engineering/membership-grant-validation.md).

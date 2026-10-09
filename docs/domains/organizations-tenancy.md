@@ -1,6 +1,6 @@
 # Organizations and Tenancy
 
-Status: consulta autenticada, seleção BFF/UI e revogação administrativa com auditoria/locks implementadas conforme ADRs [0008](../adr/0008-membership-directory.md), [0009](../adr/0009-browser-organization-selection.md) e [0010](../adr/0010-membership-revocation.md). Alteração administrativa de papéis está implementada no [ADR 0011](../adr/0011-membership-role-changes.md), compartilhando auditoria/locks com revogação. Concessão de vínculos, administração no navegador e RLS permanecem propostos.
+Status: consulta autenticada, seleção BFF/UI e revogação administrativa com auditoria/locks implementadas conforme ADRs [0008](../adr/0008-membership-directory.md), [0009](../adr/0009-browser-organization-selection.md) e [0010](../adr/0010-membership-revocation.md). Alteração administrativa de papéis está implementada no [ADR 0011](../adr/0011-membership-role-changes.md), compartilhando auditoria/locks com revogação. Concessão a atores existentes está implementada no [ADR 0012](../adr/0012-membership-grants.md), sem reativação. Administração no navegador e RLS permanecem propostos.
 
 ## Objetivo e responsabilidades
 

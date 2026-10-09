@@ -2,6 +2,8 @@
 
 ## Não lançado
 
+- Concessão administrativa de memberships a atores existentes, com auditoria atômica, idempotência, concorrência serializada e sem reativação.
+
 - Alteração administrativa de papéis de memberships existentes, com auditoria atômica, idempotência e preservação do último administrador.
 - Protocolo transacional compartilhado entre mudança de papel e revogação; migration aditiva e concorrência cruzada verificada em PostgreSQL.
 

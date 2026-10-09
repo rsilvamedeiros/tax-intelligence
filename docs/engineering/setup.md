@@ -82,6 +82,15 @@ GRANT INSERT ON organization_access.membership_role_changes TO tax_api_membershi
 
 Sem INSERT/DELETE de memberships, acesso de leitura/mutação aos eventos, identidade ou sessões BFF. A operação só altera memberships ativas existentes e não reativa revogadas. Revogação e mudança de papel compartilham lock; provisionamento operacional deve respeitá-lo. Login não cria ator e concessão de vínculos segue pendente. Rollback desabilita PATCH e remove os grants adicionais, preservando migration/auditoria.
 
+Para habilitar concessão a atores já existentes, aplicar migration 0005 e os grants do [ADR 0012](../adr/0012-membership-grants.md):
+
+```sql
+GRANT INSERT (organization_id, actor_id, role) ON organization_access.memberships TO tax_api_membership;
+GRANT INSERT ON organization_access.membership_grants TO tax_api_membership;
+```
+
+Não conceder INSERT em revoked_at, escrita de identidade ou leitura/mutação/remoção dos eventos. Primeiro administrador e atores continuam provisionados operacionalmente; login e PUT não criam identidades. PUT não reativa revogados nem substitui PATCH. Rollback desabilita PUT e revoga os novos grants, preservando auditoria. A role API também precisa dos grants anteriores de SELECT/UPDATE para o protocolo de locks compartilhado.
+
 ## Diagnóstico de falhas
 
 - Engine incompatível: conferir `node --version` e caminho do executável; no Windows, pnpm global pode usar Node adjacente mesmo com PATH alterado. Preferir instalação suportada ou executar pnpm.cjs explicitamente com Node 24 local.
