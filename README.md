@@ -2,7 +2,7 @@
 
 Tax Intelligence Platform: fundação de uma plataforma B2B de inteligência tributária, fiscal, trabalhista e financeira sobre sistemas existentes.
 
-**Etapa atual: fundação técnica.** Monorepo web/API, health/readiness, contratos operacionais e testes iniciais implementados. [Evidências do bootstrap](docs/engineering/bootstrap-validation.md). Nenhuma vertical de negócio implementada; marca comercial pendente. Não houve deploy.
+**Etapa atual: identidade e consulta de memberships.** Monorepo web/API, health/readiness, login/sessões BFF e consulta autenticada de organizações implementados. [Evidências de memberships](docs/engineering/membership-validation.md). Administração de vínculos, RLS e vertical fiscal permanecem pendentes; marca comercial pendente. Não houve deploy.
 
 - [Documentação navegável](docs/README.md)
 - [Avaliação do repositório e plano por etapas](docs/engineering/repository-assessment.md)

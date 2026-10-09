@@ -1,6 +1,6 @@
 # Identity and Access
 
-Status: verificação criptográfica de access tokens e endpoint de identidade implementados; modelo persistido, sessão BFF e autorização de negócio ainda propostos. [ADR 0006](../adr/0006-development-identity-provider.md).
+Status: verificação criptográfica de access tokens, endpoint de identidade, sessões BFF e resolução do ator persistido implementados. Permissões de negócio permanecem propostas. [ADR 0006](../adr/0006-development-identity-provider.md), [ADR 0007](../adr/0007-bff-session-storage.md) e [ADR 0008](../adr/0008-membership-directory.md).
 
 ## Objetivo e responsabilidades
 
@@ -8,7 +8,7 @@ Autenticar e verificar permissões, sem interpretar tributos.
 
 ## Entidades e regras propostas
 
-User, Identity, Role. Issuer e audience verificados; credenciais nunca expostas. Agregados e value objects serão definidos pelo primeiro caso de uso, sem classes antecipadas.
+Actor é persistido por ID UUID e dupla única e exata issuer/subject. Login não cria ator automaticamente; e-mail não identifica nem concede associação. O adapter público de identidade resolve somente o ID, sem acessar tabelas privadas de organizações. Issuer e audience são verificados; credenciais nunca expostas. Permissões por ação aguardam casos de uso próprios.
 
 ## Fluxo e integrações
 
@@ -16,7 +16,7 @@ Login → associação → verificação de ação. Interfaces: Provedor OIDC; O
 
 ## Riscos e limites
 
-O desenho de sessão e identidade persistida está proposto na [RFC 0001](../rfc/0001-identity-membership-isolation.md); verificação de tokens implementada conforme ADR 0006, sem autorização de organização.
+Sessão BFF e lookup de ator estão implementados nas etapas dos ADRs 0007/0008. Consulta de organização valida membership ativa; administração e permissões de negócio da [RFC 0001](../rfc/0001-identity-membership-isolation.md) continuam pendentes.
 
 Bypass de acesso, sessão obsoleta. Não possui documentos nem aceita tenant de payload.
 

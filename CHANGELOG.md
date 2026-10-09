@@ -2,6 +2,10 @@
 
 ## Não lançado
 
+- Login/sessões BFF e verificação de access tokens da API.
+- Consulta autenticada de organizações/memberships, sem criação automática de ator ou associação.
+- Migration aditiva de identidade/membership e integração HTTP/PostgreSQL com runtime de leitura; RLS e administração permanecem pendentes.
+
 - Documentação de produto, arquitetura, contextos, segurança e roadmap.
 - Decisões técnicas registradas em ADRs, com estado de revisão explícito.
 - Orientações de TDD, revisão, commits por módulo e PRs.
@@ -13,4 +17,4 @@
 - Tela operacional com estados acessíveis, testes RTL/axe e Cypress/Chrome.
 - Hooks de qualidade, CI, dependency audit e secret scanning preparados para PR.
 
-Fundação sem deploy ou implementação de domínio; não constitui release de produção.
+Fundação com identidade e consulta de memberships, sem deploy ou vertical fiscal; não constitui release de produção.

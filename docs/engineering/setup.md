@@ -48,6 +48,20 @@ Para habilitar a API, exporte as quatro OIDC_* de [.env.example](../../.env.exam
 
 Smoke do provedor verifica realm importado, discovery e chaves públicas; smoke de autenticação verifica o processo compilado da API com token sintético e JWKS local. A jornada real é executada separadamente por `pnpm test:e2e:auth`, com usuário sintético criado e removido automaticamente. Imagem Keycloak e realm são de desenvolvimento, sem configuração de produção. Sem Docker local, executar o fluxo real do provedor no job CI `identity-provider` e registrar o limite local.
 
+## Consulta de memberships
+
+Aplique migrations com credencial operacional separada e configure DATABASE_URL da API com uma role de login sem ownership, superuser ou BYPASSRLS. Para uma role já provisionada chamada tax_api_membership, os grants necessários são:
+
+```sql
+GRANT USAGE ON SCHEMA identity_access, organization_access TO tax_api_membership;
+GRANT SELECT ON identity_access.actors, organization_access.organizations,
+  organization_access.memberships TO tax_api_membership;
+```
+
+Não conceder escrita, acesso a auth_bff ou usar a credencial do migrador na API. A credencial BFF permanece separada. Login não cria Actor: vínculos devem ser provisionados de forma controlada, por issuer/subject exatos, sem dados reais nesta etapa. Não há endpoint de administração nem seleção no navegador ainda. Ator não provisionado recebe lista vazia e contexto 403; storage indisponível retorna 503.
+
+Para validar sem provisionamento manual, configure apenas TEST_DATABASE_URL em um banco isolado terminado em _test e execute `pnpm build`, `pnpm test:integration` e `pnpm test:integration:membership`. Os testes exigem uma credencial operacional capaz de criar/remover roles de teste: criam conexões de runtime distintas e restritas, fixtures sintéticas, token RSA efêmero e removem suas fixtures/roles ao terminar. Não usam DATABASE_URL como fallback. [Escopo e evidências](membership-validation.md).
+
 ## Diagnóstico de falhas
 
 - Engine incompatível: conferir `node --version` e caminho do executável; no Windows, pnpm global pode usar Node adjacente mesmo com PATH alterado. Preferir instalação suportada ou executar pnpm.cjs explicitamente com Node 24 local.

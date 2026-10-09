@@ -1,6 +1,6 @@
 # Organizations and Tenancy
 
-Status: modelo proposto; nenhum contexto de negócio implementado na fundação.
+Status: consulta autenticada de organizações e memberships implementada conforme [ADR 0008](../adr/0008-membership-directory.md). Administração, auditoria, seleção no BFF/UI e isolamento RLS permanecem propostos.
 
 ## Objetivo e responsabilidades
 
@@ -16,7 +16,7 @@ Selecionar organização → validar associação. Interfaces: Identity; todos o
 
 ## Riscos e limites
 
-Ownership de membership, autorização por ação, revogação concorrente e contexto transacional estão propostos na [RFC 0001](../rfc/0001-identity-membership-isolation.md), sem tabelas ou policies implementadas.
+Organization e Membership possuem tabelas com FKs, unicidade e role limitada. As consultas são filtradas pelo ator resolvido por issuer/subject, ignoram vínculos revogados e não usam cache de autorização. A próxima consulta após commit da revogação nega acesso; uma leitura iniciada antes pode concluir pelo snapshot. Administração, autorização por ação e locks para efeitos transacionais continuam propostos na [RFC 0001](../rfc/0001-identity-membership-isolation.md). Não há policies RLS nem dados de negócio nesta entrega.
 
 Acesso cruzado, contexto de pool reutilizado. Não centralizar tabelas de domínio neste contexto.
 

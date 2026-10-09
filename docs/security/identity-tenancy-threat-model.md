@@ -1,6 +1,6 @@
 # Threat model — identidade e isolamento
 
-Status: proposta para a vertical; verificação de access tokens da API implementada conforme [ADR 0006](../adr/0006-development-identity-provider.md), sem sessão/membership/RLS. Escopo: [RFC 0001](../rfc/0001-identity-membership-isolation.md); evidências exigidas na [matriz de testes](../engineering/identity-tenancy-test-plan.md).
+Status: proposta para a vertical com controles parciais implementados: access tokens da API, sessões BFF e consulta de memberships. A consulta usa ator verificado, filtro explícito e runtime de leitura, com revogação observada na próxima requisição após commit; não há administração, locks para efeitos ou RLS. [Validação de memberships](../engineering/membership-validation.md). Escopo futuro: [RFC 0001](../rfc/0001-identity-membership-isolation.md); evidências exigidas na [matriz de testes](../engineering/identity-tenancy-test-plan.md).
 
 Ativos: sessão, tokens, membership, documentos sintéticos e auditoria. Adversário considerado: usuário sem sessão, membro de outra organização, usuário revogado e cliente que altera headers/payloads. Administrador de infraestrutura e comprometimento do IdP exigem resposta operacional própria; RLS não protege contra superuser.
 
