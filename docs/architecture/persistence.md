@@ -16,4 +16,6 @@ Seeds não incluem pessoas, salários ou dados fiscais reais. Fixtures de member
 
 Runtime desta consulta usa USAGE nos schemas identity_access/organization_access e SELECT em actors/organizations/memberships. Sem ownership, superuser, BYPASSRLS ou escrita; BFF usa credencial distinta para auth_bff. Os adapters parametrizados filtram actor_id. SQL arbitrário com a credencial de leitura pode consultar outras linhas: esta etapa não prova isolamento RLS.
 
+Revogação administrativa acrescenta migration 0003 e adapter transacional conforme [ADR 0010](../adr/0010-membership-revocation.md). Sua role API recebe UPDATE somente em revoked_at e INSERT somente em membership_revocations, além das leituras existentes. Sem escrita de role/identidade, DELETE de vínculos ou leitura/mutação de auditoria. Advisory lock por organização canônica precede locks nos vínculos; autorização, último administrador, update e evento usam a mesma conexão. FKs compostas da auditoria impedem referências de atores pertencentes a outra organização. Isso é controle de acesso da aplicação e privilégio mínimo, não RLS ou proteção contra SQL arbitrário comprometido.
+
 Testes de integração exigem `TEST_DATABASE_URL` isolado. Não usar fallback para DATABASE_URL. CI provisionará PostgreSQL descartável; sem banco disponível, registrar bloqueio e não converter integração em teste mockado.

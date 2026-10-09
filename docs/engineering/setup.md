@@ -58,7 +58,16 @@ GRANT SELECT ON identity_access.actors, organization_access.organizations,
   organization_access.memberships TO tax_api_membership;
 ```
 
-Não conceder escrita, acesso a auth_bff ou usar a credencial do migrador na API. A credencial BFF permanece separada. Login não cria Actor: vínculos devem ser provisionados de forma controlada, por issuer/subject exatos, sem dados reais nesta etapa. Não há endpoint de administração. Após login, o navegador lista organizações e consulta contexto na seleção através do BFF; nenhuma seleção fica em cookie ou localStorage. Ator não provisionado recebe estado vazio e contexto 403; storage indisponível retorna 503.
+Para operar somente consultas, não conceder escrita, acesso a auth_bff ou usar a credencial do migrador na API. A credencial BFF permanece separada. Login não cria Actor: vínculos devem ser provisionados de forma controlada, por issuer/subject exatos, sem dados reais nesta etapa. Após login, o navegador lista organizações e consulta contexto na seleção através do BFF; nenhuma seleção fica em cookie ou localStorage. Ator não provisionado recebe estado vazio e contexto 403; storage indisponível retorna 503. A habilitação da revogação administrativa exige os grants adicionais abaixo.
+
+Os grants acima permitem somente consultas. Para habilitar DELETE administrativo do [ADR 0010](../adr/0010-membership-revocation.md), aplicar migration 0003 e conceder adicionalmente, com credencial operacional:
+
+```sql
+GRANT UPDATE (revoked_at) ON organization_access.memberships TO tax_api_membership;
+GRANT INSERT ON organization_access.membership_revocations TO tax_api_membership;
+```
+
+Não conceder UPDATE em role, criação/exclusão de memberships, SELECT/UPDATE/DELETE/TRUNCATE na auditoria ou ownership. A API resolve o iniciador e verifica organization_admin dentro da transação; JWT com role administrativa não concede permissão. Provisionamento inicial e alterações feitas por operador devem respeitar o advisory lock da organização; não criar organização sem administrador ativo ao habilitar esta operação. Concessão de vínculos e interface de administração permanecem pendentes. BFF continua com grants somente de sessão, sem mudança de credencial. Rollback remove a rota administrativa e preserva auditoria/migration.
 
 Para validar sem provisionamento manual, configure apenas TEST_DATABASE_URL em um banco isolado terminado em _test e execute `pnpm build`, `pnpm test:integration` e `pnpm test:integration:membership`. Os testes exigem uma credencial operacional capaz de criar/remover roles de teste: criam conexões de runtime distintas e restritas, fixtures sintéticas, token RSA efêmero e removem suas fixtures/roles ao terminar. Não usam DATABASE_URL como fallback. [Escopo e evidências](membership-validation.md).
 

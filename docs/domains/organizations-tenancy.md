@@ -1,6 +1,6 @@
 # Organizations and Tenancy
 
-Status: consulta autenticada de organizações/memberships e seleção no BFF/UI implementadas conforme [ADR 0008](../adr/0008-membership-directory.md) e [ADR 0009](../adr/0009-browser-organization-selection.md). Administração, auditoria e isolamento RLS permanecem propostos.
+Status: consulta autenticada, seleção BFF/UI e revogação administrativa com auditoria/locks implementadas conforme ADRs [0008](../adr/0008-membership-directory.md), [0009](../adr/0009-browser-organization-selection.md) e [0010](../adr/0010-membership-revocation.md). Concessão/troca de roles, administração no navegador e RLS permanecem propostos.
 
 ## Objetivo e responsabilidades
 
@@ -16,7 +16,7 @@ Selecionar organização → validar associação. Interfaces: Identity; todos o
 
 ## Riscos e limites
 
-Organization e Membership possuem tabelas com FKs, unicidade e role limitada. As consultas são filtradas pelo ator resolvido por issuer/subject, ignoram vínculos revogados e não usam cache de autorização. A próxima consulta após commit da revogação nega acesso; uma leitura iniciada antes pode concluir pelo snapshot. Administração, autorização por ação e locks para efeitos transacionais continuam propostos na [RFC 0001](../rfc/0001-identity-membership-isolation.md). Não há policies RLS nem dados de negócio nesta entrega.
+Organization e Membership possuem tabelas com FKs, unicidade e role limitada. Consultas filtram ator por issuer/subject e vínculos ativos, sem cache. A próxima consulta após commit da revogação nega acesso; leitura iniciada antes pode concluir pelo snapshot. Revogação exige administrador ativo, locks, preservação do último administrador e evento na mesma transação. Auditoria referencia iniciador/alvo na organização por FKs compostas, sem identidade externa. Outros efeitos transacionais continuam propostos na [RFC 0001](../rfc/0001-identity-membership-isolation.md). Não há policies RLS ou dados fiscais nesta entrega.
 
 Acesso cruzado, contexto de pool reutilizado. Não centralizar tabelas de domínio neste contexto.
 

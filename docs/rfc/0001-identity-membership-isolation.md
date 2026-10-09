@@ -1,12 +1,12 @@
 # RFC 0001 — Identidade, membership e isolamento
 
-Status: proposta de referência com implementação parcial por etapas. A autenticação da API, sessões BFF e consulta de memberships foram implementadas nos ADRs 0006–0008. Administração, auditoria/locks, permissões de negócio, RLS e jornada completa permanecem pendentes. Responsável pela decisão e revisão de segurança: mantenedor do projeto.
+Status: proposta de referência com implementação parcial por etapas. Autenticação, sessões BFF, consulta/seleção e revogação administrativa de memberships estão implementadas nos ADRs 0006–0010. Revogação tem auditoria transacional, locks e preserva o último administrador; concessão/troca de roles, administração BFF/UI, permissões fiscais, RLS e jornada completa permanecem pendentes. Responsável pela decisão e revisão de segurança: mantenedor do projeto.
 
-Atualização posterior ao PR #8: [ADR 0008](../adr/0008-membership-directory.md) delimita a consulta de vínculos ativos com role de leitura. A próxima leitura após revogação confirmada nega acesso; uma leitura em andamento pode concluir pelo snapshot. Locks abaixo continuam propostos para operações com efeitos. Não interpretar autenticação e lookup de membership como conclusão da vertical.
+Atualização posterior ao PR #8: [ADR 0008](../adr/0008-membership-directory.md) delimita a consulta de vínculos ativos com role de leitura. A próxima leitura após revogação confirmada nega acesso; uma leitura em andamento pode concluir pelo snapshot. O [ADR 0010](../adr/0010-membership-revocation.md) implementa locks para revogação administrativa; sua adoção em outras operações com efeitos permanece proposta. Não interpretar autenticação e lookup de membership como conclusão da vertical.
 
 ## Problema e aceite
 
-A fundação possui somente endpoints operacionais. A primeira vertical precisa identificar o ator, verificar sua associação e impedir acesso a dados de outra organização. Login bem-sucedido não demonstra autorização nem isolamento.
+A fundação original possuía somente endpoints operacionais; os controles implementados posteriormente estão identificados no status acima. A primeira vertical precisa identificar o ator, verificar sua associação e impedir acesso a dados de outra organização. Login bem-sucedido não demonstra autorização nem isolamento.
 
 Aceite do desenho: identidade estável, fronteira de sessão explícita, autorização por ação, revogação definida e testes negativos reproduzíveis. A implementação depende de escolha do provedor, aceite desta proposta e autorização específica da etapa. Ver [threat model](../security/identity-tenancy-threat-model.md) e [matriz de testes](../engineering/identity-tenancy-test-plan.md).
 
