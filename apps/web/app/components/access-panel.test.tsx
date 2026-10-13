@@ -19,6 +19,61 @@ describe('Account and organization composition', () => {
   beforeEach(() => {
     global.fetch = jest.fn();
   });
+  it('composes administration only after verified admin selection and clears it on refresh', async () => {
+    jest
+      .mocked(fetch)
+      .mockResolvedValueOnce(reply(session))
+      .mockResolvedValueOnce(
+        reply({
+          ...page,
+          items: [{ ...page.items[0], role: 'organization_admin' }],
+        }),
+      )
+      .mockResolvedValueOnce(
+        reply({
+          organization: { id, name: 'Synthetic A' },
+          role: 'organization_admin',
+        }),
+      )
+      .mockResolvedValueOnce(reply({ items: [], nextCursor: null }))
+      .mockResolvedValue(reply(page));
+    render(<AccessPanel />);
+    expect(
+      screen.queryByRole('heading', { name: 'Membros' }),
+    ).not.toBeInTheDocument();
+    fireEvent.click(
+      await screen.findByRole('button', { name: 'Selecionar Synthetic A' }),
+    );
+    await screen.findByRole('button', { name: 'Conceder acesso' });
+    fireEvent.change(screen.getByLabelText('UUID do ator existente'), {
+      target: { value: id },
+    });
+    fireEvent.click(
+      screen.getByRole('button', { name: 'Atualizar organizações' }),
+    );
+    expect(
+      screen.queryByRole('heading', { name: 'Membros' }),
+    ).not.toBeInTheDocument();
+    await screen.findByRole('button', { name: 'Selecionar Synthetic A' });
+  });
+  it('does not offer administration to a verified viewer', async () => {
+    jest
+      .mocked(fetch)
+      .mockResolvedValueOnce(reply(session))
+      .mockResolvedValueOnce(reply(page))
+      .mockResolvedValueOnce(
+        reply({ organization: { id, name: 'Synthetic A' }, role: 'viewer' }),
+      );
+    render(<AccessPanel />);
+    fireEvent.click(
+      await screen.findByRole('button', { name: 'Selecionar Synthetic A' }),
+    );
+    await screen.findByText('Organização selecionada: Synthetic A');
+    expect(
+      screen.queryByRole('heading', { name: 'Membros' }),
+    ).not.toBeInTheDocument();
+    expect(fetch).toHaveBeenCalledTimes(3);
+  });
   it('removes organization data immediately when logout starts', async () => {
     jest
       .mocked(fetch)

@@ -1,6 +1,7 @@
 'use client';
 import { useContext, useEffect, useRef, useState } from 'react';
-import { SessionExpiryContext } from './auth-session';
+import { SessionCsrfContext, SessionExpiryContext } from './auth-session';
+import { MembershipPanel } from './membership-panel';
 import {
   organizationPageSchema,
   organizationContextSchema,
@@ -19,6 +20,7 @@ export function OrganizationPanel({
   onSessionExpired?: () => void;
 }) {
   const accountExpiry = useContext(SessionExpiryContext);
+  const csrfToken = useContext(SessionCsrfContext);
   const expire = onSessionExpired ?? accountExpiry;
   const [page, setPage] = useState<Page>({ items: [], nextCursor: null });
   const [selected, setSelected] = useState<Context | null>(null);
@@ -208,6 +210,14 @@ export function OrganizationPanel({
         <p role="status">
           Organização selecionada: {selected.organization.name}
         </p>
+      )}
+      {selected?.role === 'organization_admin' && csrfToken && (
+        <MembershipPanel
+          key={selected.organization.id}
+          organizationId={selected.organization.id}
+          csrfToken={csrfToken}
+          onSessionExpired={expire}
+        />
       )}
     </section>
   );

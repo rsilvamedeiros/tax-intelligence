@@ -8,7 +8,7 @@ import {
   type ReactNode,
 } from 'react';
 import { browserSessionSchema } from '@tax/contracts';
-import { SessionExpiryContext } from './auth-session';
+import { SessionCsrfContext, SessionExpiryContext } from './auth-session';
 export function AuthPanel({ children }: { children?: ReactNode } = {}) {
   const [state, setState] = useState<
     'loading' | 'anonymous' | 'active' | 'unavailable'
@@ -101,7 +101,9 @@ export function AuthPanel({ children }: { children?: ReactNode } = {}) {
           {!leaving && (
             <Fragment key={csrf}>
               <SessionExpiryContext.Provider value={expire}>
-                {children}
+                <SessionCsrfContext.Provider value={csrf}>
+                  {children}
+                </SessionCsrfContext.Provider>
               </SessionExpiryContext.Provider>
             </Fragment>
           )}
