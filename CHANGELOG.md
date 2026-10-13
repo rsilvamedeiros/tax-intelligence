@@ -2,6 +2,7 @@
 
 ## Não lançado
 
+- Interface administrativa de membros com paginação, concessão, alteração de papel, confirmação de revogação e recuperação segura; API continua responsável pela autorização.
 - BFF administrativo de memberships com token server-side, Origin/CSRF, payload limitado e respostas sanitizadas; jornada real estendida para operações administrativas.
 
 - Consulta administrativa paginada de membros ativos/revogados, com autorização na mesma instrução SQL e resposta mínima sem identidade externa.
