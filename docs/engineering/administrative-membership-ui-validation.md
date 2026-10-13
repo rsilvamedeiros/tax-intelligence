@@ -18,4 +18,8 @@ Revisão local aplicada: contratos fechados, nenhum token no cliente, CSRF da se
 
 Jornadas locais Chrome 152: dois cenários de fundação e uma jornada autenticada com Keycloak 26.8.0 aprovados. Jornada usa controles visíveis para conceder, trocar papel, cancelar/confirmar revogação e retirar controles após auto-rebaixamento; preserva negativos de origem/CSRF, acesso cruzado, idempotência, conflito de reativação e logout. Serviços de teste pertencentes à tarefa encerrados após execução; processos existentes do usuário preservados.
 
-Revisão/checks remotos ainda pendentes. Não há validação de produção nem autorização para etapa fiscal. Sem migration, dependência ou privilégio de banco novo.
+Na [PR #16](https://github.com/rsilvamedeiros/tax-intelligence/pull/16), o commit `8f8d4ac978f86df44865a7a4ceede3ef39673777` passou nos sete jobs de Actions: documentação, quality, integração PostgreSQL, identity-provider, E2E, audit e secret-scan. GitGuardian aprovou os cinco commits sem segredos detectados.
+
+CodeRabbit pulou a revisão automática pela política do serviço para repositórios com menos de dez estrelas. Solicitação manual revisou os 18 arquivos entre a base `82a1eb803e587e308336a70e97f8d144f196741e` e aquele commit: [relatório sem comentários acionáveis](https://github.com/rsilvamedeiros/tax-intelligence/pull/16#issuecomment-6148819961) e [execução concluída](https://github.com/rsilvamedeiros/tax-intelligence/pull/16#issuecomment-6148827206). Conferidos checks e status externo. Aprovação humana permanece necessária.
+
+Registro posterior altera apenas documentação/evidências e referências de segurança/RFC; não atribuir revisão do commit anterior a código novo. Conferir novamente os checks do commit documental. Não há validação de produção nem autorização para etapa fiscal. Sem migration, dependência ou privilégio de banco novo.
