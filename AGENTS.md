@@ -8,7 +8,7 @@ Leia [índice](docs/README.md), [arquitetura](docs/architecture/overview.md), AD
 
 Estado autorizado: documentação primeiro; fundação técnica por etapa. Após PR #5, o mantenedor delegou a escolha do provedor e a autenticação da API; após PR #6, autorizou login e sessões BFF. Após PR #8, autorizou a próxima etapa de memberships, delimitada no ADR 0008. Importação, regras e isolamento de dados de negócio permanecem pendentes de etapa própria. Não transformar proposta em decisão aprovada silenciosamente.
 
-Etapa atual autorizada após integração do PR #14: BFF administrativo de memberships conforme [ADR 0014](docs/adr/0014-administrative-membership-bff.md), com sessão server-side, Origin/CSRF obrigatório para alterações e autorização revalidada pela API. Reutilizar contratos e credencial exclusiva de auth_bff; nenhum acesso web a dados de domínio. UI administrativa, criação de identidade, reativação, RLS e ações fiscais seguem pendentes.
+Etapa atual autorizada após integração do PR #15: interface administrativa de membros conforme [ADR 0015](docs/adr/0015-administrative-membership-ui.md), usando contratos existentes do BFF, CSRF público da sessão e autorização revalidada pela API. Limpar estado na troca de organização/sessão e exigir confirmação de revogação. Nenhum acesso web adicional a banco. Criação de identidade, reativação, RLS e ações fiscais seguem pendentes.
 
 ## Arquitetura e código
 
