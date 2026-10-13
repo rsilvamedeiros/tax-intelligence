@@ -33,6 +33,7 @@ Documentação primeiro; código avança por etapa com aceite, testes e revisão
 - [Validação da concessão administrativa](engineering/membership-grant-validation.md)
 - [Validação da consulta administrativa de membros](engineering/administrative-membership-directory-validation.md)
 - [Validação do BFF administrativo](engineering/administrative-membership-bff-validation.md)
+- [Validação da interface administrativa](engineering/administrative-membership-ui-validation.md)
 
 ## Domínios
 
@@ -61,6 +62,7 @@ Documentação primeiro; código avança por etapa com aceite, testes e revisão
 - [0012 concessão administrativa de memberships](adr/0012-membership-grants.md)
 - [0013 consulta administrativa de membros](adr/0013-administrative-membership-directory.md)
 - [0014 BFF administrativo de memberships](adr/0014-administrative-membership-bff.md)
+- [0015 Interface administrativa de membros](adr/0015-administrative-membership-ui.md)
 - [process](rfc/process.md)
 - [RFC 0001: identidade, membership e isolamento](rfc/0001-identity-membership-isolation.md)
 
