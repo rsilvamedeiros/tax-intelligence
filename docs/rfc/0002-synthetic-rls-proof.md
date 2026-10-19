@@ -4,6 +4,8 @@ Data: 19/10/2026. Status: proposta para revisão; implementação não autorizad
 
 ## Problema e proposta
 
+Atualização após integração da PR #18: o mantenedor solicitou a próxima etapa, autorizando a prova isolada descrita no [ADR 0016](../adr/0016-synthetic-rls-proof.md). A proposta de adoção em tabelas reais continua pendente; esta atualização não autoriza domínio fiscal. Execução e resultados em [validação](../engineering/synthetic-rls-validation.md).
+
 Os adapters existentes filtram ator/organização e verificam administração, mas não habilitam RLS. A credencial API continua podendo consultar outras linhas por SQL arbitrário, conforme [persistência](../architecture/persistence.md). O [ADR 0003](../adr/0003-tenant-isolation.md) propõe defesa adicional para dados de domínio, ainda sem tabela de negócio autorizada.
 
 Próxima implementação proposta: prova PostgreSQL em schema descartável exclusivo de testes, exercitando contexto transacional, policies e privilégios. Não criar entidade fiscal, migration de produção, endpoint, helper exportado ou dependência. Não habilitar RLS nas tabelas existentes de identidade, memberships, auditoria ou sessões: suas consultas de bootstrap e administração exigem desenho próprio antes dessa mudança.

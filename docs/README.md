@@ -16,6 +16,8 @@ Documentação primeiro; código avança por etapa com aceite, testes e revisão
 
 ## Engenharia
 
+- [Status do projeto](engineering/project-status.md)
+
 - [repository assessment](engineering/repository-assessment.md)
 - [workflow](engineering/workflow.md)
 - [testing](engineering/testing.md)
@@ -36,6 +38,7 @@ Documentação primeiro; código avança por etapa com aceite, testes e revisão
 - [Validação da interface administrativa](engineering/administrative-membership-ui-validation.md)
 - [Plano de TDD da prova RLS](engineering/synthetic-rls-test-plan.md)
 - [Validação da proposta RLS](engineering/rls-proposal-validation.md)
+- [Validação da prova sintética RLS](engineering/synthetic-rls-validation.md)
 
 ## Domínios
 
@@ -65,6 +68,7 @@ Documentação primeiro; código avança por etapa com aceite, testes e revisão
 - [0013 consulta administrativa de membros](adr/0013-administrative-membership-directory.md)
 - [0014 BFF administrativo de memberships](adr/0014-administrative-membership-bff.md)
 - [0015 Interface administrativa de membros](adr/0015-administrative-membership-ui.md)
+- [0016 Prova sintética RLS](adr/0016-synthetic-rls-proof.md)
 - [process](rfc/process.md)
 - [RFC 0001: identidade, membership e isolamento](rfc/0001-identity-membership-isolation.md)
 - [RFC 0002: prova sintética RLS](rfc/0002-synthetic-rls-proof.md)
