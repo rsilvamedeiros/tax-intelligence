@@ -31,7 +31,7 @@ Comandos: `pnpm lint`, `pnpm typecheck`, `pnpm test`, `pnpm test:coverage`, `pnp
 
 ## Segurança e IA
 
-Sem segredos versionados, PII real em fixtures/prompts/logs, scraping autenticado presumido, APIs governamentais fictícias ou decisão tributária definitiva por LLM. Autorização pertence aos casos de uso; tenant vem de membership verificada; RLS ainda é proposta. Leia [segurança](docs/security/security-model.md) e [playbook](docs/ai/playbook.md).
+Sem segredos versionados, PII real em fixtures/prompts/logs, scraping autenticado presumido, APIs governamentais fictícias ou decisão tributária definitiva por LLM. Autorização pertence aos casos de uso; tenant vem de membership verificada; RLS para dados de domínio ainda é proposta. Leia [segurança](docs/security/security-model.md) e [playbook](docs/ai/playbook.md).
 
 ## Git, PR e autonomia
 

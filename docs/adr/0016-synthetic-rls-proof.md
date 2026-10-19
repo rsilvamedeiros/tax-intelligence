@@ -1,6 +1,6 @@
 # ADR 0016 — Prova RLS em fixtures PostgreSQL
 
-Status: decisão da etapa técnica autorizada pelo pedido de próxima entrega após integração da PR #18. Implementação em andamento. Aceita o recorte da [RFC 0002](../rfc/0002-synthetic-rls-proof.md), sem habilitar RLS em tabelas da aplicação ou autorizar domínio fiscal.
+Status: decisão da etapa técnica autorizada pelo pedido de próxima entrega após integração da PR #18. Prova implementada e validada localmente; CI/revisão pendentes. Aceita o recorte da [RFC 0002](../rfc/0002-synthetic-rls-proof.md), sem habilitar RLS em tabelas da aplicação ou autorizar domínio fiscal.
 
 ## Execução
 

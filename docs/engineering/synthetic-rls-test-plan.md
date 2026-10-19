@@ -1,6 +1,6 @@
 # Plano de TDD da prova sintética RLS
 
-Status: planejado, sem execução. Escopo e limites na [RFC 0002](../rfc/0002-synthetic-rls-proof.md). Nenhum caso abaixo está aprovado por esta documentação.
+Status: matriz executada na prova isolada do [ADR 0016](../adr/0016-synthetic-rls-proof.md), com 12 cenários aprovados localmente e [evidências de Red/Green e regressões](synthetic-rls-validation.md). CI e revisão ainda pendentes nesta etapa. Escopo e limites na [RFC 0002](../rfc/0002-synthetic-rls-proof.md); execução da fixture não comprova isolamento da aplicação.
 
 ## Preparação e Red válido
 

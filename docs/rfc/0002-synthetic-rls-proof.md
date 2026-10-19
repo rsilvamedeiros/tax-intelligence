@@ -1,6 +1,6 @@
 # RFC 0002 — Prova sintética de isolamento RLS
 
-Data: 19/10/2026. Status: proposta para revisão; implementação não autorizada por este documento. Responsável pelo aceite: mantenedor. Na preparação inicial, a PR #16 da interface administrativa aguardava integração; foi integrada durante a revisão. Esta RFC descreve somente o desenho; não altera o estado de autorização do AGENTS.
+Data: 19/10/2026. Status: recorte experimental aceito no [ADR 0016](../adr/0016-synthetic-rls-proof.md); adoção em tabelas reais permanece proposta. Responsável pelo aceite: mantenedor. A autorização de execução está registrada no ADR/AGENTS; esta RFC não autoriza domínio fiscal ou alterações de produção.
 
 ## Problema e proposta
 

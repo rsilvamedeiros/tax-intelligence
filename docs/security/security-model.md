@@ -15,6 +15,8 @@ Modelo de projeto inspirado em [OWASP ASVS](https://owasp.org/www-project-applic
 
 ## Identidade e RBAC propostos
 
+A prova sintética do [ADR 0016](../adr/0016-synthetic-rls-proof.md) exercita policies, grants e contexto transacional com login restrito em fixtures descartáveis. RLS-12 explicita o limite de setting mutável: a prova não autentica tenant nem protege runtime com SQL arbitrário comprometido. Nenhuma policy ou grant da aplicação foi alterado; RLS de domínio continua pendente. [Evidências](../engineering/synthetic-rls-validation.md).
+
 BFF administrativo implementado no [ADR 0014](../adr/0014-administrative-membership-bff.md): Bearer da sessão server-side, Origin/CSRF para mutações, payload limitado, resposta sanitizada e permissão administrativa revalidada pela API. Credencial BFF permanece restrita a auth_bff. Interface administrativa implementada no [ADR 0015](../adr/0015-administrative-membership-ui.md), com limpeza de estado por organização/sessão, remoção de controles em 403 e consulta após falha ambígua; visibilidade dos controles não concede autorização. Isolamento RLS continua pendente. [Evidências](../engineering/administrative-membership-ui-validation.md).
 
 Desenho específico da primeira vertical: [RFC 0001](../rfc/0001-identity-membership-isolation.md), [threat model](identity-tenancy-threat-model.md) e [plano de testes](../engineering/identity-tenancy-test-plan.md). Controles propostos não representam autenticação ou RLS já implementados.

@@ -1,5 +1,7 @@
 # CI/CD, dependências e releases
 
+ADR 0016 acrescenta a prova RLS ao job existente `database-integration`, sem alterar imagem/versão, permissões ou grants de produção. Fixtures descartáveis usam login próprio e pool de tamanho 1; o log identifica a versão do servidor, e cleanup verifica ausência de schema/role. A prova não exporta código ao runtime nem substitui os testes de autorização da API. [Evidências](synthetic-rls-validation.md).
+
 ## CI proposto por etapa
 
 Primeiro PR documental: validação de links e manifestos de skills, revisão de coerência e diff. Workflow [Documentation](../../.github/workflows/documentation.yml) implementado com job `documentation`, Node 24, actions fixadas por SHA e permissões de leitura; executa o validador sem instalar dependências do bootstrap. Execução remota só pode ser declarada após verificar o resultado do Actions.

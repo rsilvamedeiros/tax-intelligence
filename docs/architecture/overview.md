@@ -1,5 +1,7 @@
 # Arquitetura da fundação
 
+Prova sintética RLS implementada no [ADR 0016](../adr/0016-synthetic-rls-proof.md), sem alterar runtime ou tabelas da aplicação. Demonstra policies/contexto somente em fixtures; aplicação a dados de domínio continua pendente. [Status do projeto](../engineering/project-status.md).
+
 Interface administrativa implementada conforme [ADR 0015](../adr/0015-administrative-membership-ui.md), consumindo somente o BFF existente e mantendo autorização na API. Criação de identidade, reativação, RLS e operação fiscal permanecem pendentes. [Validação](../engineering/administrative-membership-ui-validation.md).
 
 BFF administrativo implementado conforme [ADR 0014](../adr/0014-administrative-membership-bff.md), com token server-side, Origin/CSRF e autorização revalidada pela API. Não concede acesso SQL de domínio ao web nem implementa UI administrativa. [Validação](../engineering/administrative-membership-bff-validation.md).
