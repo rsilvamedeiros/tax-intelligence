@@ -1,5 +1,7 @@
 # Persistência e multi-tenancy
 
+Próximo experimento proposto na [RFC 0002](../rfc/0002-synthetic-rls-proof.md): policies e contexto em fixtures descartáveis com role restrita, pool reutilizado e limites de setting mutável explícitos. Sem migration de produto, alteração das tabelas atuais ou isolamento RLS implementado. [Plano de testes](../engineering/synthetic-rls-test-plan.md).
+
 Consulta administrativa do [ADR 0013](../adr/0013-administrative-membership-directory.md) combina administrador ativo e página de vínculos da organização na mesma instrução SQL/snapshot. Reutiliza PK e SELECT existentes, sem migration ou grant adicional. Inclui estado revogado, sem consultar identidade externa ou auditoria. [Evidências](../engineering/administrative-membership-directory-validation.md).
 
 PostgreSQL como fonte transacional; Drizzle selecionado para consultas tipadas e SQL explícito ([ADR 0002](../adr/0002-postgresql-drizzle.md)). MongoDB não adotado: documentos brutos podem iniciar em JSONB quando houver necessidade aprovada. Redis/BullMQ dependem de cache medido ou trabalhos que excedam o orçamento de uma requisição.
