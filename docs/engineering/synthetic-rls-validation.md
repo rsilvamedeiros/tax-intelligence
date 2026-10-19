@@ -29,3 +29,7 @@ Inspeção adicional do catálogo após os ciclos confirmou zero schemas/roles d
 RLS-01/02/04/05 demonstram leitura/escrita/FK da fixture; RLS-06/07 usam PID real para provar reutilização após commit, rollback e erro recuperável; RLS-08/09 descartam conexões contaminadas/inutilizáveis; RLS-10 demonstra atomicidade registro/evento somente na fixture. RLS-11 verifica privilégio mínimo e RLS-12 confirma que SQL arbitrário pode trocar o setting e então consultar B: não é autenticação nem proteção contra runtime comprometido.
 
 Esta etapa não habilita RLS nas tabelas da aplicação, não conclui DB-03 nem a primeira vertical. [Status do projeto](project-status.md) preserva essa distinção. Revisão local e remota devem registrar achados reais e aprovação humana antes de merge. Jornadas web não foram repetidas localmente nesta etapa de banco/testes; regressões remotas permanecem exigidas.
+
+## Evidência remota
+
+Na [PR #19](https://github.com/rsilvamedeiros/tax-intelligence/pull/19), o [CI](https://github.com/rsilvamedeiros/tax-intelligence/actions/runs/39329155792) do head `ae4f3c77e2e3fc9577b27508cbb8cf4973518018` executou PostgreSQL 17.11: oito suites e 82 testes aprovados, incluindo os 12 cenários RLS. A versão foi confirmada no log da fixture autenticada, além da configuração do job. GitGuardian aprovou os quatro commits sem segredos. Revisão externa/humana permanece pendente; status de bot isolado não comprova revisão concluída.
