@@ -1,6 +1,6 @@
 # Validação da proposta de prova RLS
 
-Entrega exclusivamente documental: [RFC 0002](../rfc/0002-synthetic-rls-proof.md) e [plano de TDD](synthetic-rls-test-plan.md). Base de trabalho: commit `210d123` da PR #16, ainda aberta na inspeção inicial de 19/10/2026. Nenhuma mudança em código, migrations, dependências ou privilégios.
+Preparação documental: [RFC 0002](../rfc/0002-synthetic-rls-proof.md) e [plano de TDD](synthetic-rls-test-plan.md). Base de trabalho: commit `210d123` da PR #16, ainda aberta na inspeção inicial de 19/10/2026. A integração posterior inclui uma correção de sincronização no teste Cypress herdado, descrita abaixo; nenhuma mudança no runtime, migrations, dependências ou privilégios.
 
 ## Plano e revisão
 
@@ -12,7 +12,7 @@ Próxima etapa proposta é prova descartável em banco de teste, pois tabela rea
 
 `pnpm format:check`, `pnpm validate:docs` e `git diff --check` aprovados: 87 Markdown e 16 skills; validador não verifica links externos/âncoras. Fontes externas foram consultadas separadamente. Revisão local sem achado bloqueante: proposta distingue grants, policies, contexto de sessão/transação e limite de setting mutável, sem alegar autenticação por RLS.
 
-Casos RLS-01 a RLS-12 são planejamento, não testes executados; nenhum resultado Red/Green é atribuído a esta entrega. Testes de aplicação não foram repetidos localmente para alterações exclusivamente documentais. Não há implementação RLS, proteção contra SQL arbitrário comprometido, migration ou validação de domínio/produção.
+Casos RLS-01 a RLS-12 são planejamento, não testes executados; nenhum resultado Red/Green desses casos é atribuído a esta entrega. Na fase exclusivamente documental, testes de aplicação não foram repetidos localmente; a jornada posterior da correção Cypress é registrada separadamente. Não há implementação RLS, proteção contra SQL arbitrário comprometido, migration ou validação de domínio/produção.
 
 Na [PR #17](https://github.com/rsilvamedeiros/tax-intelligence/pull/17), encadeada sobre a PR #16, o commit `39b3e6c03a757ba963324ab2f4d5cefa29b929f3` passou nos sete jobs de Actions: documentação, quality, integração PostgreSQL, identity-provider, E2E, audit e secret-scan. Essas regressões do código herdado não executam os casos RLS planejados. GitGuardian aprovou os dois commits sem segredos detectados.
 
@@ -25,3 +25,5 @@ Este registro posterior altera somente evidências documentais. Conferir checks 
 A PR #16 entrou em main antes da integração da #17 na branch da interface. A [PR #18](https://github.com/rsilvamedeiros/tax-intelligence/pull/18) leva a proposta a main; diff dos sete arquivos documentais confirmado idêntico. Sua execução [39271057425](https://github.com/rsilvamedeiros/tax-intelligence/actions/runs/39271057425) encontrou corrida na jornada herdada: após mudar o papel para analyst, GET ainda recebeu viewer. Não houve mudança de runtime nesta proposta.
 
 Asserção Cypress verificava texto Análise na linha inteira; a opção do select já continha esse texto antes da confirmação da API. Plano de correção: verificar o parágrafo de resumo do membro, atualizado somente pela nova consulta após 204, antes do GET de conferência. Preservar expectativa analyst, demais negativas e timeouts. Falha observada no CI é evidência anterior à correção, não novo TDD de comportamento de produto. Validar lint/tipos/formato e repetir jornada real Keycloak/Chrome; registrar resultado efetivo e checks posteriores. Esta correção de validação terá commit separado da proposta documental.
+
+Correção publicada em commit próprio: asserção lê o parágrafo de resumo em vez de incluir texto das opções. Lint, tipos, build, formato completo e validação documental aprovados localmente. Jornada autenticada corrigida passou com Chrome 155 e Keycloak 26.8.0, mantendo concessão, mudança de papel, consulta exata de analyst, revogação, negativos e logout. Nenhum timeout, retry ou expectativa de autorização foi relaxado. Provider e PostgreSQL de teste pertencentes à tarefa foram encerrados. CI/revisão dos commits posteriores devem ser conferidos antes da entrega; não atribuir a revisão documental anterior a essa correção.

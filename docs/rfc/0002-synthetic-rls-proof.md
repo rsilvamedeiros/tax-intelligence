@@ -1,6 +1,6 @@
 # RFC 0002 — Prova sintética de isolamento RLS
 
-Data: 19/10/2026. Status: proposta para revisão; implementação não autorizada por este documento. Responsável pelo aceite: mantenedor. A PR #16 da interface administrativa ainda aguarda integração. Esta entrega contém somente documentação; não altera o estado de autorização do AGENTS.
+Data: 19/10/2026. Status: proposta para revisão; implementação não autorizada por este documento. Responsável pelo aceite: mantenedor. Na preparação inicial, a PR #16 da interface administrativa aguardava integração; foi integrada durante a revisão. Esta RFC descreve somente o desenho; não altera o estado de autorização do AGENTS.
 
 ## Problema e proposta
 
