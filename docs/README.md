@@ -34,6 +34,8 @@ Documentação primeiro; código avança por etapa com aceite, testes e revisão
 - [Validação da consulta administrativa de membros](engineering/administrative-membership-directory-validation.md)
 - [Validação do BFF administrativo](engineering/administrative-membership-bff-validation.md)
 - [Validação da interface administrativa](engineering/administrative-membership-ui-validation.md)
+- [Plano de TDD da prova RLS](engineering/synthetic-rls-test-plan.md)
+- [Validação da proposta RLS](engineering/rls-proposal-validation.md)
 
 ## Domínios
 
@@ -65,6 +67,7 @@ Documentação primeiro; código avança por etapa com aceite, testes e revisão
 - [0015 Interface administrativa de membros](adr/0015-administrative-membership-ui.md)
 - [process](rfc/process.md)
 - [RFC 0001: identidade, membership e isolamento](rfc/0001-identity-membership-isolation.md)
+- [RFC 0002: prova sintética RLS](rfc/0002-synthetic-rls-proof.md)
 
 ## Roadmap
 
