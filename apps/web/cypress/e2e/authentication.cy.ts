@@ -83,10 +83,11 @@ describe('Real Keycloak BFF login', () => {
       expect(body.identity.issuer).to.equal(
         'http://127.0.0.1:8080/realms/tax-intelligence',
       );
-      cy.env<{ organizationIds: string[]; actorIds: string[] }>(
+      cy.env<{ organizationIds: string[]; actorIds: [string, string, string] }>(
         ['organizationIds', 'actorIds'],
         { log: false },
       ).then(({ organizationIds: ids, actorIds: actors }) => {
+        expect(actors).to.have.length(3);
         const collection = `/api/organizations/${ids[0]}/memberships`;
         const member = `${collection}/${actors[1]}`;
         const headers = {
@@ -157,9 +158,29 @@ describe('Real Keycloak BFF login', () => {
           'viewer',
           403,
         );
+        cy.contains('li', 'Synthetic A').find('button').click();
+        cy.contains('h3', 'Membros').should('be.visible');
+        const grant = (actor: string, role: string) => {
+          cy.get('form[aria-label="Conceder acesso"]').within(() => {
+            cy.get('input').clear().type(actor, { log: false });
+            cy.get('select').select(role);
+            cy.contains('button', 'Conceder acesso').click();
+          });
+          cy.contains('.membership-list li', actor).should(
+            'contain.text',
+            'Ativo',
+          );
+        };
+        grant(actors[1], 'viewer');
         mutate('PUT', member, 'viewer');
-        mutate('PUT', member, 'viewer');
-        mutate('PATCH', member, 'analyst');
+        cy.contains('.membership-list li', actors[1]).within(() => {
+          cy.get('select').select('analyst');
+          cy.contains('button', 'Salvar papel').click();
+        });
+        cy.contains('.membership-list li', actors[1]).should(
+          'contain.text',
+          'Análise',
+        );
         cy.request({ url: collection, log: false }).then(({ body: page }) => {
           expect(page.items).to.have.length(2);
           expect(
@@ -185,7 +206,18 @@ describe('Real Keycloak BFF login', () => {
             });
           },
         );
-        mutate('DELETE', member);
+        cy.contains('.membership-list li', actors[1]).within(() => {
+          cy.contains('button', 'Revogar acesso').click();
+          cy.contains('button', 'Cancelar revogação')
+            .should('have.focus')
+            .click();
+          cy.contains('button', 'Revogar acesso').should('have.focus').click();
+          cy.contains('button', 'Confirmar revogação').click();
+        });
+        cy.contains('.membership-list li', actors[1])
+          .should('contain.text', 'Revogado')
+          .find('button')
+          .should('not.exist');
         mutate('DELETE', member);
         mutate('PUT', member, 'viewer', 409);
         cy.request({ url: collection, log: false }).then(({ body: page }) => {
@@ -199,8 +231,16 @@ describe('Real Keycloak BFF login', () => {
             status: 'revoked',
           });
         });
-        mutate('PUT', `${collection}/${actors[2]}`, 'organization_admin');
-        mutate('PATCH', `${collection}/${actors[0]}`, 'viewer');
+        grant(actors[2], 'organization_admin');
+        cy.contains('.membership-list li', actors[0]).within(() => {
+          cy.get('select').select('viewer');
+          cy.contains('button', 'Salvar papel').click();
+        });
+        cy.contains(
+          'Administração indisponível. Selecione a organização novamente.',
+        ).should('be.visible');
+        cy.get('.membership-list').should('not.exist');
+        cy.get('form[aria-label="Conceder acesso"]').should('not.exist');
         cy.request({ url: collection, failOnStatusCode: false, log: false })
           .its('status')
           .should('equal', 403);
