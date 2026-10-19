@@ -1,6 +1,6 @@
 # Persistência e multi-tenancy
 
-Próximo experimento proposto na [RFC 0002](../rfc/0002-synthetic-rls-proof.md): policies e contexto em fixtures descartáveis com role restrita, pool reutilizado e limites de setting mutável explícitos. Sem migration de produto, alteração das tabelas atuais ou isolamento RLS implementado. [Plano de testes](../engineering/synthetic-rls-test-plan.md).
+Prova sintética implementada no [ADR 0016](../adr/0016-synthetic-rls-proof.md): policies e contexto em fixtures descartáveis com login restrito e pool reutilizado, com 12 cenários aprovados localmente. Sem migration de produto ou alteração das tabelas atuais; não há isolamento RLS de domínio implementado. [Evidências](../engineering/synthetic-rls-validation.md) e [plano de testes](../engineering/synthetic-rls-test-plan.md).
 
 Consulta administrativa do [ADR 0013](../adr/0013-administrative-membership-directory.md) combina administrador ativo e página de vínculos da organização na mesma instrução SQL/snapshot. Reutiliza PK e SELECT existentes, sem migration ou grant adicional. Inclui estado revogado, sem consultar identidade externa ou auditoria. [Evidências](../engineering/administrative-membership-directory-validation.md).
 

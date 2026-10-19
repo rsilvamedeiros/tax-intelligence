@@ -6,6 +6,8 @@ Atualização após escolha do provedor: casos de assinatura/issuer/audience/alg
 
 ## Fixtures e ambiente
 
+ADR 0016 executa a [matriz sintética RLS](synthetic-rls-test-plan.md): DB-01, parte de DB-02, DB-04 e DB-05 demonstrados apenas nas relações técnicas da fixture, com PID real e role sem bypass. Atomicidade de evento também é exercitada somente nesse experimento. DB-03 de tabelas de controle, RLS em dados de domínio e E2E com efeito fiscal continuam pendentes. [Validação e ciclos Red/Green observados](synthetic-rls-validation.md).
+
 ADR 0011 estende ACCESS-02/03 com mudança de papéis e perda de acesso administrativo usando token ainda válido. Mudança de papel concorrente com revogação preserva administrador; permissão perdida durante espera em lock é revalidada, cobrindo ACCESS-04 para esses efeitos. Auditoria indisponível reverte role (DB-06 parcial). Não comprova RLS, concessão de vínculos ou ação fiscal. [Validação de papéis](membership-role-validation.md).
 
 ADR 0010 exercita ACCESS-02 para viewer/admin de outra organização, ACCESS-03 com token ainda válido e ACCESS-04 por espera observada em pg_blocking_pids, revogações administrativas concorrentes e revalidação do iniciador após espera. DB-06 é demonstrado para revogação: negar INSERT de auditoria reverte revoked_at. FKs compostas da auditoria impedem referências cruzadas. São evidências de controle de acesso administrativo, sem RLS, importação ou conclusão integral da matriz. [Validação da revogação](membership-revocation-validation.md).

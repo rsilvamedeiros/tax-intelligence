@@ -2,7 +2,7 @@
 
 Tax Intelligence Platform: fundação de uma plataforma B2B de inteligência tributária, fiscal, trabalhista e financeira sobre sistemas existentes.
 
-**Etapa atual: interface administrativa de membros.** Administrador seleciona organização, consulta membros, concede acesso a ator existente, altera papel e confirma revogação pelo BFF. API revalida autorização; tokens permanecem no servidor. [Evidências desta etapa](docs/engineering/administrative-membership-ui-validation.md). Criação de identidade, reativação, RLS e vertical fiscal permanecem pendentes; marca comercial pendente. Não houve deploy.
+**Etapa atual: prova sintética RLS.** Login, sessões BFF, seleção de organização e administração de membros já estão implementados. A prova de banco valida policies e contexto em fixtures isoladas; não habilita RLS em dados reais da aplicação. [Status do projeto](docs/engineering/project-status.md) e [evidências da etapa](docs/engineering/synthetic-rls-validation.md). Importação, diagnóstico, regras reais e produção permanecem pendentes. Não houve deploy.
 
 - [Documentação navegável](docs/README.md)
 - [Avaliação do repositório e plano por etapas](docs/engineering/repository-assessment.md)

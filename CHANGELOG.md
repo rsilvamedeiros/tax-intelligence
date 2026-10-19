@@ -2,6 +2,9 @@
 
 ## Não lançado
 
+- Prova sintética RLS com 12 cenários PostgreSQL, login restrito, contexto transacional, reutilização/descarte de conexão e limites de setting mutável; sem alterar tabelas da aplicação.
+- Status geral do projeto documentado, distinguindo fundação implementada, prova isolada e pendências da primeira vertical.
+
 - Interface administrativa de membros com paginação, concessão, alteração de papel, confirmação de revogação e recuperação segura; API continua responsável pela autorização.
 - BFF administrativo de memberships com token server-side, Origin/CSRF, payload limitado e respostas sanitizadas; jornada real estendida para operações administrativas.
 

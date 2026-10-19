@@ -1,8 +1,10 @@
 # RFC 0002 — Prova sintética de isolamento RLS
 
-Data: 19/10/2026. Status: proposta para revisão; implementação não autorizada por este documento. Responsável pelo aceite: mantenedor. Na preparação inicial, a PR #16 da interface administrativa aguardava integração; foi integrada durante a revisão. Esta RFC descreve somente o desenho; não altera o estado de autorização do AGENTS.
+Data: 19/10/2026. Status: recorte experimental aceito no [ADR 0016](../adr/0016-synthetic-rls-proof.md); adoção em tabelas reais permanece proposta. Responsável pelo aceite: mantenedor. A autorização de execução está registrada no ADR/AGENTS; esta RFC não autoriza domínio fiscal ou alterações de produção.
 
 ## Problema e proposta
+
+Atualização após integração da PR #18: o mantenedor solicitou a próxima etapa, autorizando a prova isolada descrita no [ADR 0016](../adr/0016-synthetic-rls-proof.md). A proposta de adoção em tabelas reais continua pendente; esta atualização não autoriza domínio fiscal. Execução e resultados em [validação](../engineering/synthetic-rls-validation.md).
 
 Os adapters existentes filtram ator/organização e verificam administração, mas não habilitam RLS. A credencial API continua podendo consultar outras linhas por SQL arbitrário, conforme [persistência](../architecture/persistence.md). O [ADR 0003](../adr/0003-tenant-isolation.md) propõe defesa adicional para dados de domínio, ainda sem tabela de negócio autorizada.
 
@@ -39,7 +41,7 @@ Superuser/BYPASSRLS continuam fora da defesa; FORCE não os limita. TRUNCATE e v
 
 ## Execução, adoção e reversão
 
-Sequência proposta: aceite desta RFC e integração da PR #16; depois documentação de execução, testes Red válidos com role/fixture corretas, implementação SQL mínima, Green e regressões PostgreSQL. Falha de ambiente ou falta de privilégio não conta como Red de isolamento. Plano detalhado em [TDD da prova](../engineering/synthetic-rls-test-plan.md).
+Sequência autorizada após integração da PR #18, conforme [ADR 0016](../adr/0016-synthetic-rls-proof.md). Execução e resultados registrados na [validação da prova](../engineering/synthetic-rls-validation.md). Falha de ambiente ou falta de privilégio não conta como Red de isolamento. Plano detalhado em [TDD da prova](../engineering/synthetic-rls-test-plan.md).
 
 Reutilizar `pnpm test:integration` e TEST_DATABASE_URL com banco terminado em `_test`, sem fallback para DATABASE_URL. CI atual usa PostgreSQL 17; ambiente local anterior usa 18. Registrar versão efetivamente executada e não afirmar compatibilidade por leitura de documentação. Nenhuma atualização de versão/CI faz parte desta proposta. Cleanup fecha pools antes de remover somente schema/roles próprios; não usar DROP OWNED de role compartilhada.
 

@@ -8,11 +8,11 @@ Leia [índice](docs/README.md), [arquitetura](docs/architecture/overview.md), AD
 
 Estado autorizado: documentação primeiro; fundação técnica por etapa. Após PR #5, o mantenedor delegou a escolha do provedor e a autenticação da API; após PR #6, autorizou login e sessões BFF. Após PR #8, autorizou a próxima etapa de memberships, delimitada no ADR 0008. Importação, regras e isolamento de dados de negócio permanecem pendentes de etapa própria. Não transformar proposta em decisão aprovada silenciosamente.
 
-Etapa atual autorizada após integração do PR #15: interface administrativa de membros conforme [ADR 0015](docs/adr/0015-administrative-membership-ui.md), usando contratos existentes do BFF, CSRF público da sessão e autorização revalidada pela API. Limpar estado na troca de organização/sessão e exigir confirmação de revogação. Nenhum acesso web adicional a banco. Criação de identidade, reativação, RLS e ações fiscais seguem pendentes.
+Etapa atual autorizada após integração da PR #18 e novo pedido de próxima entrega: prova sintética RLS conforme [ADR 0016](docs/adr/0016-synthetic-rls-proof.md), exclusivamente em fixtures PostgreSQL de teste e sem helper público. Preservar runtime, tabelas/migrations e privilégios da aplicação. RLS aplicado a dados de domínio, criação de identidade, reativação e ações fiscais seguem pendentes de etapa própria.
 
 ## Arquitetura e código
 
-Preparação da próxima etapa: [RFC 0002](docs/rfc/0002-synthetic-rls-proof.md) propõe prova RLS em fixtures isoladas, com [plano de TDD](docs/engineering/synthetic-rls-test-plan.md). Status de proposta: não autoriza implementação, migration, novas tabelas de domínio ou mudança de privilégios. A etapa atual acima permanece vigente até novo aceite.
+A [RFC 0002](docs/rfc/0002-synthetic-rls-proof.md) fundamenta o experimento autorizado no ADR 0016, com [plano de TDD](docs/engineering/synthetic-rls-test-plan.md). A autorização cobre somente a prova isolada; não autoriza migrations/tabelas de domínio nem novos privilégios de produção.
 
 - Monólito modular; presentation → application → domain; infrastructure implementa portas. Domain independente de React, Nest e ORM.
 - Web usa ui/contracts; API usa contracts/database; contratos não importam infraestrutura; contextos não acessam internals/tabelas de outros.
@@ -31,9 +31,11 @@ Comandos: `pnpm lint`, `pnpm typecheck`, `pnpm test`, `pnpm test:coverage`, `pnp
 
 ## Segurança e IA
 
-Sem segredos versionados, PII real em fixtures/prompts/logs, scraping autenticado presumido, APIs governamentais fictícias ou decisão tributária definitiva por LLM. Autorização pertence aos casos de uso; tenant vem de membership verificada; RLS ainda é proposta. Leia [segurança](docs/security/security-model.md) e [playbook](docs/ai/playbook.md).
+Sem segredos versionados, PII real em fixtures/prompts/logs, scraping autenticado presumido, APIs governamentais fictícias ou decisão tributária definitiva por LLM. Autorização pertence aos casos de uso; tenant vem de membership verificada; RLS para dados de domínio ainda é proposta. Leia [segurança](docs/security/security-model.md) e [playbook](docs/ai/playbook.md).
 
 ## Git, PR e autonomia
+
+Comunicação em pt-BR: manter os status próximos do estado geral do projeto, indicando o que já está implementado, o que a etapa atual comprova e o que falta para a primeira vertical. Consultar e atualizar [status do projeto](docs/engineering/project-status.md) com evidências; não inventar percentual de conclusão nem confundir prova isolada com recurso de produção.
 
 Siga [workflow](docs/engineering/workflow.md). Commits por módulo/entrega coerente com mensagem curta em inglês: feat, fix, chore, docs ou test; sem corpo, descrição, assinatura de IA ou Co-Authored-By. Preserve user.name/user.email configurados. Não criar commits quebrados apenas para separar teste e implementação.
 
