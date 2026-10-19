@@ -4,6 +4,8 @@ BFF administrativo implementado conforme [ADR 0014](../adr/0014-administrative-m
 
 Sem datas prometidas; cada etapa depende do aceite da anterior. [Plano da inspeção](../engineering/repository-assessment.md).
 
+Próxima etapa técnica proposta: [prova sintética RLS](../rfc/0002-synthetic-rls-proof.md), com [matriz de TDD](../engineering/synthetic-rls-test-plan.md), depois do aceite e da integração da PR #16. Prova isolada não habilita RLS na aplicação nem autoriza domínio fiscal. Esta preparação documental não altera a etapa atual autorizada.
+
 | Prioridade | Entrega                                           | Dependência/aceite                                                 |
 | ---------- | ------------------------------------------------- | ------------------------------------------------------------------ |
 | P0         | Documentação de produto/arquitetura e ADRs        | Revisão pelo responsável; propostas explícitas                     |

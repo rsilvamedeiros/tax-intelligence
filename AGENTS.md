@@ -12,6 +12,8 @@ Etapa atual autorizada após integração do PR #15: interface administrativa de
 
 ## Arquitetura e código
 
+Preparação da próxima etapa: [RFC 0002](docs/rfc/0002-synthetic-rls-proof.md) propõe prova RLS em fixtures isoladas, com [plano de TDD](docs/engineering/synthetic-rls-test-plan.md). Status de proposta: não autoriza implementação, migration, novas tabelas de domínio ou mudança de privilégios. A etapa atual acima permanece vigente até novo aceite.
+
 - Monólito modular; presentation → application → domain; infrastructure implementa portas. Domain independente de React, Nest e ORM.
 - Web usa ui/contracts; API usa contracts/database; contratos não importam infraestrutura; contextos não acessam internals/tabelas de outros.
 - Exceção BFF autorizada no [ADR 0007](docs/adr/0007-bff-session-storage.md): somente apps/web/server/auth/runtime.ts, com server-only, acessa database para sessões técnicas via BFF_DATABASE_URL. React não acessa banco. Consulta de memberships pertence à API; nenhuma ampliação do acesso ao banco pela web está autorizada.
