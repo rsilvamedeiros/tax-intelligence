@@ -41,7 +41,7 @@ Superuser/BYPASSRLS continuam fora da defesa; FORCE não os limita. TRUNCATE e v
 
 ## Execução, adoção e reversão
 
-Sequência proposta: aceite desta RFC e integração da PR #16; depois documentação de execução, testes Red válidos com role/fixture corretas, implementação SQL mínima, Green e regressões PostgreSQL. Falha de ambiente ou falta de privilégio não conta como Red de isolamento. Plano detalhado em [TDD da prova](../engineering/synthetic-rls-test-plan.md).
+Sequência autorizada após integração da PR #18, conforme [ADR 0016](../adr/0016-synthetic-rls-proof.md). Execução e resultados registrados na [validação da prova](../engineering/synthetic-rls-validation.md). Falha de ambiente ou falta de privilégio não conta como Red de isolamento. Plano detalhado em [TDD da prova](../engineering/synthetic-rls-test-plan.md).
 
 Reutilizar `pnpm test:integration` e TEST_DATABASE_URL com banco terminado em `_test`, sem fallback para DATABASE_URL. CI atual usa PostgreSQL 17; ambiente local anterior usa 18. Registrar versão efetivamente executada e não afirmar compatibilidade por leitura de documentação. Nenhuma atualização de versão/CI faz parte desta proposta. Cleanup fecha pools antes de remover somente schema/roles próprios; não usar DROP OWNED de role compartilhada.
 

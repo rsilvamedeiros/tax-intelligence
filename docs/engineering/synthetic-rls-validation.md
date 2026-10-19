@@ -32,4 +32,8 @@ Esta etapa não habilita RLS nas tabelas da aplicação, não conclui DB-03 nem 
 
 ## Evidência remota
 
-Na [PR #19](https://github.com/rsilvamedeiros/tax-intelligence/pull/19), o [CI](https://github.com/rsilvamedeiros/tax-intelligence/actions/runs/39329155792) do head `ae4f3c77e2e3fc9577b27508cbb8cf4973518018` executou PostgreSQL 17.11: oito suites e 82 testes aprovados, incluindo os 12 cenários RLS. A versão foi confirmada no log da fixture autenticada, além da configuração do job. GitGuardian aprovou os quatro commits sem segredos. Revisão externa/humana permanece pendente; status de bot isolado não comprova revisão concluída.
+Na [PR #19](https://github.com/rsilvamedeiros/tax-intelligence/pull/19), o [CI](https://github.com/rsilvamedeiros/tax-intelligence/actions/runs/39329155792) do head `ae4f3c77e2e3fc9577b27508cbb8cf4973518018` executou PostgreSQL 17.11: oito suites e 82 testes aprovados, incluindo os 12 cenários RLS. A versão foi confirmada no log da fixture autenticada, além da configuração do job. GitGuardian aprovou os quatro commits sem segredos. O commit seguinte repetiu os sete jobs com sucesso; GitGuardian aprovou seus cinco commits.
+
+## Revisão externa
+
+CodeRabbit concluiu a [revisão completa](https://github.com/rsilvamedeiros/tax-intelligence/pull/19#pullrequestreview-5578169243) dos 16 arquivos até `6ac127e7bb5deb8879470ccb9f390bb71c8f8757`. Um achado Minor fora do diff: a sequência da RFC ainda citava aceite futuro e PR #16. Texto corrigido para autorização após PR #18/ADR 0016 e resultados executados. Nenhum achado de código publicado. A correção posterior altera somente documentação, validada localmente; não alegar nova revisão completa desse commit. Aceite humano antes de merge permanece pendente.

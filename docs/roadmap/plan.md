@@ -4,7 +4,7 @@ BFF administrativo implementado conforme [ADR 0014](../adr/0014-administrative-m
 
 Sem datas prometidas; cada etapa depende do aceite da anterior. [Plano da inspeção](../engineering/repository-assessment.md).
 
-Etapa técnica atual: [prova sintética RLS](../adr/0016-synthetic-rls-proof.md) implementada com [12 cenários aprovados localmente](../engineering/synthetic-rls-validation.md), integração aprovada em PostgreSQL 17.11 no CI e revisão externa/humana pendente. Prova isolada não habilita RLS na aplicação nem autoriza domínio fiscal. O próximo consumidor real exige recorte autorizado e critérios próprios; acompanhar [status do projeto](../engineering/project-status.md).
+Etapa técnica atual: [prova sintética RLS](../adr/0016-synthetic-rls-proof.md) implementada com [12 cenários aprovados localmente](../engineering/synthetic-rls-validation.md), integração aprovada em PostgreSQL 17.11 no CI e revisão CodeRabbit concluída, com correção documental; aceite humano pendente. Prova isolada não habilita RLS na aplicação nem autoriza domínio fiscal. O próximo consumidor real exige recorte autorizado e critérios próprios; acompanhar [status do projeto](../engineering/project-status.md).
 
 | Prioridade | Entrega                                           | Dependência/aceite                                                 |
 | ---------- | ------------------------------------------------- | ------------------------------------------------------------------ |

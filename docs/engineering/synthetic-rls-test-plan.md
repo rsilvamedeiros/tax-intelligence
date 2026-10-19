@@ -1,6 +1,6 @@
 # Plano de TDD da prova sintética RLS
 
-Status: matriz executada na prova isolada do [ADR 0016](../adr/0016-synthetic-rls-proof.md), com 12 cenários aprovados localmente e [evidências de Red/Green e regressões](synthetic-rls-validation.md). Integração remota aprovada em PostgreSQL 17.11; revisão externa/humana pendente. Escopo e limites na [RFC 0002](../rfc/0002-synthetic-rls-proof.md); execução da fixture não comprova isolamento da aplicação.
+Status: matriz executada na prova isolada do [ADR 0016](../adr/0016-synthetic-rls-proof.md), com 12 cenários aprovados localmente e [evidências de Red/Green e regressões](synthetic-rls-validation.md). Integração remota aprovada em PostgreSQL 17.11; revisão CodeRabbit concluída, com correção documental; aceite humano pendente. Escopo e limites na [RFC 0002](../rfc/0002-synthetic-rls-proof.md); execução da fixture não comprova isolamento da aplicação.
 
 ## Preparação e Red válido
 
