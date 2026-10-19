@@ -177,10 +177,9 @@ describe('Real Keycloak BFF login', () => {
           cy.get('select').select('analyst');
           cy.contains('button', 'Salvar papel').click();
         });
-        cy.contains('.membership-list li', actors[1]).should(
-          'contain.text',
-          'Análise',
-        );
+        cy.contains('.membership-list li', actors[1])
+          .find('p')
+          .should('contain.text', 'Análise');
         cy.request({ url: collection, log: false }).then(({ body: page }) => {
           expect(page.items).to.have.length(2);
           expect(
