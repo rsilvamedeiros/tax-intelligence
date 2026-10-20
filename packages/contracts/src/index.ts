@@ -1,4 +1,17 @@
 import { z } from 'zod';
+export {
+  syntheticDocumentBatchInputSchema,
+  syntheticDocumentBatchReceiptSchema,
+  syntheticDocumentBatchDetailSchema,
+  syntheticDocumentIdempotencyKeySchema,
+  syntheticDocumentBatchInputOpenApiSchema,
+  syntheticDocumentBatchReceiptOpenApiSchema,
+  syntheticDocumentBatchDetailOpenApiSchema,
+  syntheticDocumentIdempotencyKeyOpenApiSchema,
+  type SyntheticDocumentBatchInput,
+  type SyntheticDocumentBatchReceipt,
+  type SyntheticDocumentBatchDetail,
+} from './synthetic-document-batch';
 export const organizationRoleSchema = z.enum([
   'organization_admin',
   'analyst',

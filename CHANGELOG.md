@@ -2,6 +2,8 @@
 
 ## Não lançado
 
+- Contrato runtime/OpenAPI do lote sintético e comando canônico puro, com TDD; sem novas rotas ou persistência.
+
 - Proposta do primeiro lote sintético com contrato, autorização, idempotência, auditoria/RLS e matriz TDD; sem implementação de negócio.
 
 - Prova sintética RLS com 12 cenários PostgreSQL, login restrito, contexto transacional, reutilização/descarte de conexão e limites de setting mutável; sem alterar tabelas da aplicação.
