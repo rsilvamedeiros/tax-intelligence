@@ -2,6 +2,8 @@
 
 ## Não lançado
 
+- Proposta do primeiro lote sintético com contrato, autorização, idempotência, auditoria/RLS e matriz TDD; sem implementação de negócio.
+
 - Prova sintética RLS com 12 cenários PostgreSQL, login restrito, contexto transacional, reutilização/descarte de conexão e limites de setting mutável; sem alterar tabelas da aplicação.
 - Status geral do projeto documentado, distinguindo fundação implementada, prova isolada e pendências da primeira vertical.
 

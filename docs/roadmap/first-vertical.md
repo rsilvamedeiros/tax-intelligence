@@ -1,5 +1,7 @@
 # Primeira vertical: proposta, implementação não autorizada
 
+Próximo recorte em revisão: [RFC 0003](../rfc/0003-synthetic-document-intake.md), somente criação e consulta de lote sintético na API, com RLS/auditoria nas futuras tabelas. Diagnóstico, BFF e UI permanecem módulos posteriores. [Plano TDD não executado](../engineering/synthetic-document-intake-test-plan.md). A integração da PR #19 concluiu a prova RLS isolada, sem autorizar esta vertical.
+
 Objetivo: demonstrar rastreabilidade ponta a ponta sem calcular tributo ou transmitir obrigação. Passos: organização → associação autorizada → JSON sintético → validação → persistência → regra determinística demonstrativa → achado/evidência → auditoria → REST → frontend → testes e traces.
 
 Regra de demonstração proposta `DEMO-TOTAL-001`: comparar total informado com soma de linhas usando centavos inteiros. Fonte: especificação de fixture do projeto, **sem fonte normativa e sem validade fiscal**. Jurisdição: não aplicável. Versão: 1.0.0; vigência: não aplicável. Resultado: divergência estrutural demonstrativa, sem recomendação tributária. Qualquer regra real precisa do registro abaixo e aprovação especializada.
@@ -8,7 +10,7 @@ Registro de regra real: ID, referência normativa e trecho verificável, jurisdi
 
 ## Ordem de TDD proposta
 
-Preparação de identidade e isolamento detalhada na [RFC 0001](../rfc/0001-identity-membership-isolation.md), com [ameaças](../security/identity-tenancy-threat-model.md) e [casos de teste](../engineering/identity-tenancy-test-plan.md). Provedor e implementação ainda pendentes; testes desse plano não foram executados.
+Preparação de identidade e isolamento detalhada na [RFC 0001](../rfc/0001-identity-membership-isolation.md), com [ameaças](../security/identity-tenancy-threat-model.md) e [casos de teste](../engineering/identity-tenancy-test-plan.md). Autenticação, sessões, memberships/administração e prova RLS isolada foram implementadas por etapas. A matriz registra evidências parciais; RLS de domínio e testes desta vertical continuam pendentes.
 
 1. Autorização: sem identidade rejeita; tenant não associado rejeita; escolha de tenant não é confiada ao payload.
 2. Domínio puro: entrada válida, negativa, overflow/precisão, total correspondente/divergente; sem banco.

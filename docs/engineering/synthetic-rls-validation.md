@@ -1,5 +1,7 @@
 # Validação da prova sintética RLS
 
+Encerramento: [PR #19](https://github.com/rsilvamedeiros/tax-intelligence/pull/19) integrada em `9a62fa0f7b2d9cdf0504cc65fc580001e6778b2d`. O head final `0a374be3e2c660d87d1e17857046d1c408b5f55f` teve sete jobs Actions e GitGuardian aprovados. Revisão completa cobriu `6ac127e`; a correção seguinte foi documental. As referências a aceite humano pendente abaixo preservam a sequência de evidências anterior ao merge, sem nova execução de testes nesta atualização.
+
 Escopo: [ADR 0016](../adr/0016-synthetic-rls-proof.md). Base: PR #18 integrada, main `ee9e2fc`. [Plano de testes](synthetic-rls-test-plan.md).
 
 ## Plano

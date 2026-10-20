@@ -39,6 +39,7 @@ Documentação primeiro; código avança por etapa com aceite, testes e revisão
 - [Plano de TDD da prova RLS](engineering/synthetic-rls-test-plan.md)
 - [Validação da proposta RLS](engineering/rls-proposal-validation.md)
 - [Validação da prova sintética RLS](engineering/synthetic-rls-validation.md)
+- [Plano proposto do primeiro lote sintético](engineering/synthetic-document-intake-test-plan.md)
 
 ## Domínios
 
@@ -72,6 +73,7 @@ Documentação primeiro; código avança por etapa com aceite, testes e revisão
 - [process](rfc/process.md)
 - [RFC 0001: identidade, membership e isolamento](rfc/0001-identity-membership-isolation.md)
 - [RFC 0002: prova sintética RLS](rfc/0002-synthetic-rls-proof.md)
+- [RFC 0003: primeiro lote de documentos sintéticos](rfc/0003-synthetic-document-intake.md)
 
 ## Roadmap
 
