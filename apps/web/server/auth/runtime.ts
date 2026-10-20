@@ -7,6 +7,7 @@ import { readBffConfig } from './config';
 import { createTokenReader } from './session-token';
 import { createOrganizationHandlers } from '../organizations/handlers';
 import { createMembershipHandlers } from '../organizations/membership-handlers';
+import { createSyntheticBatchHandlers } from '../fiscal-compliance/handlers';
 
 type Handlers = ReturnType<typeof createAuthHandlers>;
 const runtimeGlobal = globalThis as typeof globalThis & {
@@ -14,6 +15,7 @@ const runtimeGlobal = globalThis as typeof globalThis & {
     auth: Handlers;
     organizations: ReturnType<typeof createOrganizationHandlers>;
     memberships: ReturnType<typeof createMembershipHandlers>;
+    syntheticBatches: ReturnType<typeof createSyntheticBatchHandlers>;
   };
 };
 function runtime() {
@@ -42,13 +44,20 @@ function runtime() {
   const upstream = (
     path: string,
     token: string,
-    init?: { method: 'GET' | 'PUT' | 'PATCH' | 'DELETE'; body?: string },
+    init?: {
+      method: 'GET' | 'POST' | 'PUT' | 'PATCH' | 'DELETE';
+      body?: string;
+      idempotencyKey?: string;
+    },
   ) =>
     fetch(new URL(path, config.apiBase), {
       method: init?.method ?? 'GET',
       body: init?.body,
       headers: {
         Authorization: `Bearer ${token}`,
+        ...(init?.idempotencyKey === undefined
+          ? {}
+          : { 'Idempotency-Key': init.idempotencyKey }),
         ...(init?.body === undefined
           ? {}
           : { 'Content-Type': 'application/json' }),
@@ -67,7 +76,17 @@ function runtime() {
     readSession: createTokenReader(store),
     upstream,
   });
-  runtimeGlobal.taxBffRuntime = { auth: handlers, organizations, memberships };
+  const syntheticBatches = createSyntheticBatchHandlers({
+    origin: config.origin,
+    readSession: createTokenReader(store),
+    upstream,
+  });
+  runtimeGlobal.taxBffRuntime = {
+    auth: handlers,
+    organizations,
+    memberships,
+    syntheticBatches,
+  };
   return runtimeGlobal.taxBffRuntime;
 }
 export async function handleAuth(action: keyof Handlers, request: Request) {
@@ -76,6 +95,30 @@ export async function handleAuth(action: keyof Handlers, request: Request) {
   } catch {
     return Response.json(
       { message: 'Autenticação indisponível' },
+      {
+        status: 503,
+        headers: {
+          'Cache-Control': 'no-store',
+          'Referrer-Policy': 'no-referrer',
+        },
+      },
+    );
+  }
+}
+export async function handleSyntheticBatches(
+  action: keyof ReturnType<typeof createSyntheticBatchHandlers>,
+  request: Request,
+  organizationId: string,
+  batchId?: string,
+) {
+  try {
+    const handlers = runtime().syntheticBatches;
+    return action === 'create'
+      ? await handlers.create(request, organizationId)
+      : await handlers.get(request, organizationId, batchId ?? '');
+  } catch {
+    return Response.json(
+      { message: 'Lote sintético indisponível' },
       {
         status: 503,
         headers: {
