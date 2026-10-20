@@ -1,5 +1,7 @@
 # Setup local e troubleshooting
 
+API do lote sintético: configure SYNTHETIC_BATCH_DATABASE_URL com login dedicado conforme [ADR 0019](../adr/0019-synthetic-document-http.md). Não reutilize o login DATABASE_URL/BFF; não há fallback. Sem configuração, POST/GET retornam 503, preservando o bootstrap. O runtime não executa grants/migrations. `pnpm test:integration:synthetic-batch`, após build, provisiona e limpa somente fixtures e role aleatória no TEST_DATABASE_URL isolado. [Privilégios e limites de operação](synthetic-document-http-validation.md).
+
 Pré-requisitos da stack: Node 24 LTS, pnpm 10.24.0 e Git; Chrome para E2E. PostgreSQL 17 para integração; Docker opcional para desenvolvimento, necessário apenas se optar por Compose. Binários locais PostgreSQL também podem criar instância de teste independente; testes locais desta etapa usaram PostgreSQL 18.1. [Resultados técnicos](bootstrap-validation.md).
 
 Comandos da fundação:
