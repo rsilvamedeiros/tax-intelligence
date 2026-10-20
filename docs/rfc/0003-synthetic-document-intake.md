@@ -1,6 +1,6 @@
 # RFC 0003 — Primeiro lote de documentos sintéticos
 
-Status: proposta para revisão após integração da [PR #19](https://github.com/rsilvamedeiros/tax-intelligence/pull/19), merge `9a62fa0`. Implementação de negócio ainda não autorizada. Responsável pelo aceite e revisão de segurança: mantenedor. Não há ADR de adoção, migration, endpoint ou teste novo executado nesta entrega documental.
+Status: aceita para execução incremental após integração da PR #20 (`fb9ffd5`) e pedido da próxima entrega. O [ADR 0017](../adr/0017-synthetic-document-contract.md) implementa somente schemas/OpenAPI e comando canônico. Persistência/API, autorização transacional e demais controles desta RFC ainda não foram implementados. Responsável pela revisão de isolamento: mantenedor; sem aprovação automática de código crítico.
 
 ## Problema e objetivo observável
 
@@ -79,7 +79,7 @@ Aceite exige negativos de A/B, replay sem evento duplicado, rollback sem efeito 
 
 Rollback proposto desabilita as novas rotas e remove apenas grants adicionais da etapa, preservando dados, auditoria e migrations aplicadas. Reversão destrutiva ou desligar RLS para restaurar acesso não são estratégias aceitas. Antes de qualquer piloto real, definir retenção, responsáveis, backup/restore, capacidade e operação; não transformar prazo sintético em obrigação fiscal.
 
-## Plano desta entrega documental
+## Histórico da preparação documental (PR #20)
 
 Aceite atual: RFC e matriz revisáveis, índices/roadmap/status coerentes, distinção entre implementado e proposto, links e formato válidos. Riscos: confundir prova com autorização de domínio, permissões implícitas ou prometer compatibilidade fiscal. Mitigação: manter esta RFC como proposta e nenhuma mudança funcional. Revisão local e remota, commits por entrega e PR para `main`; sem merge/deploy automático.
 

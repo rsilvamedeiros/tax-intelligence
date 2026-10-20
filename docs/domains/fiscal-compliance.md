@@ -1,6 +1,6 @@
 # Fiscal Compliance
 
-Status: modelo proposto; nenhum contexto de negócio implementado na fundação.
+Status: contrato inicial e preparação pura do lote sintético implementados no [ADR 0017](../adr/0017-synthetic-document-contract.md), sem agregado persistido, endpoint ou diagnóstico. Modelo restante proposto.
 
 ## Objetivo e responsabilidades
 

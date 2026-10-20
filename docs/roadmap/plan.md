@@ -1,5 +1,7 @@
 # Roadmap e backlog priorizado
 
+Etapa vigente: [ADR 0017](../adr/0017-synthetic-document-contract.md), contrato runtime/OpenAPI e comando canônico do lote sintético implementados após a PR #20. [Evidências](../engineering/synthetic-document-contract-validation.md). Próxima entrega: persistência/autorização transacional, seguida das rotas; diagnóstico e interface continuam posteriores. Entradas abaixo preservam o percurso anterior.
+
 BFF administrativo implementado conforme [ADR 0014](../adr/0014-administrative-membership-bff.md), com token server-side, Origin/CSRF e autorização revalidada pela API. Interface administrativa implementada no [ADR 0015](../adr/0015-administrative-membership-ui.md), sem ampliar acesso SQL do web. [Validação](../engineering/administrative-membership-ui-validation.md). RLS, criação de identidade e reativação permanecem pendentes.
 
 Sem datas prometidas; cada etapa depende do aceite da anterior. [Plano da inspeção](../engineering/repository-assessment.md).

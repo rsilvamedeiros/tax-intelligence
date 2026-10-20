@@ -2,7 +2,7 @@
 
 Tax Intelligence Platform: fundação de uma plataforma B2B de inteligência tributária, fiscal, trabalhista e financeira sobre sistemas existentes.
 
-**Etapa atual: proposta do primeiro lote sintético.** Login, sessões BFF, seleção de organização e administração de membros estão implementados; a prova RLS foi integrada na PR #19. A [RFC 0003](docs/rfc/0003-synthetic-document-intake.md) propõe o primeiro recurso de domínio com autorização, idempotência e auditoria, sem implementação autorizada. [Status do projeto](docs/engineering/project-status.md) e [evidências RLS](docs/engineering/synthetic-rls-validation.md). Importação, diagnóstico, regras reais e produção permanecem pendentes. Não houve deploy.
+**Etapa atual: contrato do primeiro lote sintético.** Schemas runtime/OpenAPI e preparação canônica do comando implementados conforme [ADR 0017](docs/adr/0017-synthetic-document-contract.md), após integração da proposta na PR #20. Login, administração de membros e prova RLS isolada estão concluídos. [Status do projeto](docs/engineering/project-status.md) e [validação](docs/engineering/synthetic-document-contract-validation.md). Persistência/API do lote, diagnóstico, interface e produção continuam pendentes. Não houve deploy.
 
 - [Documentação navegável](docs/README.md)
 - [Avaliação do repositório e plano por etapas](docs/engineering/repository-assessment.md)

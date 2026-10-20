@@ -8,13 +8,13 @@ Leia [índice](docs/README.md), [arquitetura](docs/architecture/overview.md), AD
 
 Estado autorizado: documentação primeiro; fundação técnica por etapa. Após PR #5, o mantenedor delegou a escolha do provedor e a autenticação da API; após PR #6, autorizou login e sessões BFF. Após PR #8, autorizou a próxima etapa de memberships, delimitada no ADR 0008. Importação, regras e isolamento de dados de negócio permanecem pendentes de etapa própria. Não transformar proposta em decisão aprovada silenciosamente.
 
-Etapa atual autorizada após integração da PR #18 e novo pedido de próxima entrega: prova sintética RLS conforme [ADR 0016](docs/adr/0016-synthetic-rls-proof.md), exclusivamente em fixtures PostgreSQL de teste e sem helper público. Preservar runtime, tabelas/migrations e privilégios da aplicação. RLS aplicado a dados de domínio, criação de identidade, reativação e ações fiscais seguem pendentes de etapa própria.
+Prova sintética RLS do [ADR 0016](docs/adr/0016-synthetic-rls-proof.md) concluída e integrada na PR #19. Demonstra somente fixtures, sem alterar runtime ou tabelas da aplicação.
 
 PR #20 integrada e nova entrega solicitada: aceita a [RFC 0003](docs/rfc/0003-synthetic-document-intake.md). Etapa atual: contrato e preparação pura do lote sintético conforme [ADR 0017](docs/adr/0017-synthetic-document-contract.md), com schemas/OpenAPI e TDD. Persistência, grants, endpoints e autorização transacional ficam na continuação; diagnóstico e BFF/UI são etapas posteriores. Não criar migrations ou rotas nesta entrega.
 
 ## Arquitetura e código
 
-A [RFC 0002](docs/rfc/0002-synthetic-rls-proof.md) fundamenta o experimento autorizado no ADR 0016, com [plano de TDD](docs/engineering/synthetic-rls-test-plan.md). A autorização cobre somente a prova isolada; não autoriza migrations/tabelas de domínio nem novos privilégios de produção.
+A [RFC 0002](docs/rfc/0002-synthetic-rls-proof.md) fundamenta o experimento autorizado no ADR 0016, com [plano de TDD](docs/engineering/synthetic-rls-test-plan.md). A prova isolada não implementou RLS de domínio; a etapa atual do ADR 0017 também não inclui migrations ou novos privilégios.
 
 - Monólito modular; presentation → application → domain; infrastructure implementa portas. Domain independente de React, Nest e ORM.
 - Web usa ui/contracts; API usa contracts/database; contratos não importam infraestrutura; contextos não acessam internals/tabelas de outros.
