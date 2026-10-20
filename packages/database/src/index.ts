@@ -18,3 +18,12 @@ export { MembershipRevocationStore } from './membership-revocation-store';
 export { MembershipRoleStore } from './membership-role-store';
 export { MembershipGrantStore } from './membership-grant-store';
 export { AdministrativeMembershipStore } from './administrative-membership-store';
+export { SyntheticDocumentBatchStore } from './synthetic-document-batch-store';
+export { OrganizationOperationStore } from './organization-operation-store';
+export { SyntheticBatchAuditStore } from './synthetic-batch-audit-store';
+export type {
+  SyntheticBatchOperation,
+  SyntheticBatchCreateCommand,
+  SyntheticBatchCreateResult,
+  SyntheticBatchReadResult,
+} from './synthetic-document-batch-store';

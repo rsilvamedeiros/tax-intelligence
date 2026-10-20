@@ -18,6 +18,7 @@
     "@types/pg": "8.23.1"
   },
   "dependencies": {
+    "@tax/contracts": "workspace:*",
     "pg": "8.23.1",
     "drizzle-orm": "0.45.4"
   }

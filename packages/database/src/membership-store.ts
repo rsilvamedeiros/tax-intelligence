@@ -6,7 +6,7 @@ export interface StoredMembership {
   role: string;
 }
 export class IdentityStore {
-  constructor(private readonly pool: Pool) {}
+  constructor(private readonly pool: Pick<Pool, 'query'>) {}
   async findActor(identity: {
     issuer: string;
     subject: string;
