@@ -1,6 +1,6 @@
 # Plano TDD — recebimento de lote sintético
 
-Status: execução parcial após aceite da [RFC 0003](../rfc/0003-synthetic-document-intake.md). O [ADR 0017](../adr/0017-synthetic-document-contract.md) cobre INTAKE-01 e preparação canônica do comando com [evidências Red/Green](synthetic-document-contract-validation.md); autorização, persistência, HTTP e INTAKE-02 a INTAKE-12 continuam pendentes. Não confundir com os 12 cenários já aprovados da prova RLS isolada.
+Status: execução parcial da [RFC 0003](../rfc/0003-synthetic-document-intake.md). ADR 0017 cobre INTAKE-01 e comando puro; [ADR 0018](../adr/0018-synthetic-document-persistence.md) acrescenta [evidências PostgreSQL](synthetic-document-persistence-validation.md) das partes de autorização/persistência de INTAKE-02 a INTAKE-10 e recuperação de conexão de INTAKE-12. Transporte, Bearer e status HTTP do novo fluxo, INTAKE-11 e privacidade de seus traces permanecem pendentes. Não confundir com a prova RLS isolada.
 
 ## Fixtures e Red válido
 
@@ -29,4 +29,4 @@ Verificar recusa antes do lock para quem não possui permissão e revalidação 
 
 Domínio puro, HTTP real, integração PostgreSQL das tabelas novas e API compilada com runtime restrito; regressões existentes de login/administração, lint, tipos, cobertura, build e scans. BFF/UI e E2E com novo efeito não fazem parte do primeiro recorte API; continuar como pendência explícita. Checks dependentes de ambiente só contam quando executados; docs apenas por links, formato e coerência.
 
-INTAKE-01 está coberto por testes puros; demais casos não foram executados para o lote. DB-03 das tabelas de controle, diagnóstico e importação real continuam pendentes, mesmo se esta matriz futura passar.
+INTAKE-01 está coberto por testes puros e partes de persistência têm evidência no ADR 0018; nenhum endpoint novo foi exercitado. DB-03 das tabelas de controle, diagnóstico e importação real continuam pendentes, mesmo se esta matriz futura passar.

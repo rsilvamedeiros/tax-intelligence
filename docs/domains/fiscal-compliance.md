@@ -1,6 +1,6 @@
 # Fiscal Compliance
 
-Status: contrato inicial e preparação pura do lote sintético implementados no [ADR 0017](../adr/0017-synthetic-document-contract.md), sem agregado persistido, endpoint ou diagnóstico. Modelo restante proposto.
+Status: contrato inicial e preparação pura implementados no [ADR 0017](../adr/0017-synthetic-document-contract.md); persistência normalizada e RLS implementados no [ADR 0018](../adr/0018-synthetic-document-persistence.md). Sem endpoint, diagnóstico ou fonte fiscal real; modelo restante proposto.
 
 ## Objetivo e responsabilidades
 

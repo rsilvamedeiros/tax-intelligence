@@ -1,6 +1,6 @@
 # RFC 0003 — Primeiro lote de documentos sintéticos
 
-Status: aceita para execução incremental após integração da PR #20 (`fb9ffd5`) e pedido da próxima entrega. O [ADR 0017](../adr/0017-synthetic-document-contract.md) implementa somente schemas/OpenAPI e comando canônico. Persistência/API, autorização transacional e demais controles desta RFC ainda não foram implementados. Responsável pela revisão de isolamento: mantenedor; sem aprovação automática de código crítico.
+Status: aceita para execução incremental após integração da PR #20 (`fb9ffd5`) e pedido da próxima entrega. O [ADR 0017](../adr/0017-synthetic-document-contract.md) implementa somente schemas/OpenAPI e comando canônico. O [ADR 0018](../adr/0018-synthetic-document-persistence.md) acrescenta persistência, RLS e autorização transacional; composição/rotas da API e demais controles de transporte ainda não foram implementados. Responsável pela revisão de isolamento: mantenedor; sem aprovação automática de código crítico.
 
 ## Problema e objetivo observável
 

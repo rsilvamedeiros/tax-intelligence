@@ -2,6 +2,8 @@
 
 ## Não lançado
 
+- Persistência do lote sintético com migration aditiva, RLS, autorização antes/depois do lock, replay idempotente, auditoria atômica e testes PostgreSQL com role dedicada; sem novos endpoints.
+
 - Contrato runtime/OpenAPI do lote sintético e comando canônico puro, com TDD; sem novas rotas ou persistência.
 
 - Proposta do primeiro lote sintético com contrato, autorização, idempotência, auditoria/RLS e matriz TDD; sem implementação de negócio.

@@ -1,6 +1,6 @@
 # Audit and Compliance
 
-Status: modelo proposto; nenhum contexto de negócio implementado na fundação.
+Status: adapter de evento mínimo de criação de lote sintético implementado no [ADR 0018](../adr/0018-synthetic-document-persistence.md), atomicamente com o agregado. Sem consulta pública da auditoria ou política operacional de retenção. Modelo restante proposto.
 
 ## Objetivo e responsabilidades
 

@@ -1,12 +1,14 @@
 # Persistência e multi-tenancy
 
+Etapa vigente: [ADR 0018](../adr/0018-synthetic-document-persistence.md), migration 0006 para lotes/documentos/linhas e evento de criação, com ENABLE/FORCE, FKs compostas e login dedicado injetado nos adapters. Identidade/membership são revalidadas sob o mesmo lock administrativo, com precheck antes de disputar o lock. Sem configuração da API, RLS de controle ou diagnóstico. [Evidências](../engineering/synthetic-document-persistence-validation.md). A prova anterior abaixo permanece limitada às suas fixtures.
+
 Prova sintética implementada no [ADR 0016](../adr/0016-synthetic-rls-proof.md): policies e contexto em fixtures descartáveis com login restrito e pool reutilizado, com 12 cenários aprovados localmente. Sem migration de produto ou alteração das tabelas atuais; não há isolamento RLS de domínio implementado. [Evidências](../engineering/synthetic-rls-validation.md) e [plano de testes](../engineering/synthetic-rls-test-plan.md).
 
 Consulta administrativa do [ADR 0013](../adr/0013-administrative-membership-directory.md) combina administrador ativo e página de vínculos da organização na mesma instrução SQL/snapshot. Reutiliza PK e SELECT existentes, sem migration ou grant adicional. Inclui estado revogado, sem consultar identidade externa ou auditoria. [Evidências](../engineering/administrative-membership-directory-validation.md).
 
 PostgreSQL como fonte transacional; Drizzle selecionado para consultas tipadas e SQL explícito ([ADR 0002](../adr/0002-postgresql-drizzle.md)). MongoDB não adotado: documentos brutos podem iniciar em JSONB quando houver necessidade aprovada. Redis/BullMQ dependem de cache medido ou trabalhos que excedam o orçamento de uma requisição.
 
-Migration 0000 cria schema `platform` e journal técnico; 0001 cria sessões técnicas BFF; 0002 adiciona atores, organizações e memberships conforme [ADR 0008](../adr/0008-membership-directory.md). Não há tabelas fiscais ou policies RLS. Aplicar migrations por comando separado, nunca implicitamente ao iniciar API. Não editar migrations aplicadas; mudanças aditivas primeiro, backfill controlado e remoção em release posterior. Credencial de migration deve ser distinta da aplicação em produção.
+Migration 0000 cria schema `platform` e journal técnico; 0001 cria sessões técnicas BFF; 0002 adiciona atores, organizações e memberships conforme [ADR 0008](../adr/0008-membership-directory.md). Migrations 0003–0005 acrescentam eventos administrativos; 0006 cria o primeiro agregado sintético e sua auditoria com policies RLS. Tabelas de controle continuam sem RLS. Aplicar migrations por comando separado, nunca implicitamente ao iniciar API. Não editar migrations aplicadas; mudanças aditivas primeiro, backfill controlado e remoção em release posterior. Credencial de migration deve ser distinta da aplicação em produção.
 
 ## Modelo proposto da primeira vertical
 
