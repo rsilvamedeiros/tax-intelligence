@@ -10,11 +10,11 @@ Estado autorizado: documentação primeiro; fundação técnica por etapa. Após
 
 Prova sintética RLS do [ADR 0016](docs/adr/0016-synthetic-rls-proof.md) concluída e integrada na PR #19. Demonstra somente fixtures, sem alterar runtime ou tabelas da aplicação.
 
-PR #20 integrada e nova entrega solicitada: aceita a [RFC 0003](docs/rfc/0003-synthetic-document-intake.md). Etapa atual: contrato e preparação pura do lote sintético conforme [ADR 0017](docs/adr/0017-synthetic-document-contract.md), com schemas/OpenAPI e TDD. Persistência, grants, endpoints e autorização transacional ficam na continuação; diagnóstico e BFF/UI são etapas posteriores. Não criar migrations ou rotas nesta entrega.
+PR #21 integrada e nova entrega solicitada: persistência do lote sintético conforme [ADR 0018](docs/adr/0018-synthetic-document-persistence.md). Autoriza migration aditiva, adapters de Identity/Organizations/Audit e lote, testes PostgreSQL isolados e RLS somente das novas tabelas. Pool de domínio separado e privilégio mínimo. Não criar endpoints, wiring de credencial na API, BFF/UI, diagnóstico ou ação fiscal real nesta entrega.
 
 ## Arquitetura e código
 
-A [RFC 0002](docs/rfc/0002-synthetic-rls-proof.md) fundamenta o experimento autorizado no ADR 0016, com [plano de TDD](docs/engineering/synthetic-rls-test-plan.md). A prova isolada não implementou RLS de domínio; a etapa atual do ADR 0017 também não inclui migrations ou novos privilégios.
+A [RFC 0002](docs/rfc/0002-synthetic-rls-proof.md) fundamenta o experimento autorizado no ADR 0016, com [plano de TDD](docs/engineering/synthetic-rls-test-plan.md). A prova isolada não implementou RLS de domínio; a etapa atual do ADR 0018 limita RLS e grants às relações novas do lote.
 
 - Monólito modular; presentation → application → domain; infrastructure implementa portas. Domain independente de React, Nest e ORM.
 - Web usa ui/contracts; API usa contracts/database; contratos não importam infraestrutura; contextos não acessam internals/tabelas de outros.

@@ -1,6 +1,6 @@
 # Primeira vertical: contrato iniciado, fluxo pendente
 
-[ADR 0017](../adr/0017-synthetic-document-contract.md): contrato e preparação pura implementados após integração da PR #20 e nova entrega solicitada. [Validação](../engineering/synthetic-document-contract-validation.md). A autorização desta entrega não antecipa persistência, rotas, grants, diagnóstico ou UI.
+[ADR 0017](../adr/0017-synthetic-document-contract.md): contrato e preparação pura implementados após integração da PR #20 e nova entrega solicitada. [Validação](../engineering/synthetic-document-contract-validation.md). Continuação no [ADR 0018](../adr/0018-synthetic-document-persistence.md): persistência, RLS e auditoria transacional implementados, sem rota ou wiring de credencial na API. Diagnóstico e UI continuam posteriores.
 
 Fluxo alvo da [RFC 0003](../rfc/0003-synthetic-document-intake.md): criação e consulta de lote sintético na API, com RLS/auditoria nas futuras tabelas. Diagnóstico, BFF e UI permanecem módulos posteriores. [Plano TDD parcialmente executado](../engineering/synthetic-document-intake-test-plan.md); contrato puro não comprova o fluxo alvo. A PR #19 concluiu apenas a prova RLS isolada; o aceite posterior da RFC iniciou o contrato do ADR 0017.
 
@@ -21,4 +21,4 @@ Preparação de identidade e isolamento detalhada na [RFC 0001](../rfc/0001-iden
 5. HTTP e contrato: validação, erros, ID externo ao tenant vira 404 e resposta sem dados extras.
 6. UI: loading/vazio/erro/sucesso/evidência; E2E com dois tenants e sessão real sintética.
 
-Critérios bloqueantes: qualquer leitura cruzada, segredo/log sensível, regra não reproduzível, efeito sem auditoria ou sucesso parcial persistido. Cobertura sozinha não aprova. Commit por módulo coerente após checks e revisão, PR com evidências. Tabelas, autorização transacional e rotas exigem a próxima etapa; não antecipar diagnóstico ou dados reais.
+Critérios bloqueantes: qualquer leitura cruzada, segredo/log sensível, regra não reproduzível, efeito sem auditoria ou sucesso parcial persistido. Cobertura sozinha não aprova. Commit por módulo coerente após checks e revisão, PR com evidências. Tabelas e autorização transacional estão no ADR 0018; composição HTTP/credencial e rotas exigem a próxima etapa; não antecipar diagnóstico ou dados reais.

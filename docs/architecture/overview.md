@@ -1,5 +1,7 @@
 # Arquitetura da fundação
 
+Persistência do lote sintético implementada no [ADR 0018](../adr/0018-synthetic-document-persistence.md): adapters de Organizations/Identity/Audit compostos na mesma transação e novas tabelas com RLS. Credencial dedicada ainda não está ligada à API; não há endpoints do lote, diagnóstico ou UI. [Validação](../engineering/synthetic-document-persistence-validation.md).
+
 Prova sintética RLS implementada no [ADR 0016](../adr/0016-synthetic-rls-proof.md), sem alterar runtime ou tabelas da aplicação. Demonstra policies/contexto somente em fixtures; aplicação a dados de domínio continua pendente. [Status do projeto](../engineering/project-status.md).
 
 Interface administrativa implementada conforme [ADR 0015](../adr/0015-administrative-membership-ui.md), consumindo somente o BFF existente e mantendo autorização na API. Criação de identidade, reativação, RLS e operação fiscal permanecem pendentes. [Validação](../engineering/administrative-membership-ui-validation.md).

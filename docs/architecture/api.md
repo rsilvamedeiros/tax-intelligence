@@ -1,5 +1,7 @@
 # Contratos REST e aplicação
 
+Persistência do lote sintético implementada no [ADR 0018](../adr/0018-synthetic-document-persistence.md), sem módulo HTTP ou wiring de pool dedicado na aplicação. Os futuros POST/GET continuam indisponíveis. Próxima etapa deve integrar os adapters e mapear autenticação, limites de corpo, idempotência e erros pelo contrato, sem usar o login administrativo como fallback.
+
 Preparação de lote sintético implementada no [ADR 0017](../adr/0017-synthetic-document-contract.md): schemas runtime/OpenAPI de entrada, recibo, detalhe e chave idempotente em contracts, sem rotas registradas. O limite HTTP de 16 KiB, autorização, status, transporte e efeitos de POST/GET da [RFC 0003](../rfc/0003-synthetic-document-intake.md) ainda exigem implementação. Schemas gerados não significam operação publicada no Swagger.
 
 Base: `/v1`; versão do contrato independente da versão do pacote. Swagger em desenvolvimento, não publicado por padrão em produção. Contratos compartilhados em `packages/contracts`; schemas runtime devem rejeitar campos inesperados. Mudanças incompatíveis exigem nova versão ou janela de migração documentada.
