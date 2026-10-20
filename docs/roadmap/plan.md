@@ -4,7 +4,7 @@ BFF administrativo implementado conforme [ADR 0014](../adr/0014-administrative-m
 
 Sem datas prometidas; cada etapa depende do aceite da anterior. [Plano da inspeção](../engineering/repository-assessment.md).
 
-Etapa técnica atual: [prova sintética RLS](../adr/0016-synthetic-rls-proof.md) implementada com [12 cenários aprovados localmente](../engineering/synthetic-rls-validation.md), integração aprovada em PostgreSQL 17.11 no CI e revisão CodeRabbit concluída, com correção documental; aceite humano pendente. Prova isolada não habilita RLS na aplicação nem autoriza domínio fiscal. O próximo consumidor real exige recorte autorizado e critérios próprios; acompanhar [status do projeto](../engineering/project-status.md).
+Etapa técnica atual: [prova sintética RLS](../adr/0016-synthetic-rls-proof.md) implementada com [12 cenários aprovados localmente](../engineering/synthetic-rls-validation.md), integração aprovada em PostgreSQL 17.11 no CI e revisão CodeRabbit concluída, com correção documental; integrada na PR #19. Prova isolada não habilita RLS na aplicação nem autoriza domínio fiscal. O próximo consumidor real exige recorte autorizado e critérios próprios; acompanhar [status do projeto](../engineering/project-status.md).
 
 | Prioridade | Entrega                                           | Dependência/aceite                                                 |
 | ---------- | ------------------------------------------------- | ------------------------------------------------------------------ |
@@ -25,3 +25,5 @@ Pendências para negócio: marca, ICP de clientes, regras e fontes reais, respon
 Consulta administrativa de membros completa a preparação da API para UI administrativa no navegador conforme [ADR 0013](../adr/0013-administrative-membership-directory.md). UI implementada no ADR 0015; RLS ainda requer etapa própria.
 
 Após a fundação, RFC/threat model e matriz de TDD orientaram autenticação da API, login/sessões BFF, consulta/seleção de organizações e revogação administrativa com auditoria/locks, conforme ADRs 0006–0010. Alteração de papéis existentes foi implementada no [ADR 0011](../adr/0011-membership-role-changes.md). Concessão a atores existentes foi implementada no [ADR 0012](../adr/0012-membership-grants.md), sem reativação ou criação de identidade. Próximas etapas devem completar isolamento RLS antes de importação fiscal; cada módulo exige seu contrato, negativos e aceite. [RFC 0001](../rfc/0001-identity-membership-isolation.md), [ameaças](../security/identity-tenancy-threat-model.md), [matriz de TDD](../engineering/identity-tenancy-test-plan.md). A vertical fiscal não foi autorizada por essas entregas de identidade/acesso.
+
+Próximo recorte em revisão: [primeiro lote sintético](../rfc/0003-synthetic-document-intake.md), somente API de criação/consulta, idempotência e auditoria/RLS em novas tabelas. Contrato e testes propostos precedem autorização de implementação; diagnóstico e UI são posteriores.

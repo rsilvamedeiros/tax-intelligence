@@ -2,7 +2,7 @@
 
 Tax Intelligence Platform: fundação de uma plataforma B2B de inteligência tributária, fiscal, trabalhista e financeira sobre sistemas existentes.
 
-**Etapa atual: prova sintética RLS.** Login, sessões BFF, seleção de organização e administração de membros já estão implementados. A prova de banco valida policies e contexto em fixtures isoladas; não habilita RLS em dados reais da aplicação. [Status do projeto](docs/engineering/project-status.md) e [evidências da etapa](docs/engineering/synthetic-rls-validation.md). Importação, diagnóstico, regras reais e produção permanecem pendentes. Não houve deploy.
+**Etapa atual: proposta do primeiro lote sintético.** Login, sessões BFF, seleção de organização e administração de membros estão implementados; a prova RLS foi integrada na PR #19. A [RFC 0003](docs/rfc/0003-synthetic-document-intake.md) propõe o primeiro recurso de domínio com autorização, idempotência e auditoria, sem implementação autorizada. [Status do projeto](docs/engineering/project-status.md) e [evidências RLS](docs/engineering/synthetic-rls-validation.md). Importação, diagnóstico, regras reais e produção permanecem pendentes. Não houve deploy.
 
 - [Documentação navegável](docs/README.md)
 - [Avaliação do repositório e plano por etapas](docs/engineering/repository-assessment.md)
