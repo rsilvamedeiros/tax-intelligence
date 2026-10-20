@@ -27,6 +27,6 @@ Verificar recusa antes do lock para quem não possui permissão e revalidação 
 
 ## Validação após implementação
 
-Domínio puro, HTTP real, integração PostgreSQL das tabelas novas e API compilada com runtime restrito; regressões existentes de login/administração, lint, tipos, cobertura, build e scans. BFF/UI e E2E com novo efeito não fazem parte do primeiro recorte API; continuar como pendência explícita. Checks dependentes de ambiente só contam quando executados; docs apenas por links, formato e coerência.
+Domínio puro, HTTP real, integração PostgreSQL das tabelas novas e API compilada com runtime restrito; regressões existentes de login/administração, lint, tipos, cobertura, build e scans. O BFF do ADR 0020 e sua jornada Keycloak/Chrome com efeito real foram aprovados no CI, conforme [evidências](synthetic-document-bff-validation.md). Permanecem pendentes a interface do lote e sua evidência de INTAKE-11, além de OTLP específico das novas rotas; isso não equivale à ausência do BFF ou do E2E de transporte. Checks dependentes de ambiente só contam quando executados; docs apenas por links, formato e coerência.
 
 INTAKE-01 está coberto por testes puros, partes de persistência têm evidência no ADR 0018 e POST/GET foram exercitados na API compilada do ADR 0019. DB-03 das tabelas de controle, diagnóstico e importação real continuam pendentes, mesmo se esta matriz futura passar.
