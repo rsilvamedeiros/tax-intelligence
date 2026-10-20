@@ -31,3 +31,9 @@ Os negativos e cenários concorrentes adicionais são regressões acrescentadas 
 API não expõe POST/GET do lote. INTAKE-02 a INTAKE-10 têm evidência de persistência/autorização, mas seus status HTTP e a integração pelo Bearer real permanecem pendentes. INTAKE-11 e privacidade do novo transporte exigem a próxima etapa. DB-03 de tabelas de controle não foi resolvido; SQL arbitrário com setting mutável continua fora da defesa.
 
 Revisão local: SQL parametrizado, scopes canônicos, separação de adapters, permissões/constraints, comparação sem arredondamento, descarte de conexão e rollback aditivo. Sem achado bloqueante local; não é revisão independente. Conferir versão PostgreSQL, checks externos e revisão remota pelo head entregue. Revisão humana de isolamento antes de merge; nenhum deploy ou migration em banco existente de produto foi executado.
+
+## Evidência remota e revisão
+
+[PR #22](https://github.com/rsilvamedeiros/tax-intelligence/pull/22), head `3e4d04a0e1fb2d77369849454009b838dc88335d`: sete jobs Actions e GitGuardian aprovados. O [job de banco](https://github.com/rsilvamedeiros/tax-intelligence/actions/runs/39426800439) confirmou PostgreSQL 17.11 no log, com nove suites e 106 testes aprovados. Os mesmos testes passaram localmente em 18.1.
+
+[CodeRabbit](https://github.com/rsilvamedeiros/tax-intelligence/pull/22#pullrequestreview-5585406010) concluiu revisão de 25 arquivos até esse head; o lockfile foi excluído pelo filtro do reviewer e teve suas três linhas de vínculo workspace conferidas localmente. Quatro achados Minor documentais: crase, afirmação antiga sobre RLS, delimitação do contexto Fiscal e etapa anterior no roadmap. Corrigidos em acompanhamento somente documental; nenhum achado de código publicado. Não alegar nova revisão completa do commit de correção. Aceite humano de isolamento antes de merge continua necessário.

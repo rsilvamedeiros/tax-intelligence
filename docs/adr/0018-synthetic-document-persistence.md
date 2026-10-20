@@ -18,7 +18,7 @@ Criação do lote/documentos/linhas e evento confirma atomicamente. Após lock, 
 
 ENABLE/FORCE nas quatro tabelas; policies por comando vinculam tenant ao contexto. Policies aplicam-se a PUBLIC, mas **nenhum GRANT é concedido a PUBLIC**: role/login é provisionado separadamente, sem nome fixo ou CREATE ROLE na migration. Login restrito recebe SELECT/INSERT no agregado, INSERT limitado às quatro colunas de evento e SELECT de controle para os adapters de Identity/Organizations. Sem ownership, superuser, BYPASSRLS, escrita de memberships, SELECT/UPDATE/DELETE/TRUNCATE de auditoria, DDL ou acesso auth_bff. Testes autenticam esse login e verificam os privilégios.
 
-Setting mutável não autentica ator e não impede SQL arbitrário comprometido; DB-03 de controle permanece pendente. RLS do lote é defesa adicional e não equivale a autorização fiscal geral. Constraints de cardinalidade por linha não provam sozinhas completude do agregado; leitura valida contagens/ordinais e contrato antes de retornar dados.
+Setting mutável não autentica ator e não impede SQL arbitrário comprometido; DB-03 de controle permanece pendente. RLS do lote é defesa adicional e não equivale à autorização fiscal geral. Constraints de cardinalidade por linha não provam sozinhas completude do agregado; leitura valida contagens/ordinais e contrato antes de retornar dados.
 
 ## Plano, aceite e reversão
 
