@@ -22,6 +22,17 @@ export async function createBrowserMembershipFixture(issuer, subject) {
   async function cleanup() {
     try {
       for (const table of [
+        'fiscal_compliance.synthetic_lines',
+        'fiscal_compliance.synthetic_documents',
+        'audit_compliance.synthetic_batch_creations',
+        'fiscal_compliance.synthetic_batches',
+      ]) {
+        await owner.pool.query(
+          `DELETE FROM ${table} WHERE tenant_id=ANY($1::uuid[])`,
+          [ids],
+        );
+      }
+      for (const table of [
         'membership_grants',
         'membership_role_changes',
         'membership_revocations',
@@ -71,6 +82,19 @@ export async function createBrowserMembershipFixture(issuer, subject) {
       await owner.pool.query(
         `GRANT INSERT ON organization_access.membership_grants, organization_access.membership_role_changes, organization_access.membership_revocations TO ${role}`,
       );
+    } else if (kind === 'batch') {
+      await owner.pool.query(
+        `GRANT USAGE ON SCHEMA identity_access,organization_access,fiscal_compliance,audit_compliance TO ${role}`,
+      );
+      await owner.pool.query(
+        `GRANT SELECT ON identity_access.actors,organization_access.memberships TO ${role}`,
+      );
+      await owner.pool.query(
+        `GRANT SELECT,INSERT ON fiscal_compliance.synthetic_batches,fiscal_compliance.synthetic_documents,fiscal_compliance.synthetic_lines TO ${role}`,
+      );
+      await owner.pool.query(
+        `GRANT INSERT(tenant_id,actor_id,batch_id,request_id) ON audit_compliance.synthetic_batch_creations TO ${role}`,
+      );
     } else {
       await owner.pool.query(`GRANT USAGE ON SCHEMA auth_bff TO ${role}`);
       await owner.pool.query(
@@ -85,6 +109,7 @@ export async function createBrowserMembershipFixture(issuer, subject) {
   try {
     const apiUrl = await runtimeRole('api');
     const bffUrl = await runtimeRole('bff');
+    const batchUrl = await runtimeRole('batch');
     await owner.pool.query(
       'INSERT INTO identity_access.actors(id,issuer,subject) VALUES($1,$2,$3),($4,$2,$5),($6,$2,$7)',
       [
@@ -111,7 +136,7 @@ export async function createBrowserMembershipFixture(issuer, subject) {
         ],
       );
     }
-    return { ids, actors, apiUrl, bffUrl, cleanup };
+    return { ids, actors, apiUrl, bffUrl, batchUrl, cleanup };
   } catch (error) {
     await cleanup();
     throw error;
