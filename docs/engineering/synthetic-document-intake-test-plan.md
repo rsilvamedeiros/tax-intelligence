@@ -11,7 +11,7 @@ Escrever o primeiro teste de cada comportamento, observar falha correspondente e
 | ID        | Comportamento e resultado esperado                                                                                                                                                                       | Camada                     |
 | --------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | -------------------------- |
 | INTAKE-01 | Documento válido e limites inclusivos preservam inteiros, referência e ordem; strings/negativos/fracionários/extras/duplicados/excesso são rejeitados; total divergente continua aceito estruturalmente  | Domínio/contrato           |
-| INTAKE-02 | Sem access, MFA/ID token, identidade não provisionada, vínculo revogado ou organização B indevida não produzem efeito; viewer/reviewer não criam                                                         | HTTP/aplicação             |
+| INTAKE-02 | Sem access, MFA/ID token, identidade não provisionada, vínculo revogado ou organização B indevida não produzem efeito; viewer/reviewer não criam nem adquirem o lock da organização para o POST          | HTTP/aplicação             |
 | INTAKE-03 | POST válido retorna 201; GET autorizado retorna somente contrato fechado; ID B em organização A permitida retorna o mesmo 404 de ausente                                                                 | HTTP/PostgreSQL            |
 | INTAKE-04 | Mesmo tenant/ator/chave/comando retorna 200 e mesmo ID/data, mesmo com ordem diferente de propriedades JSON; sem novo lote/evento. Conteúdo ou ordem de arrays diferentes gera 409                       | Aplicação/PostgreSQL       |
 | INTAKE-05 | Mesma chave em B ou com outro ator autorizado não colide com A; replay revalida papel e vínculo antes de devolver sucesso                                                                                | Aplicação/PostgreSQL       |
@@ -23,7 +23,7 @@ Escrever o primeiro teste de cada comportamento, observar falha correspondente e
 | INTAKE-11 | Corpo maior que 16 KiB com Content-Length e chunked, JSON/tipo de mídia/chave/query inválidos são rejeitados antes de escrita; errors/request ID/no-store consistentes                                   | HTTP compilado             |
 | INTAKE-12 | Falha de storage, lock ou auditoria retorna 503 sem SQL, identidade externa, chave, valores ou corpo em logs/traces/respostas; setting mutável continua documentado como limite                          | Integração/observabilidade |
 
-GET também participa do protocolo de autorização; teste leitura bloqueada durante revogação e negação após seu commit. Deduplicação não substitui autorização, e eventos devem referenciar tenant/ator/recurso/request ID internos sem copiar o documento. Migration/constraints e rollback da aplicação precisam de ensaio com dados sintéticos existentes.
+Verificar recusa antes do lock para quem não possui permissão e revalidação obrigatória depois da espera para quem passou na primeira consulta. GET também participa do protocolo de autorização; teste leitura bloqueada durante revogação e negação após seu commit. Deduplicação não substitui autorização, e eventos devem referenciar tenant/ator/recurso/request ID internos sem copiar o documento. Migration/constraints e rollback da aplicação precisam de ensaio com dados sintéticos existentes.
 
 ## Validação após implementação
 
