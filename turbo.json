@@ -6,6 +6,7 @@
       "outputs": ["dist/**", ".next/**", "!.next/cache/**"],
       "env": [
         "DATABASE_URL",
+        "SYNTHETIC_BATCH_DATABASE_URL",
         "API_BASE_URL",
         "NODE_ENV",
         "OTEL_EXPORTER_OTLP_TRACES_ENDPOINT",
@@ -31,6 +32,7 @@
     },
     "dev": {
       "env": [
+        "SYNTHETIC_BATCH_DATABASE_URL",
         "OIDC_ISSUER",
         "OIDC_JWKS_URL",
         "OIDC_AUDIENCE",

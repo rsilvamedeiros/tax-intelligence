@@ -3,8 +3,9 @@ import { HealthController } from './health/health.controller';
 import { HealthService } from './health/health.service';
 import { AuthModule } from './auth';
 import { OrganizationsModule } from './organizations/organizations.module';
+import { FiscalComplianceModule } from './fiscal-compliance/fiscal-compliance.module';
 @Module({
-  imports: [AuthModule, OrganizationsModule],
+  imports: [AuthModule, OrganizationsModule, FiscalComplianceModule],
   controllers: [HealthController],
   providers: [HealthService],
 })

@@ -85,6 +85,8 @@ jobs:
         run: pnpm exec turbo build --filter=@tax/api...
       - name: Verify membership API with restricted PostgreSQL access
         run: pnpm test:integration:membership
+      - name: Verify synthetic batch API with dedicated PostgreSQL access
+        run: pnpm test:integration:synthetic-batch
 
   e2e:
     runs-on: ubuntu-latest
