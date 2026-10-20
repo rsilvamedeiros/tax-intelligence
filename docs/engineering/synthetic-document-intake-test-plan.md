@@ -1,6 +1,6 @@
 # Plano TDD — recebimento de lote sintético
 
-Status: execução parcial da [RFC 0003](../rfc/0003-synthetic-document-intake.md). ADR 0017 cobre INTAKE-01 e comando puro; [ADR 0018](../adr/0018-synthetic-document-persistence.md) acrescenta [evidências PostgreSQL](synthetic-document-persistence-validation.md) de autorização/persistência e recuperação. [ADR 0019](../adr/0019-synthetic-document-http.md) acrescenta [transporte, Bearer, status HTTP e integração compilada](synthetic-document-http-validation.md), incluindo limites, replay, negação e logs sanitizados. INTAKE-11 no navegador e prova OTLP específica das novas rotas permanecem pendentes; smoke OTLP geral não substitui essa evidência. Não confundir com a prova RLS isolada.
+Status: execução parcial da [RFC 0003](../rfc/0003-synthetic-document-intake.md). ADR 0017 cobre INTAKE-01 e comando puro; [ADR 0018](../adr/0018-synthetic-document-persistence.md) acrescenta [evidências PostgreSQL](synthetic-document-persistence-validation.md) de autorização/persistência e recuperação. [ADR 0019](../adr/0019-synthetic-document-http.md) acrescenta [transporte, Bearer, status HTTP e integração compilada](synthetic-document-http-validation.md), incluindo limites, replay, negação e logs sanitizados. O ADR 0020 acrescenta BFF e regressão de navegador, com [evidências por ambiente](synthetic-document-bff-validation.md). A UI de INTAKE-11 e a prova OTLP específica das novas rotas permanecem pendentes; smoke OTLP geral não substitui essa evidência. Não confundir com a prova RLS isolada.
 
 ## Fixtures e Red válido
 
