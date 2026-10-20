@@ -10,7 +10,7 @@ Estado autorizado: documentação primeiro; fundação técnica por etapa. Após
 
 Etapa atual autorizada após integração da PR #18 e novo pedido de próxima entrega: prova sintética RLS conforme [ADR 0016](docs/adr/0016-synthetic-rls-proof.md), exclusivamente em fixtures PostgreSQL de teste e sem helper público. Preservar runtime, tabelas/migrations e privilégios da aplicação. RLS aplicado a dados de domínio, criação de identidade, reativação e ações fiscais seguem pendentes de etapa própria.
 
-PR #19 integrada: prova sintética concluída. Continuação atual prepara somente a [RFC 0003](docs/rfc/0003-synthetic-document-intake.md) e sua [matriz TDD](docs/engineering/synthetic-document-intake-test-plan.md) para o primeiro lote sintético. Não criar migrations, grants, endpoints, diagnóstico ou UI dessa proposta antes do aceite específico do mantenedor e ADR de execução. Não confundir aprovação documental com liberação de implementação da vertical.
+PR #20 integrada e nova entrega solicitada: aceita a [RFC 0003](docs/rfc/0003-synthetic-document-intake.md). Etapa atual: contrato e preparação pura do lote sintético conforme [ADR 0017](docs/adr/0017-synthetic-document-contract.md), com schemas/OpenAPI e TDD. Persistência, grants, endpoints e autorização transacional ficam na continuação; diagnóstico e BFF/UI são etapas posteriores. Não criar migrations ou rotas nesta entrega.
 
 ## Arquitetura e código
 
