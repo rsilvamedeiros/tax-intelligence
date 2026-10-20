@@ -15,6 +15,8 @@ Modelo de projeto inspirado em [OWASP ASVS](https://owasp.org/www-project-applic
 
 ## Identidade e RBAC propostos
 
+Estado atual do lote sintético: os ADRs 0018/0019 implementam RLS somente nas quatro tabelas novas e POST/GET com Bearer, membership/papel revalidados na transação e pool de domínio dedicado. Perfil excessivo é rejeitado por operação, sem fallback administrativo. Esse recorte não implementa RLS das tabelas de controle nem permite dados fiscais reais. [Evidências e limites](../engineering/synthetic-document-http-validation.md).
+
 A prova sintética do [ADR 0016](../adr/0016-synthetic-rls-proof.md) exercita policies, grants e contexto transacional com login restrito em fixtures descartáveis. RLS-12 explicita o limite de setting mutável: a prova não autentica tenant nem protege runtime com SQL arbitrário comprometido. Nenhuma policy ou grant da aplicação foi alterado; RLS de domínio continua pendente. [Evidências](../engineering/synthetic-rls-validation.md).
 
 BFF administrativo implementado no [ADR 0014](../adr/0014-administrative-membership-bff.md): Bearer da sessão server-side, Origin/CSRF para mutações, payload limitado, resposta sanitizada e permissão administrativa revalidada pela API. Credencial BFF permanece restrita a auth_bff. Interface administrativa implementada no [ADR 0015](../adr/0015-administrative-membership-ui.md), com limpeza de estado por organização/sessão, remoção de controles em 403 e consulta após falha ambígua; visibilidade dos controles não concede autorização. Isolamento RLS continua pendente. [Evidências](../engineering/administrative-membership-ui-validation.md).

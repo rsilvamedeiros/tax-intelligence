@@ -1,6 +1,6 @@
 # Arquitetura da fundação
 
-Persistência do lote sintético implementada no [ADR 0018](../adr/0018-synthetic-document-persistence.md): adapters de Organizations/Identity/Audit compostos na mesma transação e novas tabelas com RLS. Credencial dedicada ainda não está ligada à API; não há endpoints do lote, diagnóstico ou UI. [Validação](../engineering/synthetic-document-persistence-validation.md).
+API do lote sintético implementada no [ADR 0019](../adr/0019-synthetic-document-http.md): controller → serviço/porta de aplicação → repository → adapters transacionais públicos do ADR 0018. POST/GET exigem Bearer e pool com login dedicado; tabelas novas mantêm RLS e auditoria atômica. Sem BFF/UI do lote ou diagnóstico. [Validação](../engineering/synthetic-document-http-validation.md).
 
 Prova sintética RLS implementada no [ADR 0016](../adr/0016-synthetic-rls-proof.md), sem alterar runtime ou tabelas da aplicação. Demonstra policies/contexto somente em fixtures; aplicação a dados de domínio continua pendente. [Status do projeto](../engineering/project-status.md).
 

@@ -32,6 +32,66 @@ export type SyntheticBatchReadResult =
 
 export class SyntheticDocumentBatchStore {
   constructor(private readonly pool: Pool) {}
+  async assertRuntimePrivileges(): Promise<void> {
+    const result = await this.pool.query<{ allowed: boolean }>(`
+      SELECT NOT (r.rolsuper OR r.rolbypassrls OR r.rolcreaterole OR r.rolcreatedb OR r.rolreplication)
+        AND NOT EXISTS (SELECT 1 FROM pg_auth_members WHERE member=r.oid)
+        AND NOT has_database_privilege(current_user,current_database(),'CREATE')
+        AND NOT EXISTS (
+          SELECT 1 FROM pg_namespace n WHERE n.nspname !~ '^pg_' AND n.nspname <> 'information_schema'
+          AND (n.nspowner=r.oid OR has_schema_privilege(current_user,n.oid,'CREATE'))
+        )
+        AND NOT has_schema_privilege(current_user,'auth_bff','USAGE')
+        AND NOT EXISTS (
+          SELECT 1 FROM pg_class c JOIN pg_namespace n ON n.oid=c.relnamespace
+          WHERE n.nspname !~ '^pg_' AND n.nspname <> 'information_schema' AND c.relkind='S'
+          AND (c.relowner=r.oid OR has_sequence_privilege(current_user,c.oid,'USAGE,SELECT,UPDATE'))
+        )
+        AND NOT EXISTS (
+          SELECT 1 FROM pg_class WHERE oid IN (
+            'fiscal_compliance.synthetic_batches'::regclass,
+            'fiscal_compliance.synthetic_documents'::regclass,
+            'fiscal_compliance.synthetic_lines'::regclass,
+            'audit_compliance.synthetic_batch_creations'::regclass)
+          AND (NOT relrowsecurity OR NOT relforcerowsecurity)
+        )
+        AND NOT EXISTS (
+          SELECT 1 FROM pg_class c JOIN pg_namespace n ON n.oid=c.relnamespace
+          WHERE n.nspname !~ '^pg_' AND n.nspname <> 'information_schema' AND c.relkind IN ('r','p','v','m','f')
+          AND (c.relowner=r.oid
+            OR has_table_privilege(current_user,c.oid,'UPDATE,DELETE,TRUNCATE,REFERENCES,TRIGGER')
+            OR has_any_column_privilege(current_user,c.oid,'UPDATE,REFERENCES')
+            OR (has_any_column_privilege(current_user,c.oid,'SELECT') AND NOT (
+              (n.nspname='identity_access' AND c.relname='actors') OR
+              (n.nspname='organization_access' AND c.relname='memberships') OR
+              (n.nspname='fiscal_compliance' AND c.relname IN ('synthetic_batches','synthetic_documents','synthetic_lines'))))
+            OR (has_any_column_privilege(current_user,c.oid,'INSERT') AND NOT (
+              (n.nspname='fiscal_compliance' AND c.relname IN ('synthetic_batches','synthetic_documents','synthetic_lines')) OR
+              (n.nspname='audit_compliance' AND c.relname='synthetic_batch_creations'))))
+        )
+        AND NOT EXISTS (
+          SELECT 1 FROM pg_attribute a WHERE a.attrelid='audit_compliance.synthetic_batch_creations'::regclass
+          AND a.attnum>0 AND NOT a.attisdropped AND a.attname NOT IN ('tenant_id','actor_id','batch_id','request_id')
+          AND has_column_privilege(current_user,a.attrelid,a.attnum,'INSERT')
+        )
+        AND has_table_privilege(current_user,'identity_access.actors','SELECT')
+        AND has_table_privilege(current_user,'organization_access.memberships','SELECT')
+        AND has_table_privilege(current_user,'fiscal_compliance.synthetic_batches','SELECT')
+        AND has_table_privilege(current_user,'fiscal_compliance.synthetic_batches','INSERT')
+        AND has_table_privilege(current_user,'fiscal_compliance.synthetic_documents','SELECT')
+        AND has_table_privilege(current_user,'fiscal_compliance.synthetic_documents','INSERT')
+        AND has_table_privilege(current_user,'fiscal_compliance.synthetic_lines','SELECT')
+        AND has_table_privilege(current_user,'fiscal_compliance.synthetic_lines','INSERT')
+        AND NOT EXISTS (
+          SELECT 1 FROM pg_attribute a WHERE a.attrelid='audit_compliance.synthetic_batch_creations'::regclass
+          AND a.attnum>0 AND NOT a.attisdropped AND a.attname IN ('tenant_id','actor_id','batch_id','request_id')
+          AND NOT has_column_privilege(current_user,a.attrelid,a.attnum,'INSERT')
+        )
+        AS allowed FROM pg_roles r WHERE r.rolname=current_user
+    `);
+    if (result.rows[0]?.allowed !== true)
+      throw new Error('Unsafe synthetic batch database privileges');
+  }
   async create(
     command: SyntheticBatchCreateCommand,
   ): Promise<SyntheticBatchCreateResult> {

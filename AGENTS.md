@@ -10,11 +10,11 @@ Estado autorizado: documentação primeiro; fundação técnica por etapa. Após
 
 Prova sintética RLS do [ADR 0016](docs/adr/0016-synthetic-rls-proof.md) concluída e integrada na PR #19. Demonstra somente fixtures, sem alterar runtime ou tabelas da aplicação.
 
-PR #21 integrada e nova entrega solicitada: persistência do lote sintético conforme [ADR 0018](docs/adr/0018-synthetic-document-persistence.md). Autoriza migration aditiva, adapters de Identity/Organizations/Audit e lote, testes PostgreSQL isolados e RLS somente das novas tabelas. Pool de domínio separado e privilégio mínimo. Não criar endpoints, wiring de credencial na API, BFF/UI, diagnóstico ou ação fiscal real nesta entrega.
+Próxima entrega solicitada: API do lote sintético conforme [ADR 0019](docs/adr/0019-synthetic-document-http.md), dependente da PR #22 de persistência. Autoriza POST/GET, pool com credencial dedicada e testes HTTP/PostgreSQL isolados. Sem fallback administrativo, acesso SQL adicional pela web, BFF/UI, diagnóstico, dados fiscais reais ou deploy. PR #22 ainda aberta no início desta etapa; não fazer merge automático.
 
 ## Arquitetura e código
 
-A [RFC 0002](docs/rfc/0002-synthetic-rls-proof.md) fundamenta o experimento autorizado no ADR 0016, com [plano de TDD](docs/engineering/synthetic-rls-test-plan.md). A prova isolada não implementou RLS de domínio; a etapa atual do ADR 0018 limita RLS e grants às relações novas do lote.
+A [RFC 0002](docs/rfc/0002-synthetic-rls-proof.md) fundamenta o experimento autorizado no ADR 0016, com [plano de TDD](docs/engineering/synthetic-rls-test-plan.md). A prova isolada não implementou RLS de domínio; os ADRs 0018/0019 limitam RLS e grants às relações novas do lote.
 
 - Monólito modular; presentation → application → domain; infrastructure implementa portas. Domain independente de React, Nest e ORM.
 - Web usa ui/contracts; API usa contracts/database; contratos não importam infraestrutura; contextos não acessam internals/tabelas de outros.
@@ -33,7 +33,7 @@ Comandos: `pnpm lint`, `pnpm typecheck`, `pnpm test`, `pnpm test:coverage`, `pnp
 
 ## Segurança e IA
 
-Sem segredos versionados, PII real em fixtures/prompts/logs, scraping autenticado presumido, APIs governamentais fictícias ou decisão tributária definitiva por LLM. Autorização pertence aos casos de uso; tenant vem de membership verificada; RLS para dados de domínio ainda é proposta. Leia [segurança](docs/security/security-model.md) e [playbook](docs/ai/playbook.md).
+Sem segredos versionados, PII real em fixtures/prompts/logs, scraping autenticado presumido, APIs governamentais fictícias ou decisão tributária definitiva por LLM. Autorização pertence aos casos de uso; tenant vem de membership verificada; RLS implementado somente nas quatro tabelas do lote sintético. RLS de controle e de futuros dados reais permanece pendente. Leia [segurança](docs/security/security-model.md) e [playbook](docs/ai/playbook.md).
 
 ## Git, PR e autonomia
 

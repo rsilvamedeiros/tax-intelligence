@@ -175,6 +175,27 @@ describe('Synthetic batches with real restricted PostgreSQL runtime', () => {
     }
   });
 
+  it('accepts the dedicated runtime privilege profile and rejects the database owner', async () => {
+    await expect(store.assertRuntimePrivileges()).resolves.toBeUndefined();
+    await expect(
+      new SyntheticDocumentBatchStore(owner.pool).assertRuntimePrivileges(),
+    ).rejects.toThrow('Unsafe');
+  });
+
+  it('requires INSERT independently from SELECT in the runtime profile', async () => {
+    await owner.pool.query(
+      `REVOKE INSERT ON fiscal_compliance.synthetic_lines FROM ${role}`,
+    );
+    try {
+      await expect(store.assertRuntimePrivileges()).rejects.toThrow('Unsafe');
+    } finally {
+      await owner.pool.query(
+        `GRANT INSERT ON fiscal_compliance.synthetic_lines TO ${role}`,
+      );
+    }
+    await expect(store.assertRuntimePrivileges()).resolves.toBeUndefined();
+  });
+
   it('creates one normalized batch and an atomic minimal audit event', async () => {
     const cmd = command();
     const result = await store.create(cmd);

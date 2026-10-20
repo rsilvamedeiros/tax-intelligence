@@ -1,8 +1,8 @@
 # Contratos REST e aplicação
 
-Persistência do lote sintético implementada no [ADR 0018](../adr/0018-synthetic-document-persistence.md), sem módulo HTTP ou wiring de pool dedicado na aplicação. Os futuros POST/GET continuam indisponíveis. Próxima etapa deve integrar os adapters e mapear autenticação, limites de corpo, idempotência e erros pelo contrato, sem usar o login administrativo como fallback.
+POST `/v1/organizations/:organizationId/synthetic-document-batches` e GET da mesma rota com `/:batchId` implementados no [ADR 0019](../adr/0019-synthetic-document-http.md), compondo a persistência do ADR 0018. Bearer verificado, pool exclusivo SYNTHETIC_BATCH_DATABASE_URL sem fallback administrativo, validação runtime e privilégio mínimo. POST exige JSON até 16 KiB, inclusive chunked, e uma chave UUIDv4; criação 201, replay 200, conflito 409. GET sem corpo/query, 404 uniforme fora do escopo após autorização. 400/401/403/413/415/503 sanitizados, no-store e request ID; [evidências e limites](../engineering/synthetic-document-http-validation.md). Sem BFF/UI ou diagnóstico.
 
-Preparação de lote sintético implementada no [ADR 0017](../adr/0017-synthetic-document-contract.md): schemas runtime/OpenAPI de entrada, recibo, detalhe e chave idempotente em contracts, sem rotas registradas. O limite HTTP de 16 KiB, autorização, status, transporte e efeitos de POST/GET da [RFC 0003](../rfc/0003-synthetic-document-intake.md) ainda exigem implementação. Schemas gerados não significam operação publicada no Swagger.
+Schemas runtime/OpenAPI de entrada, recibo, detalhe e chave idempotente em contracts foram preparados no [ADR 0017](../adr/0017-synthetic-document-contract.md). Agora as operações e suas respostas estão registradas no Swagger de desenvolvimento; testes confrontam transporte e contratos compartilhados.
 
 Base: `/v1`; versão do contrato independente da versão do pacote. Swagger em desenvolvimento, não publicado por padrão em produção. Contratos compartilhados em `packages/contracts`; schemas runtime devem rejeitar campos inesperados. Mudanças incompatíveis exigem nova versão ou janela de migração documentada.
 

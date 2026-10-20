@@ -42,6 +42,7 @@ Documentação primeiro; código avança por etapa com aceite, testes e revisão
 - [Plano proposto do primeiro lote sintético](engineering/synthetic-document-intake-test-plan.md)
 - [Validação do contrato do lote sintético](engineering/synthetic-document-contract-validation.md)
 - [Validação da persistência do lote sintético](engineering/synthetic-document-persistence-validation.md)
+- [Validação da API do lote sintético](engineering/synthetic-document-http-validation.md)
 
 ## Domínios
 
@@ -74,6 +75,7 @@ Documentação primeiro; código avança por etapa com aceite, testes e revisão
 - [0016 Prova sintética RLS](adr/0016-synthetic-rls-proof.md)
 - [0017 Contrato do lote sintético](adr/0017-synthetic-document-contract.md)
 - [0018 Persistência do lote sintético](adr/0018-synthetic-document-persistence.md)
+- [0019 API do lote sintético](adr/0019-synthetic-document-http.md)
 - [process](rfc/process.md)
 - [RFC 0001: identidade, membership e isolamento](rfc/0001-identity-membership-isolation.md)
 - [RFC 0002: prova sintética RLS](rfc/0002-synthetic-rls-proof.md)

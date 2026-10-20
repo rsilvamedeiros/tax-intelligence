@@ -10,6 +10,7 @@ import { trace, SpanStatusCode } from '@opentelemetry/api';
 import type { Request, Response, NextFunction } from 'express';
 import type { ApiError } from '@tax/contracts';
 import helmet from 'helmet';
+import { json } from 'express';
 import { readConfig } from './config';
 const uuidPattern =
   /^[0-9a-f]{8}-[0-9a-f]{4}-[1-8][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i;
@@ -23,12 +24,17 @@ export class HttpErrorFilter implements ExceptionFilter {
       error instanceof Error &&
       'type' in error &&
       error.type === 'entity.too.large';
+    const parserStatus =
+      error instanceof Error &&
+      'status' in error &&
+      typeof error.status === 'number' &&
+      [400, 413, 415].includes(error.status)
+        ? error.status
+        : undefined;
     const status =
       error instanceof HttpException
         ? error.getStatus()
-        : oversized
-          ? 413
-          : 500;
+        : (parserStatus ?? (oversized ? 413 : 500));
     const body: ApiError = {
       statusCode: status,
       code: status >= 500 ? 'INTERNAL_ERROR' : 'REQUEST_REJECTED',
@@ -79,6 +85,10 @@ export function configureHttp(
     response.once('close', finish);
     next();
   });
+  app.use(
+    '/v1/organizations/:organizationId/synthetic-document-batches',
+    json({ limit: 16 * 1024, inflate: false }),
+  );
   app.useBodyParser('json', { limit: '1mb' });
   app.use(helmet());
   app.enableCors({
