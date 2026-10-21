@@ -7,6 +7,7 @@ import {
 } from '@testing-library/react';
 import { axe } from 'jest-axe';
 import { OrganizationPanel } from './organization-panel';
+import { SessionCsrfContext } from './auth-session';
 describe('Accessible organization selection', () => {
   const id = '00000000-0000-4000-8000-000000000001';
   const row = { id, name: 'Synthetic A', role: 'viewer' };
@@ -47,6 +48,40 @@ describe('Accessible organization selection', () => {
       }),
     );
     expect(screen.getByText('Leitura')).toBeInTheDocument();
+  });
+  it('mounts the batch workspace only after selection and clears it on refresh', async () => {
+    jest
+      .mocked(fetch)
+      .mockResolvedValueOnce(reply(page))
+      .mockResolvedValueOnce(reply(context))
+      .mockResolvedValueOnce(reply(page))
+      .mockResolvedValueOnce(reply(context));
+    render(
+      <SessionCsrfContext.Provider value={'a'.repeat(43)}>
+        <OrganizationPanel />
+      </SessionCsrfContext.Provider>,
+    );
+    expect(
+      screen.queryByRole('region', { name: 'Lotes sintéticos' }),
+    ).not.toBeInTheDocument();
+    fireEvent.click(
+      await screen.findByRole('button', { name: 'Selecionar Synthetic A' }),
+    );
+    fireEvent.change(await screen.findByLabelText('Identificador do lote'), {
+      target: { value: id },
+    });
+    fireEvent.click(
+      screen.getByRole('button', { name: 'Atualizar organizações' }),
+    );
+    expect(
+      screen.queryByRole('region', { name: 'Lotes sintéticos' }),
+    ).not.toBeInTheDocument();
+    fireEvent.click(
+      await screen.findByRole('button', { name: 'Selecionar Synthetic A' }),
+    );
+    expect(await screen.findByLabelText('Identificador do lote')).toHaveValue(
+      '',
+    );
   });
   it('offers an empty state without automatic membership creation', async () => {
     jest

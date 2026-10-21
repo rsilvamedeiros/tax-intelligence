@@ -2,6 +2,7 @@
 import { useContext, useEffect, useRef, useState } from 'react';
 import { SessionCsrfContext, SessionExpiryContext } from './auth-session';
 import { MembershipPanel } from './membership-panel';
+import { SyntheticBatchPanel } from './synthetic-batch-panel';
 import {
   organizationPageSchema,
   organizationContextSchema,
@@ -215,6 +216,14 @@ export function OrganizationPanel({
         <MembershipPanel
           key={selected.organization.id}
           organizationId={selected.organization.id}
+          csrfToken={csrfToken}
+          onSessionExpired={expire}
+        />
+      )}
+      {selected && csrfToken && (
+        <SyntheticBatchPanel
+          organizationId={selected.organization.id}
+          role={selected.role}
           csrfToken={csrfToken}
           onSessionExpired={expire}
         />
