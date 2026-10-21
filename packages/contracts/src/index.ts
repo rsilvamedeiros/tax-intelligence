@@ -1,5 +1,10 @@
 import { z } from 'zod';
 export {
+  syntheticDiagnosticSchema,
+  syntheticDiagnosticOpenApiSchema,
+  type SyntheticDiagnostic,
+} from './synthetic-diagnostic';
+export {
   syntheticDocumentBatchInputSchema,
   syntheticDocumentBatchReceiptSchema,
   syntheticDocumentBatchDetailSchema,

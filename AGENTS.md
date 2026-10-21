@@ -10,7 +10,7 @@ Estado autorizado: documentação primeiro; fundação técnica por etapa. Após
 
 Prova sintética RLS do [ADR 0016](docs/adr/0016-synthetic-rls-proof.md) concluída e integrada na PR #19. Demonstra somente fixtures, sem alterar runtime ou tabelas da aplicação.
 
-Próxima entrega solicitada: interface de criação/consulta do lote sintético conforme [ADR 0021](docs/adr/0021-synthetic-document-ui.md), dependente da PR #24 do BFF, aberta no início desta etapa. Autoriza formulário, recibo/detalhe, recuperação idempotente e limpeza por contexto, com testes RTL/E2E. Sem novos endpoints, SQL pela web, diagnóstico, dados fiscais reais ou deploy. API continua revalidando autorização; não fazer merge automático.
+PR #25 da interface integrada. Próxima entrega solicitada: núcleo puro DEMO-TOTAL-001 conforme [ADR 0022](docs/adr/0022-synthetic-diagnostic-core.md). Autoriza contrato versionado de resultado, comparação exata e evidência sintética, com validação de entrada em application e TDD. Sem rotas, persistência de diagnósticos, novas permissões, UI de diagnóstico, dados fiscais reais ou deploy. Execução sobre lote persistido e auditoria exigem etapa própria; não fazer merge automático.
 
 ## Arquitetura e código
 
