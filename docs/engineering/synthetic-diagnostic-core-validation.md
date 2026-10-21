@@ -25,9 +25,9 @@ Regressões adicionais não contam como Red observado. Na primeira execução de
 
 Nenhum teste PostgreSQL ou browser do novo diagnóstico existe: não há acesso a banco, rota ou UI para exercitar neste recorte. Não alegar execução local dessas suítes nesta etapa.
 
-[CI da PR #26](https://github.com/rsilvamedeiros/tax-intelligence/actions/runs/39676611805), no commit 556d0d764027620022f6a8d073c1ae48497f6a55: sete jobs aprovados, preservando 108 testes PostgreSQL 17.11/nove suítes, API compilada e jornada real Keycloak/Chrome 155 (uma aprovada, zero falhas), além do E2E geral. GitGuardian aprovou os cinco commits sem segredos detectados. CodeRabbit confirmou início da revisão completa; análise ainda pendente nesta atualização, sem inferir revisão concluída do commit status.
+[CI da PR #26](https://github.com/rsilvamedeiros/tax-intelligence/actions/runs/39676611805), no commit 556d0d764027620022f6a8d073c1ae48497f6a55: sete jobs aprovados, preservando 108 testes PostgreSQL 17.11/nove suítes, API compilada e jornada real Keycloak/Chrome 155 (uma aprovada, zero falhas), além do E2E geral. GitGuardian aprovou os cinco commits sem segredos detectados. Revisão completa do CodeRabbit concluída nesse head, conforme registro abaixo.
 
-Revisão local é autorrevisão estática de contratos, precisão, fronteiras e ausência de exposição remota. Revisão externa e decisão humana são distintas. Sem delegação para agentes.
+Revisão local é autorrevisão estática de contratos, precisão, fronteiras e ausência de exposição remota. [CodeRabbit](https://github.com/rsilvamedeiros/tax-intelligence/pull/26#pullrequestreview-5606372921) revisou os 17 arquivos até 556d0d7. Um achado Minor de status desatualizado no roadmap e uma sugestão Trivial de asserções OpenAPI foram acolhidos: etapa atual corrigida e teste existente ampliado para obrigatoriedade, limites e enum do artefato gerado, sem snapshot integral. Não houve alteração do código executável após a revisão. Não alegar revisão completa do acompanhamento posterior ou aprovação humana. Sem delegação para agentes.
 
 ## Limites e próximo ponto de decisão
 
