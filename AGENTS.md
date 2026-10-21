@@ -10,7 +10,7 @@ Estado autorizado: documentação primeiro; fundação técnica por etapa. Após
 
 Prova sintética RLS do [ADR 0016](docs/adr/0016-synthetic-rls-proof.md) concluída e integrada na PR #19. Demonstra somente fixtures, sem alterar runtime ou tabelas da aplicação.
 
-PR #23 integrada e próxima entrega solicitada: BFF do lote sintético conforme [ADR 0020](docs/adr/0020-synthetic-document-bff.md). Autoriza POST/GET pela sessão server-side existente, Origin/CSRF e chave idempotente validada, com testes de fronteira e jornada isolada. Sem novo acesso SQL pela web, UI do lote, diagnóstico, dados fiscais reais ou deploy. API continua revalidando autorização e usando seu próprio pool restrito. Não fazer merge automático.
+Próxima entrega solicitada: interface de criação/consulta do lote sintético conforme [ADR 0021](docs/adr/0021-synthetic-document-ui.md), dependente da PR #24 do BFF, aberta no início desta etapa. Autoriza formulário, recibo/detalhe, recuperação idempotente e limpeza por contexto, com testes RTL/E2E. Sem novos endpoints, SQL pela web, diagnóstico, dados fiscais reais ou deploy. API continua revalidando autorização; não fazer merge automático.
 
 ## Arquitetura e código
 
