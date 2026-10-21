@@ -31,6 +31,51 @@ it('accepts explicit synthetic provenance and emits a closed OpenAPI shape', () 
   expect(syntheticDiagnosticOpenApiSchema).toMatchObject({
     type: 'object',
     additionalProperties: false,
+    required: ['schemaVersion', 'rule', 'documents'],
+    properties: {
+      rule: {
+        additionalProperties: false,
+        required: ['id', 'version', 'source', 'fiscalValidity'],
+      },
+      documents: {
+        minItems: 1,
+        maxItems: 10,
+        items: {
+          additionalProperties: false,
+          required: [
+            'reference',
+            'declaredTotalCents',
+            'lineAmountsCents',
+            'computedTotalCents',
+            'differenceCents',
+            'outcome',
+          ],
+          properties: {
+            declaredTotalCents: {
+              type: 'integer',
+              minimum: 0,
+              maximum: 1_000_000_000,
+            },
+            lineAmountsCents: {
+              minItems: 1,
+              maxItems: 10,
+              items: { type: 'integer', minimum: 0, maximum: 1_000_000_000 },
+            },
+            computedTotalCents: {
+              type: 'integer',
+              minimum: 0,
+              maximum: 10_000_000_000,
+            },
+            differenceCents: {
+              type: 'integer',
+              minimum: -10_000_000_000,
+              maximum: 1_000_000_000,
+            },
+            outcome: { enum: ['match', 'mismatch'] },
+          },
+        },
+      },
+    },
   });
 });
 it.each([
