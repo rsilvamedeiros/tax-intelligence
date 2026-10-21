@@ -103,6 +103,31 @@ select {
   list-style: none;
   padding: 0;
 }
+.synthetic-batch-panel {
+  margin-top: 24px;
+  padding-top: 16px;
+  border-top: 1px solid var(--border);
+}
+.synthetic-batch-panel form,
+.synthetic-batch-panel fieldset {
+  display: grid;
+  gap: 12px;
+  min-width: 0;
+}
+.synthetic-batch-panel fieldset {
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 16px;
+}
+.synthetic-batch-panel form {
+  margin-bottom: 24px;
+}
+.synthetic-batch-panel strong {
+  overflow-wrap: anywhere;
+}
+.synthetic-batch-panel button:disabled {
+  cursor: not-allowed;
+}
 .organization-list li {
   display: flex;
   align-items: center;

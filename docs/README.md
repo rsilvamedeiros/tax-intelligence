@@ -44,6 +44,7 @@ Documentação primeiro; código avança por etapa com aceite, testes e revisão
 - [Validação da persistência do lote sintético](engineering/synthetic-document-persistence-validation.md)
 - [Validação da API do lote sintético](engineering/synthetic-document-http-validation.md)
 - [Validação do BFF do lote sintético](engineering/synthetic-document-bff-validation.md)
+- [Validação da interface do lote sintético](engineering/synthetic-document-ui-validation.md)
 
 ## Domínios
 
@@ -78,6 +79,7 @@ Documentação primeiro; código avança por etapa com aceite, testes e revisão
 - [0018 Persistência do lote sintético](adr/0018-synthetic-document-persistence.md)
 - [0019 API do lote sintético](adr/0019-synthetic-document-http.md)
 - [0020 BFF do lote sintético](adr/0020-synthetic-document-bff.md)
+- [0021 Interface do lote sintético](adr/0021-synthetic-document-ui.md)
 - [process](rfc/process.md)
 - [RFC 0001: identidade, membership e isolamento](rfc/0001-identity-membership-isolation.md)
 - [RFC 0002: prova sintética RLS](rfc/0002-synthetic-rls-proof.md)
