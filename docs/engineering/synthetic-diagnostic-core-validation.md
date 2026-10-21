@@ -21,7 +21,11 @@ Regressões adicionais não contam como Red observado. Na primeira execução de
 - `pnpm test:smoke`: autenticação RSA e exportação OTLP real aprovadas, sem sentinelas sensíveis.
 - `pnpm audit:dependencies`: exit 0, um advisory moderado existente; nenhuma dependência adicionada.
 
-Nenhum teste PostgreSQL ou browser do novo diagnóstico existe: não há acesso a banco, rota ou UI para exercitar neste recorte. CI mantém as regressões existentes em banco e navegador; não alegar execução local dessas suítes nesta etapa. Links, formato e revisão final são conferidos antes do commit; resultados remotos ainda pendentes.
+`pnpm format:check`, `node scripts/validate-docs.mjs` e `git diff --check`: aprovados; 104 documentos e 16 manifests de skills validados.
+
+Nenhum teste PostgreSQL ou browser do novo diagnóstico existe: não há acesso a banco, rota ou UI para exercitar neste recorte. Não alegar execução local dessas suítes nesta etapa.
+
+[CI da PR #26](https://github.com/rsilvamedeiros/tax-intelligence/actions/runs/39676611805), no commit 556d0d764027620022f6a8d073c1ae48497f6a55: sete jobs aprovados, preservando 108 testes PostgreSQL 17.11/nove suítes, API compilada e jornada real Keycloak/Chrome 155 (uma aprovada, zero falhas), além do E2E geral. GitGuardian aprovou os cinco commits sem segredos detectados. CodeRabbit confirmou início da revisão completa; análise ainda pendente nesta atualização, sem inferir revisão concluída do commit status.
 
 Revisão local é autorrevisão estática de contratos, precisão, fronteiras e ausência de exposição remota. Revisão externa e decisão humana são distintas. Sem delegação para agentes.
 
