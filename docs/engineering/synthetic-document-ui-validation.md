@@ -17,10 +17,14 @@ Quatro ciclos Red/Green observados: criação ausente no componente inicial; rec
 - `pnpm test:integration:synthetic-batch`: primeira execução falhou por timeout de inicialização da API. Repetição após os demais jobs, sem alterar código ou timeout, aprovada: pool restrito, criação/replay/conflito, isolamento, papéis persistidos, revogação e auditoria. A causa do primeiro timeout não foi comprovada.
 - `pnpm audit:dependencies`: exit 0; um advisory moderado existente. Nenhuma dependência adicionada.
 
-Formato, links e revisão do diff são registrados antes do commit. Revisão local é autorrevisão estática de segurança, arquitetura e regressões; revisão externa e aprovação humana são etapas distintas.
+`pnpm format:check`, `node scripts/validate-docs.mjs` e `git diff --check`: aprovados; 102 documentos e 16 manifests de skills validados. Revisão local é autorrevisão estática de segurança, arquitetura e regressões; nenhum achado bloqueante confirmado. Revisão externa solicitada ao CodeRabbit na PR #25, ainda sem resultado publicado nesta atualização; aprovação humana continua necessária.
 
 ## Navegador e limites
 
-Jornada Cypress acrescentada ao teste real de autenticação: formulário com dois documentos, rejeição de valor fora do limite sem truncá-lo, criação cuja resposta é substituída por 503 após commit, repetição explícita com mesma chave e replay 200, consulta, limpeza por troca de contexto, leitura como viewer e limpeza no logout. Execução local de Chrome/Keycloak não realizada; evidência do CI pendente nesta revisão.
+Jornada Cypress acrescentada ao teste real de autenticação: formulário com dois documentos, rejeição de valor fora do limite sem truncá-lo, criação cuja resposta é substituída por 503 após commit, repetição explícita com mesma chave e replay 200, consulta, limpeza por troca de contexto, leitura como viewer e limpeza no logout. Execução local de Chrome/Keycloak não realizada.
+
+[CI da PR #25](https://github.com/rsilvamedeiros/tax-intelligence/actions/runs/39629127140), no commit 070746661b29ec27e36d4bfe4e56b95cf99420ef: sete jobs aprovados, incluindo PostgreSQL 17.11 (108 testes/nove suítes), E2E geral e identity-provider com Keycloak/Chrome 155 (uma jornada aprovada, zero falhas). Qualidade, documentação, dependências e secret-scan também aprovados. GitGuardian e commit status externo ainda não publicaram resultado; não declarar esses checks aprovados por inferência.
+
+Fixtures locais verificadas sem papéis temporários, lotes ou eventos restantes; cluster isolado iniciado nesta etapa encerrado.
 
 Somente dados sintéticos e banco isolado por TEST_DATABASE_URL. Comando/chave vivem na memória da sessão visual e se perdem ao sair do contexto; a mensagem de incerteza orienta reconciliar antes de trocar. Não há listagem ou recuperação persistente de rascunhos. A UI não calcula totais, não decide autorização e não implementa diagnóstico, importação real ou operação fiscal de produção.
