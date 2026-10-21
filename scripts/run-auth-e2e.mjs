@@ -109,7 +109,12 @@ try {
     OTEL_EXPORTER_OTLP_TRACES_ENDPOINT: '',
   };
   api = spawn(process.execPath, ['apps/api/dist/main.js'], {
-    env: { ...env, PORT: '3001', DATABASE_URL: membership.apiUrl },
+    env: {
+      ...env,
+      PORT: '3001',
+      DATABASE_URL: membership.apiUrl,
+      SYNTHETIC_BATCH_DATABASE_URL: membership.batchUrl,
+    },
     stdio: 'ignore',
   });
   web = spawn(

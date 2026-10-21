@@ -15,6 +15,8 @@ Modelo de projeto inspirado em [OWASP ASVS](https://owasp.org/www-project-applic
 
 ## Identidade e RBAC propostos
 
+BFF sintético no [ADR 0020](../adr/0020-synthetic-document-bff.md): token da sessão server-side, Origin/CSRF em escrita, seletores e chave validados, JSON UTF-8 e limites de bytes na entrada/saída. Nenhum cache de papel ou novo acesso SQL de domínio na web. API revalida autorização. Repetição após falha conserva comando/chave; sem retry automático. [Evidências](../engineering/synthetic-document-bff-validation.md).
+
 Estado atual do lote sintético: os ADRs 0018/0019 implementam RLS somente nas quatro tabelas novas e POST/GET com Bearer, membership/papel revalidados na transação e pool de domínio dedicado. Perfil excessivo é rejeitado por operação, sem fallback administrativo. Esse recorte não implementa RLS das tabelas de controle nem permite dados fiscais reais. [Evidências e limites](../engineering/synthetic-document-http-validation.md).
 
 A prova sintética do [ADR 0016](../adr/0016-synthetic-rls-proof.md) exercita policies, grants e contexto transacional com login restrito em fixtures descartáveis. RLS-12 explicita o limite de setting mutável: a prova não autentica tenant nem protege runtime com SQL arbitrário comprometido. Nenhuma policy ou grant da aplicação foi alterado; RLS de domínio continua pendente. [Evidências](../engineering/synthetic-rls-validation.md).

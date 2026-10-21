@@ -1,6 +1,6 @@
 # Arquitetura da fundação
 
-API do lote sintético implementada no [ADR 0019](../adr/0019-synthetic-document-http.md): controller → serviço/porta de aplicação → repository → adapters transacionais públicos do ADR 0018. POST/GET exigem Bearer e pool com login dedicado; tabelas novas mantêm RLS e auditoria atômica. Sem BFF/UI do lote ou diagnóstico. [Validação](../engineering/synthetic-document-http-validation.md).
+API do lote sintético implementada no [ADR 0019](../adr/0019-synthetic-document-http.md): controller → serviço/porta de aplicação → repository → adapters transacionais públicos do ADR 0018. POST/GET exigem Bearer e pool com login dedicado; tabelas novas mantêm RLS e auditoria atômica. BFF implementado no [ADR 0020](../adr/0020-synthetic-document-bff.md) com sessão existente, Origin/CSRF e chave idempotente, sem ampliar acesso SQL da web. UI do lote e diagnóstico permanecem pendentes. [Validação BFF](../engineering/synthetic-document-bff-validation.md).
 
 Prova sintética RLS implementada no [ADR 0016](../adr/0016-synthetic-rls-proof.md), sem alterar runtime ou tabelas da aplicação. Demonstra policies/contexto somente em fixtures; aplicação a dados de domínio continua pendente. [Status do projeto](../engineering/project-status.md).
 

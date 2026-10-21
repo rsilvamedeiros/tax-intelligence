@@ -1,5 +1,7 @@
 # Frontend e design system
 
+BFF do lote sintético implementado no [ADR 0020](../adr/0020-synthetic-document-bff.md): POST de criação e GET de detalhe usam sessão server-side, chave idempotente validada, Origin/CSRF para escrita e schemas/limites de bytes. API decide membership/papel; nenhuma nova consulta SQL pela web. UI do lote e diagnóstico continuam pendentes. [Validação](../engineering/synthetic-document-bff-validation.md).
+
 Interface administrativa implementada no [ADR 0015](../adr/0015-administrative-membership-ui.md). OrganizationPanel monta MembershipPanel somente no contexto selecionado de administrador; AuthPanel fornece o CSRF público por contexto, preservando a fronteira desmontada por sessão. Membros usam schema estrito e estado local, sem storage/SQL; mutações serializadas aguardam API e consultam novamente. 401 encerra conta, 403 remove controles/dados administrativos e falhas ambíguas exigem consulta. Revogação tem confirmação com foco de cancelamento e retorno ao botão. [Validação](../engineering/administrative-membership-ui-validation.md).
 
 Next.js App Router, React e TypeScript strict. Server Components por padrão; Client Components somente para estado, eventos e APIs do navegador. Componentes não calculam regras fiscais; exibem resultados produzidos por casos de uso da API. A tela operacional usa um proxy server-side com timeout e validação runtime do contrato; não encaminha respostas desconhecidas.

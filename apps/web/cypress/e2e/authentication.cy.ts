@@ -1,3 +1,5 @@
+import { exerciseSyntheticBatchBff } from '../support/synthetic-batch';
+
 describe('Real Keycloak BFF login', () => {
   it('logs in through code and PKCE, enforces CSRF, and revokes the session', () => {
     cy.request({ url: '/', log: false })
@@ -88,6 +90,9 @@ describe('Real Keycloak BFF login', () => {
         { log: false },
       ).then(({ organizationIds: ids, actorIds: actors }) => {
         expect(actors).to.have.length(3);
+        exerciseSyntheticBatchBff(body.csrfToken, ids[0]!, ids[2]!).as(
+          'syntheticBatchId',
+        );
         const collection = `/api/organizations/${ids[0]}/memberships`;
         const member = `${collection}/${actors[1]}`;
         const headers = {
@@ -244,6 +249,34 @@ describe('Real Keycloak BFF login', () => {
           .its('status')
           .should('equal', 403);
         mutate('PATCH', `${collection}/${actors[2]}`, 'viewer', 403);
+        const batches = `/api/organizations/${ids[0]}/synthetic-document-batches`;
+        cy.get<string>('@syntheticBatchId').then((id) => {
+          cy.request({ url: `${batches}/${id}`, log: false })
+            .its('status')
+            .should('equal', 200);
+        });
+        cy.request({
+          method: 'POST',
+          url: batches,
+          headers: {
+            ...headers,
+            'Idempotency-Key': '00000000-0000-4000-8000-000000000001',
+          },
+          body: {
+            schemaVersion: 'synthetic-document-batch-v1',
+            documents: [
+              {
+                reference: 'denied-viewer',
+                declaredTotalCents: 1,
+                lineAmountsCents: [1],
+              },
+            ],
+          },
+          failOnStatusCode: false,
+          log: false,
+        })
+          .its('status')
+          .should('equal', 403);
       });
     });
     cy.request({
@@ -269,6 +302,28 @@ describe('Real Keycloak BFF login', () => {
       .its('status')
       .should('equal', 401);
     cy.getCookie('tax_session', { log: false }).should('be.null');
+    cy.env<{ organizationIds: string[] }>(['organizationIds'], {
+      log: false,
+    }).then(({ organizationIds: ids }) => {
+      const path = `/api/organizations/${ids[0]}/synthetic-document-batches`;
+      cy.request({
+        method: 'POST',
+        url: path,
+        headers: { Origin: 'http://127.0.0.1:3000' },
+        body: {},
+        failOnStatusCode: false,
+        log: false,
+      })
+        .its('status')
+        .should('equal', 401);
+      cy.request({
+        url: `${path}/00000000-0000-4000-8000-000000000001`,
+        failOnStatusCode: false,
+        log: false,
+      })
+        .its('status')
+        .should('equal', 401);
+    });
     cy.request({
       url: '/api/auth/session',
       failOnStatusCode: false,
