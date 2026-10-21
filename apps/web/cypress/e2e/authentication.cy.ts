@@ -1,4 +1,8 @@
 import { exerciseSyntheticBatchBff } from '../support/synthetic-batch';
+import {
+  exerciseSyntheticBatchUi,
+  verifyReadOnlyBatchUi,
+} from '../support/synthetic-batch-ui';
 
 describe('Real Keycloak BFF login', () => {
   it('logs in through code and PKCE, enforces CSRF, and revokes the session', () => {
@@ -90,6 +94,7 @@ describe('Real Keycloak BFF login', () => {
         { log: false },
       ).then(({ organizationIds: ids, actorIds: actors }) => {
         expect(actors).to.have.length(3);
+        exerciseSyntheticBatchUi();
         exerciseSyntheticBatchBff(body.csrfToken, ids[0]!, ids[2]!).as(
           'syntheticBatchId',
         );
@@ -277,6 +282,7 @@ describe('Real Keycloak BFF login', () => {
         })
           .its('status')
           .should('equal', 403);
+        verifyReadOnlyBatchUi();
       });
     });
     cy.request({
@@ -302,6 +308,7 @@ describe('Real Keycloak BFF login', () => {
       .its('status')
       .should('equal', 401);
     cy.getCookie('tax_session', { log: false }).should('be.null');
+    cy.get('.synthetic-batch-panel').should('not.exist');
     cy.env<{ organizationIds: string[] }>(['organizationIds'], {
       log: false,
     }).then(({ organizationIds: ids }) => {
