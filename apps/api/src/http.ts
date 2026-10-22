@@ -89,6 +89,10 @@ export function configureHttp(
     '/v1/organizations/:organizationId/synthetic-document-batches',
     json({ limit: 16 * 1024, inflate: false }),
   );
+  app.use(
+    '/v1/organizations/:organizationId/synthetic-diagnostic-executions',
+    json({ limit: 1024, inflate: false }),
+  );
   app.useBodyParser('json', { limit: '1mb' });
   app.use(helmet());
   app.enableCors({

@@ -1,6 +1,6 @@
 # Tax Intelligence
 
-Status: núcleo puro sintético DEMO-TOTAL-001 implementado conforme [ADR 0022](../adr/0022-synthetic-diagnostic-core.md), com persistência da execução no [ADR 0024](../adr/0024-synthetic-diagnostic-persistence.md). Contrato público e comparação determinística com evidência; sem execução remota/HTTP ou regra tributária real. [Validação](../engineering/synthetic-diagnostic-persistence-validation.md).
+Status: núcleo sintético DEMO-TOTAL-001 do [ADR 0022](../adr/0022-synthetic-diagnostic-core.md), persistência do [ADR 0024](../adr/0024-synthetic-diagnostic-persistence.md) e POST/GET autenticados do [ADR 0025](../adr/0025-synthetic-diagnostic-http.md) implementados por etapas. API na PR #30, dependente da persistência da #29, ainda sem integração em main. BFF/UI e regras tributárias reais indisponíveis. [Evidências HTTP/PostgreSQL](../engineering/synthetic-diagnostic-http-validation.md).
 
 ## Objetivo e responsabilidades
 
@@ -14,11 +14,11 @@ Implementado somente resultado sintético versionado: regra, referência, total 
 
 ## Fluxo e integrações
 
-Persistência implementada no [ADR 0024](../adr/0024-synthetic-diagnostic-persistence.md): unidade de trabalho injetada, snapshot público de Fiscal e evento de Audit na mesma conexão, com revalidação sob lock de organização. Migration 0007 e login restrito foram exercitados em PostgreSQL isolado e no serviço compilado, conforme [evidências](../engineering/synthetic-diagnostic-persistence-validation.md). Isso ainda não publica operação remota ou interface de diagnóstico.
+Persistência implementada no [ADR 0024](../adr/0024-synthetic-diagnostic-persistence.md): unidade de trabalho injetada, snapshot público de Fiscal e evento de Audit na mesma conexão, com revalidação sob lock de organização. Migration 0007 e login restrito foram exercitados em PostgreSQL isolado e no serviço compilado, conforme [evidências](../engineering/synthetic-diagnostic-persistence-validation.md). Exposição remota pertence ao módulo HTTP do ADR 0025; essa camada não possui interface web.
 
-Casos de uso de criação/replay/consulta no [ADR 0023](../adr/0023-synthetic-diagnostic-use-cases.md) usam somente capacidades transacionais específicas e contrato público de snapshot. Application verifica scope, referência e evidência antes de retornar resultado; criação aguarda evento e conclusão da unidade de trabalho. Adapter e prova PostgreSQL constam do ADR 0024, ainda sem exposição HTTP. [Validação](../engineering/synthetic-diagnostic-use-cases-validation.md).
+Casos de uso de criação/replay/consulta no [ADR 0023](../adr/0023-synthetic-diagnostic-use-cases.md) usam somente capacidades transacionais específicas e contrato público de snapshot. Application verifica scope, referência e evidência antes de retornar resultado; criação aguarda evento e conclusão da unidade de trabalho. Adapter e prova PostgreSQL constam do ADR 0024, composição HTTP no ADR 0025. [Validação](../engineering/synthetic-diagnostic-use-cases-validation.md).
 
-[RFC 0004](../rfc/0004-synthetic-diagnostic-execution.md), histórica, propôs execução registrada única por organização/lote/regra/versão e replay entre atores autorizados, com autoria original preservada. Snapshot de Fiscal, autorização e auditoria compartilham transação por portas públicas, sem SQL em application/domain. Execução, tabelas e perfil de grants foram implementados e exercitados em teste no ADR 0024; provisionamento de runtime e endpoints continuam pendentes. [Matriz e evidências](../engineering/synthetic-diagnostic-execution-test-plan.md).
+[RFC 0004](../rfc/0004-synthetic-diagnostic-execution.md), histórica, propôs execução registrada única por organização/lote/regra/versão e replay entre atores autorizados, com autoria original preservada. Snapshot de Fiscal, autorização e auditoria compartilham transação por portas públicas, sem SQL em application/domain. Execução, tabelas e perfil de grants foram implementados e exercitados em teste no ADR 0024; endpoints no ADR 0025. Provisionamento no ambiente do usuário continua fora dessas entregas. [Matriz e evidências](../engineering/synthetic-diagnostic-execution-test-plan.md).
 
 Dados validados → execução → evidência → revisão. Interfaces: Fiscal por contratos; Audit por porta transacional. Eventos propostos: DiagnosticCompleted, FindingDetected; envelope futuro com eventId, tenantId, occurredAt, schemaVersion e correlationId. Transporte durável não definido; não prometer entrega exactly-once.
 

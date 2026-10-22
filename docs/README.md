@@ -1,5 +1,8 @@
 # Documentação TAX INTELLIGENCE
 
+- [API de diagnóstico sintético](engineering/synthetic-diagnostic-http-validation.md)
+- [ADR 0025](adr/0025-synthetic-diagnostic-http.md)
+
 Documentação primeiro; código avança por etapa com aceite, testes e revisão. **Decisão registrada** é escolha técnica desta etapa; **proposta** aguarda avaliação/autorização; **hipótese** precisa de evidência; **pendência** ainda sem resolução. Nenhum estado equivale a aprovação de produção.
 
 ## Produto

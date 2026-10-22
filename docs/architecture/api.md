@@ -1,6 +1,8 @@
 # Contratos REST e aplicação
 
-Schemas públicos de comando de application, query, recibo e detalhe da execução no [ADR 0023](../adr/0023-synthetic-diagnostic-use-cases.md). Comando por organização/lote/requestId; identidade confiável permanece parâmetro separado. Isso não define body HTTP nem publica endpoint. Recibo/detalhe fechados têm schemas OpenAPI exportados, ainda sem registro em controller/Swagger. [Validação](../engineering/synthetic-diagnostic-use-cases-validation.md).
+API sintética do [ADR 0025](../adr/0025-synthetic-diagnostic-http.md): POST `/v1/organizations/:organizationId/synthetic-diagnostic-executions` recebe somente `{batchId}` JSON até 1024 bytes, sem compressão/query/Idempotency-Key; criação 201 e replay natural 200 com recibo. GET `/:executionId` sem corpo/query retorna detalhe/evidência. Bearer, pool exclusivo, papéis revalidados e 400/401/403/404/413/415/503 sanitizados. [Evidências](../engineering/synthetic-diagnostic-http-validation.md). BFF/UI de diagnóstico ainda pendentes.
+
+Recorte histórico do [ADR 0023](../adr/0023-synthetic-diagnostic-use-cases.md): schemas públicos de comando de application, query, recibo e detalhe da execução, sem publicação HTTP naquela entrega. Comando por organização/lote/requestId; identidade confiável permanece parâmetro separado. Body de transporte, endpoints e registro dos schemas de recibo/detalhe no Swagger foram acrescentados pelo ADR 0025. [Validação de application](../engineering/synthetic-diagnostic-use-cases-validation.md).
 
 Contrato `synthetic-document-diagnostic-v1` do [ADR 0022](../adr/0022-synthetic-diagnostic-core.md) disponível em contracts com schema estrito e representação OpenAPI exportada, sem publicação em rota/Swagger nesta etapa. Núcleo puro não é endpoint: nenhuma nova operação, permissão ou chamada BFF foi adicionada. Comparação sintética não tem validade fiscal.
 

@@ -1,6 +1,8 @@
 import { z } from 'zod';
 export {
   syntheticDiagnosticExecutionCommandSchema,
+  syntheticDiagnosticExecutionInputSchema,
+  syntheticDiagnosticExecutionInputOpenApiSchema,
   syntheticDiagnosticExecutionQuerySchema,
   syntheticDiagnosticExecutionReceiptSchema,
   syntheticDiagnosticExecutionDetailSchema,
