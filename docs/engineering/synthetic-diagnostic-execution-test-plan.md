@@ -1,6 +1,6 @@
 # Plano de TDD — Execução registrada do diagnóstico sintético
 
-Data: 22/10/2026. Status: **planejado, não executado**. Implementação depende do aceite da [RFC 0004](../rfc/0004-synthetic-diagnostic-execution.md) e ADR de execução. O núcleo puro do [ADR 0022](../adr/0022-synthetic-diagnostic-core.md) já possui evidência própria; seus testes não provam autorização ou persistência de diagnósticos.
+Data: 22/10/2026. Status: **execução parcial em contratos/application**, conforme [ADR 0023](../adr/0023-synthetic-diagnostic-use-cases.md) e [validação](synthetic-diagnostic-use-cases-validation.md). Persistência/locks/RLS, runtime, HTTP e navegador de diagnóstico continuam planejados. A [RFC 0004](../rfc/0004-synthetic-diagnostic-execution.md) permanece proposta para decisões de banco/grants. O núcleo puro do ADR 0022 e os dublês de portas de application não provam autorização ou persistência reais.
 
 ## Matriz de comportamento e risco
 
@@ -37,6 +37,10 @@ RUN-07 não autoriza aceitar versões do cliente ou implementar motor genérico:
 
 Negativos de tenant, papel, integridade e atomicidade são bloqueantes; não remover cobertura nem trocar PostgreSQL por mocks para passar. Regressões do lote, login/administração, núcleo puro, cobertura, lint, tipos, build e scanners continuam obrigatórias. CI de navegador existente não equivale à jornada RUN-19, e smoke OTLP geral não equivale a RUN-20.
 
-## Evidências desta preparação
+## Histórico da preparação documental da PR #27
 
 Nesta entrega só há documentação: sem testes artificiais de Markdown e sem alegação de TDD implementado. Validar links internos, formato, coerência com código/ADRs e diff; registrar resultados locais e remotos na PR. Revisão local é autorrevisão; revisão externa e aceite humano são evidências separadas. Nenhum RUN desta matriz está aprovado por sua mera descrição.
+
+## Recorte de application do ADR 0023
+
+RUN-01 tem schemas e casos negativos; partes de RUN-05/06/13 têm evidência de cálculo, replay e detecção de inconsistência por portas. Negação de porta e falhas simuladas de evento/conclusão exercitam application, sem aprovar RUN-02–16 nas fronteiras PostgreSQL. Não declarar RLS, lock, unicidade concorrente ou rollback real a partir desses testes. As demais etapas permanecem planejadas até execução nos ambientes corretos.

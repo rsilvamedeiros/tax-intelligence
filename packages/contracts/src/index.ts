@@ -1,5 +1,17 @@
 import { z } from 'zod';
 export {
+  syntheticDiagnosticExecutionCommandSchema,
+  syntheticDiagnosticExecutionQuerySchema,
+  syntheticDiagnosticExecutionReceiptSchema,
+  syntheticDiagnosticExecutionDetailSchema,
+  syntheticDiagnosticExecutionReceiptOpenApiSchema,
+  syntheticDiagnosticExecutionDetailOpenApiSchema,
+  type SyntheticDiagnosticExecutionCommand,
+  type SyntheticDiagnosticExecutionQuery,
+  type SyntheticDiagnosticExecutionReceipt,
+  type SyntheticDiagnosticExecutionDetail,
+} from './synthetic-diagnostic-execution';
+export {
   syntheticDiagnosticSchema,
   syntheticDiagnosticOpenApiSchema,
   type SyntheticDiagnostic,
