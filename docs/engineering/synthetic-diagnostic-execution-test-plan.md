@@ -1,5 +1,7 @@
 # Plano de TDD — Execução registrada do diagnóstico sintético
 
+Etapa HTTP do [ADR 0025](../adr/0025-synthetic-diagnostic-http.md) exercita RUN-17/18 por contrato e API compilada/PostgreSQL; [evidências](synthetic-diagnostic-http-validation.md). RUN-19 (BFF/UI) e RUN-20 (OTLP específico) continuam pendentes.
+
 Persistência implementada nesta etapa no [ADR 0024](../adr/0024-synthetic-diagnostic-persistence.md): snapshot público, transação, RLS/grants e auditoria exercitados em PostgreSQL real. [Evidências](../engineering/synthetic-diagnostic-persistence-validation.md). O recorte do ADR 0023 e a proposta original abaixo são históricos; runtime, HTTP, BFF/UI e OTLP específicos permanecem pendentes.
 
 Data: 22/10/2026. Status: **execução parcial em contratos/application**, conforme [ADR 0023](../adr/0023-synthetic-diagnostic-use-cases.md) e [validação](synthetic-diagnostic-use-cases-validation.md). Persistência/locks/RLS, runtime, HTTP e navegador de diagnóstico continuam planejados. A [RFC 0004](../rfc/0004-synthetic-diagnostic-execution.md) permanece proposta para decisões de banco/grants. O núcleo puro do ADR 0022 e os dublês de portas de application não provam autorização ou persistência reais.

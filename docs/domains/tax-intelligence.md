@@ -1,6 +1,8 @@
 # Tax Intelligence
 
-Status: núcleo puro sintético DEMO-TOTAL-001 implementado conforme [ADR 0022](../adr/0022-synthetic-diagnostic-core.md), com persistência da execução no [ADR 0024](../adr/0024-synthetic-diagnostic-persistence.md). Contrato público e comparação determinística com evidência; sem execução remota/HTTP ou regra tributária real. [Validação](../engineering/synthetic-diagnostic-persistence-validation.md).
+Etapa posterior do [ADR 0025](../adr/0025-synthetic-diagnostic-http.md) publica POST/GET autenticados para execução/consulta sintéticas, sem novas permissões. [Evidências](../engineering/synthetic-diagnostic-http-validation.md). Limites de ausência de HTTP nos parágrafos abaixo referem-se ao recorte histórico do ADR 0024; BFF/UI e regras reais continuam indisponíveis.
+
+Status: núcleo puro sintético DEMO-TOTAL-001 implementado conforme [ADR 0022](../adr/0022-synthetic-diagnostic-core.md), com persistência da execução no [ADR 0024](../adr/0024-synthetic-diagnostic-persistence.md). Contrato público e comparação determinística com evidência; sem regra tributária real; HTTP acrescentado posteriormente pelo ADR 0025. [Validação](../engineering/synthetic-diagnostic-persistence-validation.md).
 
 ## Objetivo e responsabilidades
 
