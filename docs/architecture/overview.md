@@ -1,6 +1,6 @@
 # Arquitetura da fundação
 
-Preparação da execução registrada na [RFC 0004](../rfc/0004-synthetic-diagnostic-execution.md), proposta em revisão: snapshot público de Fiscal, autorização revalidada, resultado versionado e evento atômicos na mesma transação. Login próprio e duas relações novas propostos; nenhuma mudança de runtime, SQL ou privilégios implementada por essa preparação. [Matriz planejada](../engineering/synthetic-diagnostic-execution-test-plan.md).
+Preparação da execução registrada na [RFC 0004](../rfc/0004-synthetic-diagnostic-execution.md), proposta em revisão: snapshot público de Fiscal, autorização revalidada e confirmação atômica do resultado versionado com seu evento na mesma transação. Login próprio e duas relações novas propostos; nenhuma mudança de runtime, SQL ou privilégios implementada por essa preparação. [Matriz planejada](../engineering/synthetic-diagnostic-execution-test-plan.md).
 
 Núcleo puro de diagnóstico sintético no [ADR 0022](../adr/0022-synthetic-diagnostic-core.md): application valida o contrato público do lote e chama domínio independente de infraestrutura. Resultado versionado DEMO-TOTAL-001 com evidências inteiras exatas, sem fonte normativa/validade fiscal. Não registrado em módulo Nest, rota, UI ou banco; execução autorizada sobre lote persistido e auditoria continuam pendentes. [Validação](../engineering/synthetic-diagnostic-core-validation.md).
 
