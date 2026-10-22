@@ -21,6 +21,12 @@ Formato e links de 112 documentos/16 manifests aprovados; diff sem erros de whit
 
 Revisão local é autorrevisão de contratos, privilégios, parser, resposta e ciclo do pool, sem achado bloqueante identificado; revisão externa e aceite humano são separados e obrigatórios para segurança. Não declarar revisão aprovada a partir do status verde do bot sem review produzido. Na PR #29, CodeRabbit revisou 24 arquivos em f2611dd; achado documental corrigido em 321ee14 e resolvido. Patch de segurança Next.js em b76646a, sem suprimir scanners.
 
+## CI e revisão externa
+
+PR #30 em rascunho por depender da #29, sem merge automático. Em a37eb3e, [CI](https://github.com/rsilvamedeiros/tax-intelligence/actions/runs/39836696803) aprovou qualidade, documentação, auditoria de dependências, E2E, ambos os scanners e integração PostgreSQL 17.11: 144 testes e jornadas compiladas de lote/serviço/API de diagnóstico. Identity-provider estava publicando o resultado após todos os passos, incluindo navegador real, passarem.
+
+CodeRabbit produziu review 5619518200 em a37eb3e, abrangendo 24 arquivos. Dois achados inline e um fora do diff, todos documentais: histórico do ADR 0023, pool opcional no bootstrap e status do diagnóstico HTTP. Correções documentais preparadas e validadas antes da publicação; sem alegar revisão externa do commit posterior ou aprovação humana.
+
 ## Limites e decisão seguinte
 
 `SYNTHETIC_DIAGNOSTIC_DATABASE_URL` sem fallback; ausência resulta em 503 nas operações válidas/autenticadas, configuração inválida falha ao iniciar. Perfil é conferido em cada operação pelo store; runtime não provisiona grants nem executa migrations. Sem deployment ou credencial em ambiente do usuário. RLS continua limitado às seis relações sintéticas; controle e dados reais pendentes.

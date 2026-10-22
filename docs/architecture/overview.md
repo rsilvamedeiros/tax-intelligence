@@ -1,6 +1,6 @@
 # Arquitetura da fundação
 
-Composição HTTP de diagnóstico no [ADR 0025](../adr/0025-synthetic-diagnostic-http.md): módulo Nest usa application e store existentes, pool exclusivo e Bearer, sem SQL em controller/domain ou nova permissão. [Validação](../engineering/synthetic-diagnostic-http-validation.md). Recortes anteriores abaixo descrevem suas entregas originais; BFF/UI de diagnóstico permanecem pendentes.
+Composição HTTP de diagnóstico no [ADR 0025](../adr/0025-synthetic-diagnostic-http.md): módulo Nest usa application e store existentes, Bearer e pool PostgreSQL dedicado quando configurado, sem SQL em controller/domain ou nova permissão. Pool opcional para iniciar o bootstrap; necessário para executar operações, que retornam 503 quando ausente, sem fallback. [Validação](../engineering/synthetic-diagnostic-http-validation.md). Recortes anteriores abaixo descrevem suas entregas originais; BFF/UI de diagnóstico permanecem pendentes.
 
 Persistência de diagnóstico implementada no [ADR 0024](../adr/0024-synthetic-diagnostic-persistence.md): snapshot público Fiscal, execução versionada e evento na mesma transação autorizada, com perfil restrito e RLS nas duas relações novas. Store injetado no caso de uso, sem runtime/rota; [evidências PostgreSQL e serviço compilado](../engineering/synthetic-diagnostic-persistence-validation.md). Execução remota e interface permanecem pendentes.
 
