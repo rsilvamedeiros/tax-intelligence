@@ -1,5 +1,7 @@
 # Contratos REST e aplicação
 
+Schemas públicos de comando de application, query, recibo e detalhe da execução no [ADR 0023](../adr/0023-synthetic-diagnostic-use-cases.md). Comando por organização/lote/requestId; identidade confiável permanece parâmetro separado. Isso não define body HTTP nem publica endpoint. Recibo/detalhe fechados têm schemas OpenAPI exportados, ainda sem registro em controller/Swagger. [Validação](../engineering/synthetic-diagnostic-use-cases-validation.md).
+
 Contrato `synthetic-document-diagnostic-v1` do [ADR 0022](../adr/0022-synthetic-diagnostic-core.md) disponível em contracts com schema estrito e representação OpenAPI exportada, sem publicação em rota/Swagger nesta etapa. Núcleo puro não é endpoint: nenhuma nova operação, permissão ou chamada BFF foi adicionada. Comparação sintética não tem validade fiscal.
 
 BFF do lote: POST `/api/organizations/:organizationId/synthetic-document-batches` e GET com `/:batchId`, conforme [ADR 0020](../adr/0020-synthetic-document-bff.md). Token exclusivamente da sessão; escrita exige Origin/CSRF e uma chave UUIDv4 validada. Corpo JSON UTF-8 limitado a 16 KiB; GET sem corpo/query; respostas projetadas por schemas e limitadas. Preserva 201/200 e erros previstos sanitizados, sem retry automático nem headers arbitrários. [Evidências](../engineering/synthetic-document-bff-validation.md).

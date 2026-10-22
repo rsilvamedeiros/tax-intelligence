@@ -1,6 +1,6 @@
 # RFC 0004 — Execução registrada do diagnóstico sintético
 
-Data: 22/10/2026. Status: proposta em revisão, preparada após integração da PR #26 (`bb62627`). Entrega atual exclusivamente documental: não autoriza migrations, grants, runtime, endpoints, BFF/UI ou deploy. Responsável pelo aceite de isolamento e transação: mantenedor. [Plano de testes](../engineering/synthetic-diagnostic-execution-test-plan.md).
+Data: 22/10/2026. Status: proposta de persistência em revisão, preparada após integração da PR #26 (`bb62627`). Preparação documental na PR #27, aberta no início do [ADR 0023](../adr/0023-synthetic-diagnostic-use-cases.md): o pedido de próximo módulo delimitou contratos/casos de uso, sem aceitar silenciosamente decisões de SQL/grants. Migrations, runtime, endpoints, BFF/UI e deploy continuam fora desse recorte. Responsável pelo aceite de isolamento e transação reais: mantenedor. [Plano de testes](../engineering/synthetic-diagnostic-execution-test-plan.md).
 
 ## Problema e resultado observável
 
@@ -63,7 +63,7 @@ Rotas candidatas, somente para revisão do futuro ADR HTTP: POST `/v1/organizati
 ## Entregas, riscos, aceite e reversão
 
 1. Aceitar ou ajustar esta RFC e a matriz de testes; registrar ADR de implementação com portas públicas, SQL/grants, constraints e deadline total. Aceite documental não autoriza deploy ou fonte fiscal real.
-2. Contrato/caso de uso e persistência sob TDD: Red válido, Green mínimo, negativos, login restrito, concorrência e rollback com PostgreSQL real isolado. Nenhum teste planejado desta RFC foi executado ainda.
+2. Contrato/caso de uso e persistência sob TDD: Red válido, Green mínimo, negativos, login restrito, concorrência e rollback com PostgreSQL real isolado. Contratos/casos de uso têm execução parcial no ADR 0023; persistência, concorrência e RLS continuam planejados.
 3. Composição HTTP em etapa própria, seguida de BFF/UI com Origin/CSRF e limpeza por contexto. Não ampliar SQL pela web. Somente depois avaliar a vertical completa e sua evidência OTLP específica.
 
 Riscos bloqueantes: leitura cruzada, lookup antes da autorização, transações separadas, execução/evento duplicados, privilégio excessivo, resultado inconsistente ou regra alterada sem versionamento. [Matriz](../engineering/synthetic-diagnostic-execution-test-plan.md) cobre cada risco. Autorresponsabilidade da revisão humana: isolamento, escopo dos grants e semântica de replay entre atores.

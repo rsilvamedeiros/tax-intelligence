@@ -14,6 +14,8 @@ Implementado somente resultado sintético versionado: regra, referência, total 
 
 ## Fluxo e integrações
 
+Casos de uso de criação/replay/consulta no [ADR 0023](../adr/0023-synthetic-diagnostic-use-cases.md) usam somente capacidades transacionais específicas e contrato público de snapshot. Application verifica scope, referência e evidência antes de retornar resultado; criação aguarda evento e conclusão da unidade de trabalho. Adapter PostgreSQL e sua prova de autorização/atomicidade continuam pendentes. [Validação](../engineering/synthetic-diagnostic-use-cases-validation.md).
+
 [RFC 0004](../rfc/0004-synthetic-diagnostic-execution.md) propõe execução registrada única por organização/lote/regra/versão e replay entre atores autorizados, com autoria original preservada. Snapshot de Fiscal, autorização e auditoria compartilham transação por portas públicas, sem SQL em application/domain. É preparação documental; execução, tabelas, grants e endpoints não foram implementados. [Testes planejados](../engineering/synthetic-diagnostic-execution-test-plan.md).
 
 Dados validados → execução → evidência → revisão. Interfaces: Fiscal por contratos; Audit por porta transacional. Eventos propostos: DiagnosticCompleted, FindingDetected; envelope futuro com eventId, tenantId, occurredAt, schemaVersion e correlationId. Transporte durável não definido; não prometer entrega exactly-once.
