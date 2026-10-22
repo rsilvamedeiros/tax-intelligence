@@ -46,6 +46,7 @@ Documentação primeiro; código avança por etapa com aceite, testes e revisão
 - [Validação do BFF do lote sintético](engineering/synthetic-document-bff-validation.md)
 - [Validação da interface do lote sintético](engineering/synthetic-document-ui-validation.md)
 - [Validação do núcleo de diagnóstico sintético](engineering/synthetic-diagnostic-core-validation.md)
+- [Plano proposto de TDD da execução de diagnóstico](engineering/synthetic-diagnostic-execution-test-plan.md)
 
 ## Domínios
 
@@ -86,6 +87,7 @@ Documentação primeiro; código avança por etapa com aceite, testes e revisão
 - [RFC 0001: identidade, membership e isolamento](rfc/0001-identity-membership-isolation.md)
 - [RFC 0002: prova sintética RLS](rfc/0002-synthetic-rls-proof.md)
 - [RFC 0003: primeiro lote de documentos sintéticos](rfc/0003-synthetic-document-intake.md)
+- [RFC 0004: execução registrada do diagnóstico sintético](rfc/0004-synthetic-diagnostic-execution.md)
 
 ## Roadmap
 
