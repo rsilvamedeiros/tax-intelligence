@@ -50,6 +50,13 @@
       "when": 1791460806000,
       "tag": "0006_synthetic_document_batches",
       "breakpoints": true
+    },
+    {
+      "idx": 7,
+      "version": "7",
+      "when": 1791460807000,
+      "tag": "0007_synthetic_diagnostic_runs",
+      "breakpoints": true
     }
   ]
 }
