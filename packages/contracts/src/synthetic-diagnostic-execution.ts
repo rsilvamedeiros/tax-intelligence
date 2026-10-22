@@ -3,6 +3,13 @@ import { syntheticDiagnosticSchema } from './synthetic-diagnostic';
 import { syntheticDocumentBatchReceiptSchema } from './synthetic-document-batch';
 
 const id = z.string().uuid().toLowerCase();
+export const syntheticDiagnosticExecutionInputSchema = z
+  .object({ batchId: id })
+  .strict();
+export const syntheticDiagnosticExecutionInputOpenApiSchema = z.toJSONSchema(
+  syntheticDiagnosticExecutionInputSchema,
+  { target: 'openapi-3.0' },
+);
 export const syntheticDiagnosticExecutionCommandSchema = z
   .object({ organizationId: id, batchId: id, requestId: id })
   .strict();
