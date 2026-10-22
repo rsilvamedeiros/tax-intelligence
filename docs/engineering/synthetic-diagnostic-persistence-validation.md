@@ -23,6 +23,12 @@ PR #29 aberta como rascunho, dependente da PR #28. Em a3e5da7, o [CI](https://gi
 
 Revisão local é autorrevisão estática de privilégios, leases, tempo e transação; sem achado bloqueante identificado, sem aprovação automática de segurança. Segurança humana e revisão externa são distintas. As pendências da PR #28 foram retomadas: CodeRabbit revisou 16 arquivos em 6e18b7f, achado documental corrigido em 2ca28b3, com thread resolvida e oito checks aprovados.
 
+## Correções posteriores da PR #29
+
+PR #28 integrada; #29 redirecionada a main e retirada de draft para revisão humana. CodeRabbit revisou 24 arquivos em f2611dd; único achado documental corrigido em 321ee14 e thread resolvida. A declaração anterior de limite de revisão descreve a tentativa inicial, não o estado atual.
+
+O check dependency-audit de 321ee14 falhou com dois alertas críticos e um alto em Next.js 16.4.0. Atualização pontual para 16.4.1 conforme [release oficial](https://github.com/vercel/next.js/releases/tag/v16.4.1), com lockfile regenerado. `pnpm audit:dependencies` voltou a concluir com código zero, restando um alerta moderado. Nenhum scanner suprimido ou limiar reduzido. Na árvore da entrega HTTP em preparação, build Next.js 16.4.1 e os 285 testes web/BFF com cobertura passaram; CI da branch de persistência verificará a correção no seu próprio recorte.
+
 ## Limites e próximo módulo
 
 RLS protege seis relações sintéticas, sem RLS de controle ou proteção contra owner/SQL arbitrário comprometido. Aritmética e equivalência continuam em application; SQL valida estrutura básica/bytes e referências, não parecer tributário. Login de migration/teste owner é distinto do login real restrito exercitado; grants/roles não são provisionados no runtime. Operações criadas por este adapter exigem evento, mas isso não transforma auditoria em imutabilidade contra administrador do banco.
