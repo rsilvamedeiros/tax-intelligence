@@ -1,6 +1,6 @@
 # Tax Intelligence
 
-Status: núcleo puro sintético DEMO-TOTAL-001 implementado conforme [ADR 0022](../adr/0022-synthetic-diagnostic-core.md). Contrato público e comparação determinística com evidência; sem execução remota, persistência ou regra tributária real. [Validação](../engineering/synthetic-diagnostic-core-validation.md).
+Status: núcleo puro sintético DEMO-TOTAL-001 implementado conforme [ADR 0022](../adr/0022-synthetic-diagnostic-core.md), com persistência da execução no [ADR 0024](../adr/0024-synthetic-diagnostic-persistence.md). Contrato público e comparação determinística com evidência; sem execução remota/HTTP ou regra tributária real. [Validação](../engineering/synthetic-diagnostic-persistence-validation.md).
 
 ## Objetivo e responsabilidades
 
@@ -18,7 +18,7 @@ Persistência implementada no [ADR 0024](../adr/0024-synthetic-diagnostic-persis
 
 Casos de uso de criação/replay/consulta no [ADR 0023](../adr/0023-synthetic-diagnostic-use-cases.md) usam somente capacidades transacionais específicas e contrato público de snapshot. Application verifica scope, referência e evidência antes de retornar resultado; criação aguarda evento e conclusão da unidade de trabalho. Adapter e prova PostgreSQL constam do ADR 0024, ainda sem exposição HTTP. [Validação](../engineering/synthetic-diagnostic-use-cases-validation.md).
 
-[RFC 0004](../rfc/0004-synthetic-diagnostic-execution.md) propõe execução registrada única por organização/lote/regra/versão e replay entre atores autorizados, com autoria original preservada. Snapshot de Fiscal, autorização e auditoria compartilham transação por portas públicas, sem SQL em application/domain. É preparação documental; execução, tabelas, grants e endpoints não foram implementados. [Testes planejados](../engineering/synthetic-diagnostic-execution-test-plan.md).
+[RFC 0004](../rfc/0004-synthetic-diagnostic-execution.md), histórica, propôs execução registrada única por organização/lote/regra/versão e replay entre atores autorizados, com autoria original preservada. Snapshot de Fiscal, autorização e auditoria compartilham transação por portas públicas, sem SQL em application/domain. Execução, tabelas e perfil de grants foram implementados e exercitados em teste no ADR 0024; provisionamento de runtime e endpoints continuam pendentes. [Matriz e evidências](../engineering/synthetic-diagnostic-execution-test-plan.md).
 
 Dados validados → execução → evidência → revisão. Interfaces: Fiscal por contratos; Audit por porta transacional. Eventos propostos: DiagnosticCompleted, FindingDetected; envelope futuro com eventId, tenantId, occurredAt, schemaVersion e correlationId. Transporte durável não definido; não prometer entrega exactly-once.
 
