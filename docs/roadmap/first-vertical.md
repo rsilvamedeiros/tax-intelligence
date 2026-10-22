@@ -1,4 +1,4 @@
-# Primeira vertical: casos de uso, persistência de diagnóstico pendente
+# Primeira vertical: persistência sintética, transporte de diagnóstico pendente
 
 Persistência implementada nesta etapa no [ADR 0024](../adr/0024-synthetic-diagnostic-persistence.md): snapshot público, transação, RLS/grants e auditoria exercitados em PostgreSQL real. [Evidências](../engineering/synthetic-diagnostic-persistence-validation.md). O recorte do ADR 0023 e a proposta original abaixo são históricos; runtime, HTTP, BFF/UI e OTLP específicos permanecem pendentes.
 
