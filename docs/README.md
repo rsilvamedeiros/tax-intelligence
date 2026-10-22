@@ -48,6 +48,7 @@ Documentação primeiro; código avança por etapa com aceite, testes e revisão
 - [Validação do núcleo de diagnóstico sintético](engineering/synthetic-diagnostic-core-validation.md)
 - [Plano proposto de TDD da execução de diagnóstico](engineering/synthetic-diagnostic-execution-test-plan.md)
 - [Validação dos casos de uso da execução sintética](engineering/synthetic-diagnostic-use-cases-validation.md)
+- [Validação da persistência da execução sintética](engineering/synthetic-diagnostic-persistence-validation.md)
 
 ## Domínios
 
@@ -85,6 +86,7 @@ Documentação primeiro; código avança por etapa com aceite, testes e revisão
 - [0021 Interface do lote sintético](adr/0021-synthetic-document-ui.md)
 - [0022 Núcleo do diagnóstico demonstrativo](adr/0022-synthetic-diagnostic-core.md)
 - [0023 Contratos e casos de uso da execução sintética](adr/0023-synthetic-diagnostic-use-cases.md)
+- [0024 Persistência da execução sintética](adr/0024-synthetic-diagnostic-persistence.md)
 - [process](rfc/process.md)
 - [RFC 0001: identidade, membership e isolamento](rfc/0001-identity-membership-isolation.md)
 - [RFC 0002: prova sintética RLS](rfc/0002-synthetic-rls-proof.md)

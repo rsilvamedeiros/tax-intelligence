@@ -1,5 +1,7 @@
 # RFC 0004 — Execução registrada do diagnóstico sintético
 
+Persistência implementada nesta etapa no [ADR 0024](../adr/0024-synthetic-diagnostic-persistence.md): snapshot público, transação, RLS/grants e auditoria exercitados em PostgreSQL real. [Evidências](../engineering/synthetic-diagnostic-persistence-validation.md). O recorte do ADR 0023 e a proposta original abaixo são históricos; runtime, HTTP, BFF/UI e OTLP específicos permanecem pendentes.
+
 Data: 22/10/2026. Status: proposta de persistência em revisão, preparada após integração da PR #26 (`bb62627`). Preparação documental na PR #27, aberta no início do [ADR 0023](../adr/0023-synthetic-diagnostic-use-cases.md): o pedido de próximo módulo delimitou contratos/casos de uso, sem aceitar silenciosamente decisões de SQL/grants. Migrations, runtime, endpoints, BFF/UI e deploy continuam fora desse recorte. Responsável pelo aceite de isolamento e transação reais: mantenedor. [Plano de testes](../engineering/synthetic-diagnostic-execution-test-plan.md).
 
 ## Problema e resultado observável
