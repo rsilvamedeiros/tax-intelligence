@@ -1,5 +1,7 @@
 # Segurança, privacidade e resposta
 
+Persistência sintética do [ADR 0024](../adr/0024-synthetic-diagnostic-persistence.md) acrescenta RLS em execução/evento e perfil dedicado, totalizando seis relações sintéticas. Autorização é revalidada sob o lock compartilhado com revogação; capacidades expiram e conexão com trabalho pendente ou prazo excedido é destruída. Resultado/evento só confirmam juntos. Prova com login restrito não cobre SQL arbitrário comprometido, owner do banco, RLS de controle ou dados fiscais reais. Runtime HTTP e credenciais no ambiente do usuário permanecem fora desta etapa. [Evidências](../engineering/synthetic-diagnostic-persistence-validation.md).
+
 Interface sintética do [ADR 0021](../adr/0021-synthetic-document-ui.md): comando/chave somente em memória, sem tokens ou documentos em storage. Organização, sessão/CSRF e papel delimitam a instância visual; desmonte aborta requests e respostas tardias não restauram dados. Visibilidade dos controles não concede acesso: a API revalida membership. Após efeito incerto, repetir exige o mesmo comando/chave; após sucesso, uma nova criação exige ação explícita. Sem cálculo fiscal ou ampliação do acesso SQL pela web.
 
 Modelo de projeto inspirado em [OWASP ASVS](https://owasp.org/www-project-application-security-verification-standard/) e [OWASP Top 10](https://owasp.org/www-project-top-ten/), com nível alvo ASVS 2 como proposta antes de dados reais. Referências não significam certificação ou controles já implementados.

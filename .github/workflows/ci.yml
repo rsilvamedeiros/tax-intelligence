@@ -87,6 +87,8 @@ jobs:
         run: pnpm test:integration:membership
       - name: Verify synthetic batch API with dedicated PostgreSQL access
         run: pnpm test:integration:synthetic-batch
+      - name: Verify compiled diagnostic service with restricted PostgreSQL access
+        run: pnpm test:integration:synthetic-diagnostic
 
   e2e:
     runs-on: ubuntu-latest

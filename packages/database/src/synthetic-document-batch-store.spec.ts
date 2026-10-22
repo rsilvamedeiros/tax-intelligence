@@ -450,7 +450,7 @@ describe('Synthetic batches with real restricted PostgreSQL runtime', () => {
     await receipt();
     const b = await receipt(command(1, otherOrg));
     const tables = await runtime.query(
-      "SELECT c.relrowsecurity,c.relforcerowsecurity,pg_get_userbyid(c.relowner) AS owner FROM pg_class c JOIN pg_namespace n ON n.oid=c.relnamespace WHERE n.nspname IN ('fiscal_compliance','audit_compliance') AND c.relkind='r'",
+      "SELECT c.relrowsecurity,c.relforcerowsecurity,pg_get_userbyid(c.relowner) AS owner FROM pg_class c JOIN pg_namespace n ON n.oid=c.relnamespace WHERE ((n.nspname='fiscal_compliance' AND c.relname IN ('synthetic_batches','synthetic_documents','synthetic_lines')) OR (n.nspname='audit_compliance' AND c.relname='synthetic_batch_creations')) AND c.relkind='r'",
     );
     expect(tables.rows).toHaveLength(4);
     for (const table of tables.rows) {

@@ -21,6 +21,13 @@ export { AdministrativeMembershipStore } from './administrative-membership-store
 export { SyntheticDocumentBatchStore } from './synthetic-document-batch-store';
 export { OrganizationOperationStore } from './organization-operation-store';
 export { SyntheticBatchAuditStore } from './synthetic-batch-audit-store';
+export { SyntheticBatchSnapshotStore } from './synthetic-batch-snapshot-store';
+export { SyntheticDiagnosticAuditStore } from './synthetic-diagnostic-audit-store';
+export { SyntheticDiagnosticExecutionStore } from './synthetic-diagnostic-execution-store';
+export type {
+  DiagnosticPersistenceTransaction,
+  DiagnosticPersistenceOperation,
+} from './synthetic-diagnostic-execution-store';
 export type {
   SyntheticBatchOperation,
   SyntheticBatchCreateCommand,

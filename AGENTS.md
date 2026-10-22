@@ -10,11 +10,11 @@ Estado autorizado: documentação primeiro; fundação técnica por etapa. Após
 
 Prova sintética RLS do [ADR 0016](docs/adr/0016-synthetic-rls-proof.md) concluída e integrada na PR #19. Demonstra somente fixtures, sem alterar runtime ou tabelas da aplicação.
 
-PR #26 do núcleo puro integrada; PR #27 da RFC aberta no início desta entrega. Próximo módulo solicitado: contratos e casos de uso da execução sintética no [ADR 0023](docs/adr/0023-synthetic-diagnostic-use-cases.md), em branch dependente da proposta. Autoriza validação, criação/replay/consulta e portas de transação/snapshot/evento com TDD, sem adapter real, migrations, grants, novas permissões, runtime, endpoints, BFF/UI ou deploy. Testes com dublês de portas não provam autorização, RLS ou atomicidade em PostgreSQL. Persistência exige ADR e etapa próprios; não fazer merge automático. Núcleo existente permanece limitado pelo ADR 0022.
+PRs #27/#28 abertas no início desta entrega; PR #28 com checks/revisão concluídos e ajuste documental resolvido. Próximo módulo solicitado: persistência da execução sintética conforme [ADR 0024](docs/adr/0024-synthetic-diagnostic-persistence.md), em branch dependente dos casos de uso. Autoriza migration aditiva, snapshot público Fiscal, unidade de trabalho e auditoria na mesma conexão, com provas PostgreSQL isoladas e serviço compilado. Sem configuração de credencial/runtime na API, endpoint, BFF/UI, dados fiscais reais, deploy ou merge automático. Login de teste real tem privilégio mínimo; provisionamento no ambiente do usuário continua fora do recorte.
 
 ## Arquitetura e código
 
-A [RFC 0002](docs/rfc/0002-synthetic-rls-proof.md) fundamenta o experimento autorizado no ADR 0016, com [plano de TDD](docs/engineering/synthetic-rls-test-plan.md). A prova isolada não implementou RLS de domínio; os ADRs 0018/0019 limitam RLS e grants às relações novas do lote.
+A [RFC 0002](docs/rfc/0002-synthetic-rls-proof.md) fundamenta o experimento autorizado no ADR 0016, com [plano de TDD](docs/engineering/synthetic-rls-test-plan.md). A prova isolada não implementou RLS de domínio; ADRs 0018/0019 e 0024 limitam RLS às seis relações sintéticas de lote/execução/auditoria, sem RLS de controle ou dados fiscais reais.
 
 - Monólito modular; presentation → application → domain; infrastructure implementa portas. Domain independente de React, Nest e ORM.
 - Web usa ui/contracts; API usa contracts/database; contratos não importam infraestrutura; contextos não acessam internals/tabelas de outros.
@@ -33,7 +33,7 @@ Comandos: `pnpm lint`, `pnpm typecheck`, `pnpm test`, `pnpm test:coverage`, `pnp
 
 ## Segurança e IA
 
-Sem segredos versionados, PII real em fixtures/prompts/logs, scraping autenticado presumido, APIs governamentais fictícias ou decisão tributária definitiva por LLM. Autorização pertence aos casos de uso; tenant vem de membership verificada; RLS implementado somente nas quatro tabelas do lote sintético. RLS de controle e de futuros dados reais permanece pendente. Leia [segurança](docs/security/security-model.md) e [playbook](docs/ai/playbook.md).
+Sem segredos versionados, PII real em fixtures/prompts/logs, scraping autenticado presumido, APIs governamentais fictícias ou decisão tributária definitiva por LLM. Autorização pertence aos casos de uso; tenant vem de membership verificada; RLS implementado somente nas seis relações sintéticas dos ADRs 0018/0024. RLS de controle e de futuros dados reais permanece pendente. Leia [segurança](docs/security/security-model.md) e [playbook](docs/ai/playbook.md).
 
 ## Git, PR e autonomia
 
