@@ -19,6 +19,7 @@
     "test:integration:membership": "node scripts/test-membership-integration.mjs",
     "test:integration:synthetic-batch": "node scripts/test-synthetic-batch-integration.mjs",
     "test:integration:synthetic-diagnostic": "node scripts/test-synthetic-diagnostic-integration.mjs",
+    "test:integration:synthetic-diagnostic-http": "node scripts/test-synthetic-diagnostic-http-integration.mjs",
     "test:e2e": "node scripts/run-e2e.mjs",
     "test:e2e:auth": "node scripts/run-auth-e2e.mjs",
     "test:smoke": "node scripts/smoke-telemetry.mjs && node scripts/smoke-authentication.mjs",
