@@ -10,7 +10,7 @@ Estado autorizado: documentação primeiro; fundação técnica por etapa. Após
 
 Prova sintética RLS do [ADR 0016](docs/adr/0016-synthetic-rls-proof.md) concluída e integrada na PR #19. Demonstra somente fixtures, sem alterar runtime ou tabelas da aplicação.
 
-PR #25 da interface integrada. Próxima entrega solicitada: núcleo puro DEMO-TOTAL-001 conforme [ADR 0022](docs/adr/0022-synthetic-diagnostic-core.md). Autoriza contrato versionado de resultado, comparação exata e evidência sintética, com validação de entrada em application e TDD. Sem rotas, persistência de diagnósticos, novas permissões, UI de diagnóstico, dados fiscais reais ou deploy. Execução sobre lote persistido e auditoria exigem etapa própria; não fazer merge automático.
+PR #26 do núcleo puro DEMO-TOTAL-001 integrada. Próxima entrega: preparação documental da execução registrada conforme [RFC 0004](docs/rfc/0004-synthetic-diagnostic-execution.md) e [plano TDD](docs/engineering/synthetic-diagnostic-execution-test-plan.md). Proposta em revisão: não autoriza ainda migrations, grants, novas permissões, runtime, endpoints, BFF/UI de diagnóstico, dados fiscais reais ou deploy. Implementação exige aceite do recorte e ADR próprio; não fazer merge automático. Núcleo existente permanece limitado pelo ADR 0022.
 
 ## Arquitetura e código
 
