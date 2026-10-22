@@ -10,7 +10,7 @@ Estado autorizado: documentação primeiro; fundação técnica por etapa. Após
 
 Prova sintética RLS do [ADR 0016](docs/adr/0016-synthetic-rls-proof.md) concluída e integrada na PR #19. Demonstra somente fixtures, sem alterar runtime ou tabelas da aplicação.
 
-PR #26 do núcleo puro DEMO-TOTAL-001 integrada. Próxima entrega: preparação documental da execução registrada conforme [RFC 0004](docs/rfc/0004-synthetic-diagnostic-execution.md) e [plano TDD](docs/engineering/synthetic-diagnostic-execution-test-plan.md). Proposta em revisão: não autoriza ainda migrations, grants, novas permissões, runtime, endpoints, BFF/UI de diagnóstico, dados fiscais reais ou deploy. Implementação exige aceite do recorte e ADR próprio; não fazer merge automático. Núcleo existente permanece limitado pelo ADR 0022.
+PR #26 do núcleo puro integrada; PR #27 da RFC aberta no início desta entrega. Próximo módulo solicitado: contratos e casos de uso da execução sintética no [ADR 0023](docs/adr/0023-synthetic-diagnostic-use-cases.md), em branch dependente da proposta. Autoriza validação, criação/replay/consulta e portas de transação/snapshot/evento com TDD, sem adapter real, migrations, grants, novas permissões, runtime, endpoints, BFF/UI ou deploy. Testes com dublês de portas não provam autorização, RLS ou atomicidade em PostgreSQL. Persistência exige ADR e etapa próprios; não fazer merge automático. Núcleo existente permanece limitado pelo ADR 0022.
 
 ## Arquitetura e código
 
