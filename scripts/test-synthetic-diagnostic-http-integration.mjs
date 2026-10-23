@@ -353,6 +353,7 @@ try {
     );
   const entries = () =>
     logs
+      .slice(0, logs.lastIndexOf('\n') + 1)
       .split(/\r?\n/)
       .filter(Boolean)
       .map((line) => JSON.parse(line));
