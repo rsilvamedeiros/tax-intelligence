@@ -4,7 +4,7 @@ Etapa do [ADR 0027](../adr/0027-synthetic-diagnostic-ui.md), em 23/10/2026, depe
 
 ## TDD e regressões
 
-Três ciclos Red/Green observados em ambiente válido: stub sem criação por lote; falha de rede sem recuperação explícita; dois casos de atalho que permitiam substituir intenção incerta e não restauravam o mesmo lote após nova intenção explícita. Correções: formulário pelo BFF; body conservado/repetição; bloqueio compartilhado dos atalhos e revisão de seleção para remonte explícito, inclusive com o mesmo ID. Demais negativos são regressões, não Reds individuais.
+Três ciclos iniciais Red/Green observados em ambiente válido: stub sem criação por lote; falha de rede sem recuperação explícita; dois casos de atalho que permitiam substituir intenção incerta e não restauravam o mesmo lote após nova intenção explícita. Correções: formulário pelo BFF; body conservado/repetição; bloqueio compartilhado dos atalhos e revisão de seleção para remonte explícito, inclusive com o mesmo ID. Demais negativos são regressões, não Reds individuais.
 
 53 testes novos cobrem papéis, payload mínimo/CSRF, UUIDs, replay/consulta explícita, tabela de evidência, erros/saídas inválidas, recibo associado ao lote, detalhe associado ao ID/recibo, serialização, body estável, 401/403, ausência uniforme 404, respostas tardias antes/depois de json(), troca de organização/CSRF/papel/lote, unmount, atalhos e foco. Negação em lote ou diagnóstico remove os dois painéis do workspace. Axe em estados vazio/evidência não encontrou violações; isso não substitui inspeção humana por leitor de tela.
 
@@ -19,6 +19,12 @@ Falhas de ferramenta/teste corrigidas sem alegar Red de implementação: matcher
 - Jornada local Keycloak/Chrome não executada; ambiente local não possui Docker/Java no PATH. CI foi estendido para provar atalho do lote consultado → submit por Enter → commit real com resposta substituída por 503 → replay do mesmo body → evidência e proveniência → tabela focável com overflow em viewport estreita → nova intenção/contexto → viewer consulta sem criar → logout limpa a UI. Somente a resposta percebida pelo navegador é alterada no cenário incerto; API e transação permanecem reais.
 
 Formato e links de 116 documentos/16 manifests aprovados; diff sem erros de whitespace. Autorrevisão de contratos, contexto, cancelamento, recuperação e acessibilidade sem achado bloqueante identificado. CI e revisão externa pendentes na abertura da PR; autorrevisão não substitui aceite humano. Tokens de acesso permanecem exclusivamente no servidor; o CSRF público vem da fronteira de sessão. Componentes só chamam caminhos BFF e validam contratos públicos.
+
+## CI e revisão externa
+
+PR #32 aberta como rascunho por depender da PR #31. Em 4552e6f, [CI](https://github.com/rsilvamedeiros/tax-intelligence/actions/runs/40012065125) aprovou os oito checks, incluindo GitGuardian, qualidade, banco, E2E e identity-provider. PostgreSQL 17.11: 144 testes/dez suítes e jornadas compiladas de lote/serviço/API. Cypress 16.1.1 e Chrome 155 headless executaram `authentication.cy.ts` (um teste composto), incluindo a nova jornada UI, teclado/foco, viewport estreita, commit real com resposta substituída, replay do mesmo body, evidência, viewer e logout. Isso não foi executado localmente nem comprova trace OTLP específico.
+
+Review externo 5633546032 do CodeRabbit concluído em 4552e6f, abrangendo 17 arquivos. Único achado menor: caractere corrompido no nome acessível da região rolável. Ciclo Red/Green adicional: consulta por role/name falhou com o nome correto; correção em fa160ab fez passar o teste de nome/foco e os 53 testes do componente. Lint, tipos e build repetidos e aprovados. Axe não verifica ortografia; regressão passou a cobrir o nome anunciado. Não alegar revisão externa do complemento posterior ou aprovação humana.
 
 ## Limites e próximo ponto de decisão
 
