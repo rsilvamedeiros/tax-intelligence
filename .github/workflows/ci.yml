@@ -89,7 +89,7 @@ jobs:
         run: pnpm test:integration:synthetic-batch
       - name: Verify compiled diagnostic service with restricted PostgreSQL access
         run: pnpm test:integration:synthetic-diagnostic
-      - name: Verify diagnostic API with restricted PostgreSQL access
+      - name: Verify diagnostic API and OTLP with restricted PostgreSQL access
         run: pnpm test:integration:synthetic-diagnostic-http
 
   e2e:

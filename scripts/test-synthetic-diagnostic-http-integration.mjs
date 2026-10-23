@@ -52,7 +52,34 @@ const provider = createServer((_request, response) => {
 let app;
 let roleCreated = false;
 let logs = '';
+const exports = [];
+const requests = [];
+let collectorError;
+const collector = createServer((request, response) => {
+  let body = '';
+  request.on('data', (chunk) => {
+    body += chunk;
+    if (body.length > 1024 * 1024) request.destroy();
+  });
+  request.on('error', (error) => {
+    collectorError = error;
+  });
+  request.on('end', () => {
+    try {
+      assert.equal(request.method, 'POST');
+      assert.equal(request.url, '/v1/traces');
+      assert.match(request.headers['content-type'], /^application\/json/);
+      exports.push(JSON.parse(body));
+      response.writeHead(200, { 'content-type': 'application/json' });
+      response.end('{}');
+    } catch (error) {
+      collectorError = error;
+      response.writeHead(400).end();
+    }
+  });
+});
 try {
+  await new Promise((resolve) => collector.listen(0, '127.0.0.1', resolve));
   await new Promise((resolve) => provider.listen(0, '127.0.0.1', resolve));
   const issuer = `http://127.0.0.1:${provider.address().port}/realms/synthetic`;
   await migrate(owner.db, {
@@ -113,7 +140,9 @@ try {
       SYNTHETIC_BATCH_DATABASE_URL: '',
       SYNTHETIC_DIAGNOSTIC_DATABASE_URL: runtimeUrl.href,
       CORS_ORIGIN: 'http://127.0.0.1:3000',
-      OTEL_EXPORTER_OTLP_TRACES_ENDPOINT: '',
+      OTEL_EXPORTER_OTLP_TRACES_ENDPOINT: `http://127.0.0.1:${collector.address().port}/v1/traces`,
+      OTEL_BSP_SCHEDULE_DELAY: '100',
+      OTEL_TRACES_SAMPLER: 'always_on',
       OIDC_ISSUER: issuer,
       OIDC_JWKS_URL: `${issuer}/certs`,
       OIDC_AUDIENCE: 'tax-intelligence-api',
@@ -192,17 +221,28 @@ try {
   const batchId = createdBatch.receipt.id;
   const path = `/organizations/${orgs[0]}/synthetic-diagnostic-executions`;
   async function call(route, method = 'GET', body, access = accessToken) {
-    return fetch(`${base}${route}`, {
+    const requestId = randomUUID();
+    const response = await fetch(`${base}${route}`, {
       method,
       headers: {
         ...(access ? { Authorization: `Bearer ${access}` } : {}),
         ...(body ? { 'Content-Type': 'application/json' } : {}),
-        'x-request-id': randomUUID(),
+        'x-request-id': requestId,
         'x-tenant-id': orgs[2],
       },
       body: body ? JSON.stringify(body) : undefined,
       signal: AbortSignal.timeout(15000),
     });
+    assert.equal(response.headers.get('x-request-id'), requestId);
+    requests.push({
+      requestId,
+      statusCode: response.status,
+      route: route.startsWith('/unknown/')
+        ? 'unmatched'
+        : '/v1/organizations/:organizationId/synthetic-diagnostic-executions' +
+          (method === 'GET' ? '/:executionId' : ''),
+    });
+    return response;
   }
   assert.equal((await call(path, 'POST', { batchId }, '')).status, 401);
   assert.equal(
@@ -293,14 +333,162 @@ try {
   );
   assert.equal((await call(path, 'POST', { batchId })).status, 403);
   assert.equal((await call(`${path}/${receipt.id}`)).status, 403);
-  assert.ok(
-    !logs.includes(accessToken) &&
-      !logs.includes(password) &&
-      !logs.includes(subject) &&
-      !logs.includes(input.documents[0].reference),
+  assert.equal(
+    (
+      await call(
+        '/unknown/diagnostic-url-sentinel?token=diagnostic-query-sentinel',
+        'POST',
+        {
+          secret: 'diagnostic-body-sentinel',
+        },
+      )
+    ).status,
+    404,
   );
+  const spans = () =>
+    exports.flatMap((payload) =>
+      payload.resourceSpans.flatMap((resource) =>
+        resource.scopeSpans.flatMap((scope) => scope.spans),
+      ),
+    );
+  const entries = () =>
+    logs
+      .slice(0, logs.lastIndexOf('\n') + 1)
+      .split(/\r?\n/)
+      .filter(Boolean)
+      .map((line) => JSON.parse(line));
+  for (let attempt = 0; attempt < 100; attempt++) {
+    assert.ifError(collectorError);
+    const received = new Set(spans().map((span) => span.traceId));
+    const completed = entries();
+    if (
+      requests.every(({ requestId }) =>
+        completed.some(
+          (entry) =>
+            entry.requestId === requestId && received.has(entry.traceId),
+        ),
+      )
+    )
+      break;
+    await new Promise((resolve) => setTimeout(resolve, 100));
+  }
+  assert.ifError(collectorError);
+  const allowedResourceAttributes = new Set([
+    'service.name',
+    'telemetry.sdk.language',
+    'telemetry.sdk.name',
+    'telemetry.sdk.version',
+    'process.pid',
+    'process.executable.name',
+    'process.executable.path',
+    'process.command_args',
+    'process.runtime.version',
+    'process.runtime.name',
+    'process.runtime.description',
+    'process.command',
+    'process.owner',
+    'host.name',
+    'host.arch',
+    'host.id',
+  ]);
+  for (const payload of exports) {
+    for (const resource of payload.resourceSpans) {
+      for (const attribute of resource.resource.attributes) {
+        assert.ok(
+          allowedResourceAttributes.has(attribute.key),
+          `Unexpected resource key: ${attribute.key}`,
+        );
+      }
+      assert.ok(
+        resource.resource.attributes.some(
+          ({ key, value }) =>
+            key === 'service.name' &&
+            value.stringValue === 'tax-intelligence-api',
+        ),
+      );
+      for (const scope of resource.scopeSpans) {
+        assert.equal(scope.scope.name, 'tax-intelligence-api');
+        assert.equal(scope.scope.attributes?.length ?? 0, 0);
+      }
+    }
+  }
+  const completed = entries();
+  for (const expected of requests) {
+    const matchingLogs = completed.filter(
+      (entry) => entry.requestId === expected.requestId,
+    );
+    assert.equal(
+      matchingLogs.length,
+      1,
+      'Each request must have exactly one completion log',
+    );
+    const entry = matchingLogs[0];
+    assert.deepEqual(Object.keys(entry).sort(), [
+      'durationMs',
+      'event',
+      'requestId',
+      'route',
+      'statusCode',
+      'traceId',
+    ]);
+    assert.equal(entry.event, 'http.request.completed');
+    assert.equal(entry.statusCode, expected.statusCode);
+    assert.equal(entry.route, expected.route);
+    assert.match(entry.traceId, /^[0-9a-f]{32}$/);
+    assert.ok(Number.isFinite(entry.durationMs) && entry.durationMs >= 0);
+    const matchingSpans = spans().filter(
+      (span) => span.traceId === entry.traceId,
+    );
+    assert.equal(
+      matchingSpans.length,
+      1,
+      'Completion log must correlate to one exported span',
+    );
+    const span = matchingSpans[0];
+    assert.equal(span.name, 'http.request');
+    assert.deepEqual(span.attributes.map((attribute) => attribute.key).sort(), [
+      'http.response.status_code',
+      'http.route',
+    ]);
+    const attributes = Object.fromEntries(
+      span.attributes.map(({ key, value }) => [
+        key,
+        value.stringValue ?? Number(value.intValue),
+      ]),
+    );
+    assert.equal(attributes['http.response.status_code'], expected.statusCode);
+    assert.equal(attributes['http.route'], entry.route);
+    assert.equal(span.status.code ?? 0, expected.statusCode >= 500 ? 2 : 0);
+    assert.equal(span.status.message ?? '', '');
+    assert.equal(span.events?.length ?? 0, 0);
+    assert.equal(span.links?.length ?? 0, 0);
+  }
+  const telemetry = JSON.stringify(exports) + logs;
+  for (const sentinel of [
+    accessToken,
+    password,
+    subject,
+    role,
+    issuer,
+    actor,
+    otherActor,
+    ...orgs,
+    batchId,
+    receipt.id,
+    input.documents[0].reference,
+    'diagnostic-url-sentinel',
+    'diagnostic-query-sentinel',
+    'diagnostic-body-sentinel',
+  ])
+    assert.ok(
+      !telemetry.includes(sentinel),
+      'Sensitive sentinel leaked to telemetry',
+    );
   console.log(
     'Synthetic diagnostic HTTP integration passed: compiled API/RSA, restricted PostgreSQL, concurrent natural replay, exact evidence, tenant/role denial, unsafe grants and revocation.',
+  );
+  console.log(
+    'Synthetic diagnostic OTLP proof passed: decoded exports, request/log/trace correlation, route/status whitelist and sensitive sentinel exclusion.',
   );
 } finally {
   if (app && app.exitCode === null) {
@@ -314,6 +502,7 @@ try {
     }
   }
   await new Promise((resolve) => provider.close(resolve));
+  await new Promise((resolve) => collector.close(resolve));
   try {
     for (const table of [
       'audit_compliance.synthetic_diagnostic_creations',

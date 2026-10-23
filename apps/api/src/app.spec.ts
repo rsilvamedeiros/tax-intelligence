@@ -3,6 +3,7 @@ import { Test } from '@nestjs/testing';
 import type { NestExpressApplication } from '@nestjs/platform-express';
 import { SwaggerModule, DocumentBuilder } from '@nestjs/swagger';
 import request from 'supertest';
+import { trace, TraceFlags } from '@opentelemetry/api';
 import { healthResponseSchema, apiErrorSchema } from '@tax/contracts';
 import { AppModule } from './app.module';
 import { configureHttp } from './http';
@@ -133,6 +134,39 @@ describe('Operational HTTP boundary', () => {
     );
     expect(entries.at(-1)?.route).toBe('unmatched');
     expect(entries.at(-1)?.durationMs).toEqual(expect.any(Number));
+    expect(entries.at(-1)?.traceId).toBeUndefined();
+  });
+  it('correlates an SDK trace with the validated HTTP request ID', async () => {
+    const traceId = '1234567890abcdef1234567890abcdef';
+    const span = trace.wrapSpanContext({
+      traceId,
+      spanId: '1234567890abcdef',
+      traceFlags: TraceFlags.SAMPLED,
+    });
+    const tracer = jest.spyOn(trace, 'getTracer').mockReturnValue({
+      startSpan: () => span,
+      startActiveSpan: jest.fn(),
+    });
+    entries.length = 0;
+    try {
+      const id = '00000000-0000-4000-8000-000000000003';
+      await request(app.getHttpServer())
+        .get('/v1/health/live')
+        .set('x-request-id', id)
+        .expect(200);
+      expect(entries).toEqual([
+        {
+          event: 'http.request.completed',
+          requestId: id,
+          traceId,
+          route: '/v1/health/live',
+          statusCode: 200,
+          durationMs: expect.any(Number),
+        },
+      ]);
+    } finally {
+      tracer.mockRestore();
+    }
   });
   it('advertises only the allowed browser origin', async () => {
     const response = await request(app.getHttpServer())
