@@ -157,6 +157,12 @@ it('uses the API evidence without arithmetic or interpretation in React', async 
   const table = await screen.findByRole('table', {
     name: 'Evidências por documento, em centavos',
   });
+  const evidenceRegion = screen.getByRole('region', {
+    name: 'Tabela de evidências',
+  });
+  expect(evidenceRegion).toHaveAttribute('tabindex', '0');
+  evidenceRegion.focus();
+  expect(evidenceRegion).toHaveFocus();
   const rows = within(table).getAllByRole('row');
   expect(rows).toHaveLength(3);
   expect(

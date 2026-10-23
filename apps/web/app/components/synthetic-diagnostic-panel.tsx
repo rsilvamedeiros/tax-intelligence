@@ -405,7 +405,7 @@ function DiagnosticWorkspace({
           <div
             className="diagnostic-evidence"
             role="region"
-            aria-label="Tabela de evid?ncias"
+            aria-label="Tabela de evidências"
             tabIndex={0}
           >
             <table>
