@@ -14,6 +14,8 @@ PRs #27/#28 abertas no início desta entrega; PR #28 com checks/revisão conclu�
 
 ## Arquitetura e código
 
+PR #30 integrada. Pedido atual autoriza BFF de execução/consulta sintética conforme [ADR 0026](docs/adr/0026-synthetic-diagnostic-bff.md), com sessão existente, Origin/CSRF, limites de transporte e jornada real de navegador no CI. Sem interface de diagnóstico, novas permissões, SQL de domínio na web, dados reais, deploy ou merge automático. Limites das entregas anteriores abaixo descrevem seus recortes históricos.
+
 Próxima etapa autorizada pelo pedido atual: API da execução sintética conforme [ADR 0025](docs/adr/0025-synthetic-diagnostic-http.md), dependente da PR #29. Permite POST/GET autenticados, configuração de pool exclusivo e testes reais de API/RSA/PostgreSQL isolados. Sem BFF/UI de diagnóstico, dados reais, deploy ou merge automático. A PR #29 foi retirada de draft e seu achado documental corrigido; a atualização de segurança Next.js permanece separada da implementação HTTP.
 
 A [RFC 0002](docs/rfc/0002-synthetic-rls-proof.md) fundamenta o experimento autorizado no ADR 0016, com [plano de TDD](docs/engineering/synthetic-rls-test-plan.md). A prova isolada não implementou RLS de domínio; ADRs 0018/0019 e 0024 limitam RLS às seis relações sintéticas de lote/execução/auditoria, sem RLS de controle ou dados fiscais reais.
