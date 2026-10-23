@@ -14,7 +14,9 @@ Histórico da persistência: [ADR 0024](docs/adr/0024-synthetic-diagnostic-persi
 
 ## Arquitetura e código
 
-Próxima etapa solicitada: prova OTLP do diagnóstico conforme [ADR 0028](docs/adr/0028-synthetic-diagnostic-telemetry.md), dependente da interface da PR #32. Permite correlação traceId/log HTTP e collector local nos testes API/RSA/PostgreSQL existentes. Sem propagação distribuída web/API, atributos de negócio, collector externo, dados reais, deploy ou merge automático. PR #31 integrada; #32 aberta no início desta etapa.
+Etapa documental atual: [ADR 0029](docs/adr/0029-nfe-source-discovery.md) e [RFC 0004](docs/rfc/0004-nfe-xml-intake.md), avaliação de XML de NF-e como candidata à primeira fonte fiscal. Autoriza pesquisa pública, proposta de limites e plano de TDD; não autoriza parser, upload, migration, credencial ou documento real. Escolha definitiva e implementação exigem aprovação do recorte e fixação de schemas oficiais. PR #32 integrada; #33 direcionada para main e retirada de draft nesta etapa, sem merge automático.
+
+Histórico da etapa OTLP: prova OTLP do diagnóstico conforme [ADR 0028](docs/adr/0028-synthetic-diagnostic-telemetry.md), dependente da interface da PR #32. Permite correlação traceId/log HTTP e collector local nos testes API/RSA/PostgreSQL existentes. Sem propagação distribuída web/API, atributos de negócio, collector externo, dados reais, deploy ou merge automático. PR #31 integrada; #32 aberta no início desta etapa.
 
 Histórico da interface: diagnóstico sintético conforme [ADR 0027](docs/adr/0027-synthetic-diagnostic-ui.md), na PR #32, aberta no início da etapa OTLP. Permite criação/replay/consulta pelo BFF, evidência recebida da API e recuperação explícita por lote conhecido, com testes de contexto, acessibilidade e navegador real no CI. Sem cálculo em React, nova API/permissão, storage de dados no browser, dados reais, deploy ou merge automático.
 

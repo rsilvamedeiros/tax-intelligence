@@ -1,5 +1,11 @@
 # Documentação TAX INTELLIGENCE
 
+- [ADR 0029 — Preparação da primeira fonte fiscal](adr/0029-nfe-source-discovery.md)
+- [Dossiê de XML de NF-e](integrations/nfe-xml-assessment.md)
+- [RFC 0004 — Proposta de leitura XML](rfc/0004-nfe-xml-intake.md)
+- [Plano de TDD da candidata NF-e](engineering/nfe-xml-test-plan.md)
+- [Validação da preparação de fonte](engineering/nfe-source-discovery-validation.md)
+
 - [Interface de diagnóstico sintético](engineering/synthetic-diagnostic-ui-validation.md)
 - [ADR 0027](adr/0027-synthetic-diagnostic-ui.md)
 - [ADR 0028](adr/0028-synthetic-diagnostic-telemetry.md)
