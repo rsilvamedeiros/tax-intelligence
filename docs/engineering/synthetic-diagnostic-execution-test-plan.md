@@ -1,10 +1,10 @@
 # Plano de TDD — Execução registrada do diagnóstico sintético
 
-Atualizado em 23/10/2026. Contratos/casos de uso do ADR 0023, PostgreSQL do ADR 0024, HTTP do ADR 0025 e BFF do ADR 0026 possuem [evidências por etapa](synthetic-diagnostic-bff-validation.md). Interface do [ADR 0027](../adr/0027-synthetic-diagnostic-ui.md) implementa RUN-19 com jornada real aprovada no CI; [validação](synthetic-diagnostic-ui-validation.md). RUN-20 possui prova local no ADR 0028, com CI/revisão pendentes na preparação. A descrição de um aceite não equivale à sua aprovação; recortes históricos ao final preservam os limites de cada etapa.
+Atualizado em 23/10/2026. Contratos/casos de uso do ADR 0023, PostgreSQL do ADR 0024, HTTP do ADR 0025 e BFF do ADR 0026 possuem [evidências por etapa](synthetic-diagnostic-bff-validation.md). Interface do [ADR 0027](../adr/0027-synthetic-diagnostic-ui.md) implementa RUN-19 com jornada real aprovada no CI; [validação](synthetic-diagnostic-ui-validation.md). RUN-20 possui prova local no ADR 0028, com CI aprovado e revisão externa pendente por quota. A descrição de um aceite não equivale à sua aprovação; recortes históricos ao final preservam os limites de cada etapa.
 
 ## Matriz de comportamento e risco
 
-Atualização RUN-19/RUN-20: jornada UI real aprovada no CI da PR #32. Prova OTLP específica do [ADR 0028](../adr/0028-synthetic-diagnostic-telemetry.md) aprovada localmente com API/RSA/PostgreSQL, correlação request/log/trace, whitelist e sentinelas. [Evidências e limites de aceite](synthetic-diagnostic-telemetry-validation.md); CI e revisão desta nova etapa pendentes na preparação.
+Atualização RUN-19/RUN-20: jornada UI real aprovada no CI da PR #32. Prova OTLP específica do [ADR 0028](../adr/0028-synthetic-diagnostic-telemetry.md) aprovada localmente com API/RSA/PostgreSQL, correlação request/log/trace, whitelist e sentinelas. [Evidências e limites de aceite](synthetic-diagnostic-telemetry-validation.md); CI desta etapa aprovado em 178499a; revisão externa pendente pelo limite do serviço.
 
 | ID     | Aceite observável                                                                                                                                            | Fronteira                                            |
 | ------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------ | ---------------------------------------------------- |

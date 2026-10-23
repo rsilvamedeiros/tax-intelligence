@@ -1,6 +1,6 @@
 # Validação — Telemetria do diagnóstico sintético
 
-Data: 23/10/2026. Recorte do [ADR 0028](../adr/0028-synthetic-diagnostic-telemetry.md), dependente da interface da PR #32, aberta no início. PR #31 integrada. Evidências locais abaixo; CI e revisão externa ainda pendentes na preparação desta entrega.
+Data: 23/10/2026. Recorte do [ADR 0028](../adr/0028-synthetic-diagnostic-telemetry.md), na PR #33, dependente da interface da PR #32. PR #31 integrada; #32 direcionada para main e pronta para revisão humana. CI aprovado em 178499a; revisão externa pendente por limite do serviço.
 
 ## Mudança e TDD observado
 
@@ -32,7 +32,15 @@ Fechamento local: 118 Markdown e 16 manifests validados; `pnpm format:check`, `p
 | Resultado exato, persistência, replay e auditoria     | Núcleo, casos de uso e PostgreSQL dos ADRs 0022–0025         | Somente regra/fixtures demonstrativas                                                 |
 | Recuperação após efeito incerto e limpeza de contexto | UI/BFF e jornada real do ADR 0027                            | Não comprova homologação fiscal                                                       |
 | Autorização/isolamento sintético                      | Negativas de tenant/papel e RLS nas seis relações sintéticas | Controle e futuros dados reais sem RLS implementado                                   |
-| RUN-20: exportação da operação sem payload sensível   | Prova local API/RSA/PostgreSQL/collector desta entrega       | CI/revisão pendentes; sem trace distribuído web/API                                   |
+| RUN-20: exportação da operação sem payload sensível   | Prova local e CI API/RSA/PostgreSQL/collector desta entrega  | Revisão externa pendente; sem trace distribuído web/API                               |
 | Operação e primeira vertical fiscal real              | Não implementadas                                            | Fontes, vigência, autorização, segurança e revisão especializada exigem etapa própria |
 
 A evidência técnica sintética pode ser apresentada para aceite após integração/revisão. Não declara aprovação humana nem prontidão de produção. Próximo ponto de decisão: revisão do aceite demonstrativo e definição documental de uma fonte/contexto real autorizado, antes de implementar importação ou regra fiscal.
+
+## CI e revisão externa
+
+[Execução 40016144905](https://github.com/rsilvamedeiros/tax-intelligence/actions/runs/40016144905), head 178499a: oito checks aprovados, incluindo GitGuardian e scanners. PostgreSQL 17.11: 144 testes/10 suítes e serviços compilados de lote/diagnóstico/HTTP aprovados. Prova OTLP específica aprovada no mesmo job; navegador real com Keycloak, Cypress 16.1.1 e Chrome 155 headless: authentication.cy.ts aprovado, incluindo a jornada UI existente. Isso é evidência remota; browser/Keycloak local permanece não executado.
+
+Autorrevisão posterior endureceu o parser de logs para considerar apenas linhas completas durante polling, evitando falha por chunk parcial de stdout. Integração API/RSA/PostgreSQL/OTLP repetida localmente e aprovada; cleanup confirmado e cluster próprio encerrado. Não houve mudança adicional de runtime.
+
+Revisão CodeRabbit solicitada uma vez na [PR #33](https://github.com/rsilvamedeiros/tax-intelligence/pull/33#issuecomment-6373640661). O serviço informou limite gratuito atingido e próxima janela em 28 minutos no momento da resposta. Nenhuma revisão efetiva concluída nesta entrega; status verde do bot não equivale à revisão. Sem alterar plano, billing ou configuração remota. Revisão externa e aceite humano permanecem pendentes.
