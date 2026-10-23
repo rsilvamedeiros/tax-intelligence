@@ -12,6 +12,7 @@ export interface BatchPanelProps {
   csrfToken: string;
   role: 'organization_admin' | 'analyst' | 'reviewer' | 'viewer';
   onSessionExpired: () => void;
+  onAccessDenied?: () => void;
 }
 type Draft = { key: number; reference: string; total: string; lines: string };
 const blank = (key: number): Draft => ({
@@ -22,7 +23,9 @@ const blank = (key: number): Draft => ({
 });
 type Receipt = ReturnType<typeof syntheticDocumentBatchReceiptSchema.parse>;
 type Detail = ReturnType<typeof syntheticDocumentBatchDetailSchema.parse>;
-export function SyntheticBatchPanel(props: BatchPanelProps) {
+export function SyntheticBatchPanel(
+  props: BatchPanelProps & { onUseBatch?: (batchId: string) => void },
+) {
   return (
     <BatchWorkspace
       key={`${props.organizationId}:${props.csrfToken}:${props.role}`}
@@ -35,7 +38,9 @@ function BatchWorkspace({
   csrfToken,
   role,
   onSessionExpired,
-}: BatchPanelProps) {
+  onAccessDenied,
+  onUseBatch,
+}: BatchPanelProps & { onUseBatch?: (batchId: string) => void }) {
   const id = useId();
   const [drafts, setDrafts] = useState<Draft[]>([blank(0)]);
   const nextKey = useRef(1);
@@ -83,6 +88,7 @@ function BatchWorkspace({
     }
     if (status === 403) {
       clearAccess('Acesso indisponível. Selecione a organização novamente.');
+      onAccessDenied?.();
       return true;
     }
     return false;
@@ -377,6 +383,15 @@ function BatchWorkspace({
             Identificador: <strong>{receipt.id}</strong>
           </p>
           <p>Criado em: {receipt.createdAt}</p>
+          {canCreate && onUseBatch && (
+            <button
+              type="button"
+              disabled={busy !== null}
+              onClick={() => onUseBatch(receipt.id)}
+            >
+              Usar lote criado no diagnóstico
+            </button>
+          )}
         </section>
       )}
       {receipt && canCreate && (
@@ -433,6 +448,15 @@ function BatchWorkspace({
             Identificador: <strong>{detail.id}</strong>
           </p>
           <p>Criado em: {detail.createdAt}</p>
+          {canCreate && onUseBatch && (
+            <button
+              type="button"
+              disabled={busy !== null}
+              onClick={() => onUseBatch(detail.id)}
+            >
+              Usar lote consultado no diagnóstico
+            </button>
+          )}
           <ul>
             {detail.documents.map((document) => (
               <li key={document.reference}>
