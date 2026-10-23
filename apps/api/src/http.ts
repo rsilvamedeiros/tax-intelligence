@@ -6,7 +6,7 @@ import {
   type ExceptionFilter,
 } from '@nestjs/common';
 import type { NestExpressApplication } from '@nestjs/platform-express';
-import { trace, SpanStatusCode } from '@opentelemetry/api';
+import { trace, isSpanContextValid, SpanStatusCode } from '@opentelemetry/api';
 import type { Request, Response, NextFunction } from 'express';
 import type { ApiError } from '@tax/contracts';
 import helmet from 'helmet';
@@ -76,6 +76,9 @@ export function configureHttp(
       log({
         event: 'http.request.completed',
         requestId,
+        ...(isSpanContextValid(span.spanContext())
+          ? { traceId: span.spanContext().traceId }
+          : {}),
         route,
         statusCode: response.statusCode,
         durationMs: Math.round(performance.now() - start),
