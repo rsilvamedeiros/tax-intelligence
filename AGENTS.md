@@ -14,9 +14,11 @@ Histórico da persistência: [ADR 0024](docs/adr/0024-synthetic-diagnostic-persi
 
 ## Arquitetura e código
 
-PR #30 integrada. Pedido atual autoriza BFF de execução/consulta sintética conforme [ADR 0026](docs/adr/0026-synthetic-diagnostic-bff.md), com sessão existente, Origin/CSRF, limites de transporte e jornada real de navegador no CI. Sem interface de diagnóstico, novas permissões, SQL de domínio na web, dados reais, deploy ou merge automático. Limites das entregas anteriores abaixo descrevem seus recortes históricos.
+Etapa atual autorizada pelo pedido seguinte: interface de diagnóstico sintético conforme [ADR 0027](docs/adr/0027-synthetic-diagnostic-ui.md), em branch dependente da PR #31, aberta no início. Permite criação/replay/consulta pelo BFF, evidência recebida da API e recuperação explícita por lote conhecido, com testes de contexto, acessibilidade e navegador real no CI. Sem cálculo em React, nova API/permissão, storage de dados no browser, dados reais, deploy ou merge automático.
 
-Histórico da API: [ADR 0025](docs/adr/0025-synthetic-diagnostic-http.md) integrado na PR #30, após persistência da PR #29. Autorizou POST/GET autenticados, pool exclusivo e testes reais de API/RSA/PostgreSQL isolados, sem BFF/UI naquela entrega. A atualização de segurança Next.js foi separada da implementação HTTP. Interface de diagnóstico e prova OTLP específica são próximos módulos propostos, ainda exigindo etapa própria; dados reais, deploy e merge automático não estão autorizados.
+Histórico do BFF: [ADR 0026](docs/adr/0026-synthetic-diagnostic-bff.md) implementado na PR #31, com sessão existente, Origin/CSRF, limites e jornada real de navegador. Não incluiu interface naquela entrega. Limites das entregas anteriores abaixo descrevem seus recortes históricos.
+
+Histórico da API: [ADR 0025](docs/adr/0025-synthetic-diagnostic-http.md) integrado na PR #30, após persistência da PR #29. Autorizou POST/GET autenticados, pool exclusivo e testes reais de API/RSA/PostgreSQL isolados, sem BFF/UI naquela entrega. A atualização de segurança Next.js foi separada da implementação HTTP. Interface autorizada posteriormente pelo ADR 0027; prova OTLP específica ainda exige etapa própria. Dados reais, deploy e merge automático não estão autorizados.
 
 A [RFC 0002](docs/rfc/0002-synthetic-rls-proof.md) fundamenta o experimento autorizado no ADR 0016, com [plano de TDD](docs/engineering/synthetic-rls-test-plan.md). A prova isolada não implementou RLS de domínio; ADRs 0018/0019 e 0024 limitam RLS às seis relações sintéticas de lote/execução/auditoria, sem RLS de controle ou dados fiscais reais.
 

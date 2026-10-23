@@ -1,6 +1,6 @@
 # Tax Intelligence
 
-Status: núcleo, casos de uso, persistência e API do diagnóstico sintético integrados até a PR #30. BFF pela sessão existente implementado nesta entrega do [ADR 0026](../adr/0026-synthetic-diagnostic-bff.md), ainda em revisão. Interface de diagnóstico e regras tributárias reais indisponíveis. [Evidências](../engineering/synthetic-diagnostic-bff-validation.md).
+Status: núcleo/casos de uso/persistência/API integrados até a PR #30. BFF na PR #31, aberta no início desta entrega; interface do [ADR 0027](../adr/0027-synthetic-diagnostic-ui.md) implementada em branch dependente, ainda não integrada. Tela exibe evidência e permite recuperação explícita, sem cálculo ou regra tributária real. [Evidências](../engineering/synthetic-diagnostic-ui-validation.md).
 
 ## Objetivo e responsabilidades
 

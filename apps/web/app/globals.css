@@ -103,13 +103,15 @@ select {
   list-style: none;
   padding: 0;
 }
-.synthetic-batch-panel {
+.synthetic-batch-panel,
+.synthetic-diagnostic-panel {
   margin-top: 24px;
   padding-top: 16px;
   border-top: 1px solid var(--border);
 }
 .synthetic-batch-panel form,
-.synthetic-batch-panel fieldset {
+.synthetic-batch-panel fieldset,
+.synthetic-diagnostic-panel form {
   display: grid;
   gap: 12px;
   min-width: 0;
@@ -119,14 +121,37 @@ select {
   border-radius: 8px;
   padding: 16px;
 }
-.synthetic-batch-panel form {
+.synthetic-batch-panel form,
+.synthetic-diagnostic-panel form {
   margin-bottom: 24px;
 }
 .synthetic-batch-panel strong {
   overflow-wrap: anywhere;
 }
-.synthetic-batch-panel button:disabled {
+.synthetic-batch-panel button:disabled,
+.synthetic-diagnostic-panel button:disabled {
   cursor: not-allowed;
+}
+.synthetic-diagnostic-panel {
+  min-width: 0;
+  overflow-wrap: anywhere;
+}
+.diagnostic-evidence {
+  max-width: 100%;
+  overflow-x: auto;
+  margin-top: 16px;
+}
+.diagnostic-evidence table {
+  width: 100%;
+  min-width: 600px;
+  border-collapse: collapse;
+}
+.diagnostic-evidence th,
+.diagnostic-evidence td {
+  padding: 8px;
+  border: 1px solid var(--border);
+  text-align: left;
+  vertical-align: top;
 }
 .organization-list li {
   display: flex;

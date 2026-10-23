@@ -2,7 +2,7 @@
 import { useContext, useEffect, useRef, useState } from 'react';
 import { SessionCsrfContext, SessionExpiryContext } from './auth-session';
 import { MembershipPanel } from './membership-panel';
-import { SyntheticBatchPanel } from './synthetic-batch-panel';
+import { SyntheticDocumentWorkspace } from './synthetic-diagnostic-panel';
 import {
   organizationPageSchema,
   organizationContextSchema,
@@ -221,7 +221,7 @@ export function OrganizationPanel({
         />
       )}
       {selected && csrfToken && (
-        <SyntheticBatchPanel
+        <SyntheticDocumentWorkspace
           organizationId={selected.organization.id}
           role={selected.role}
           csrfToken={csrfToken}

@@ -1,12 +1,6 @@
 # Plano de TDD — Execução registrada do diagnóstico sintético
 
-Recorte BFF do [ADR 0026](../adr/0026-synthetic-diagnostic-bff.md): partes de RUN-19 implementadas em handlers/rotas e jornada de sessão existente; [evidências](synthetic-diagnostic-bff-validation.md). Interface de diagnóstico e RUN-20 de OTLP específico permanecem pendentes.
-
-Etapa HTTP do [ADR 0025](../adr/0025-synthetic-diagnostic-http.md) exercita RUN-17/18 por contrato e API compilada/PostgreSQL; [evidências](synthetic-diagnostic-http-validation.md). BFF de RUN-19 acrescentado no ADR 0026; interface de RUN-19 e RUN-20 (OTLP específico) continuam pendentes.
-
-Persistência implementada nesta etapa no [ADR 0024](../adr/0024-synthetic-diagnostic-persistence.md): snapshot público, transação, RLS/grants e auditoria exercitados em PostgreSQL real. [Evidências](../engineering/synthetic-diagnostic-persistence-validation.md). O recorte do ADR 0023 e a proposta original abaixo são históricos; runtime, HTTP, BFF/UI e OTLP específicos permanecem pendentes.
-
-Data: 22/10/2026. Status: **execução parcial em contratos/application**, conforme [ADR 0023](../adr/0023-synthetic-diagnostic-use-cases.md) e [validação](synthetic-diagnostic-use-cases-validation.md). Persistência/locks/RLS, runtime, HTTP e navegador de diagnóstico continuam planejados. A [RFC 0004](../rfc/0004-synthetic-diagnostic-execution.md) permanece proposta para decisões de banco/grants. O núcleo puro do ADR 0022 e os dublês de portas de application não provam autorização ou persistência reais.
+Atualizado em 23/10/2026. Contratos/casos de uso do ADR 0023, PostgreSQL do ADR 0024, HTTP do ADR 0025 e BFF do ADR 0026 possuem [evidências por etapa](synthetic-diagnostic-bff-validation.md). Interface do [ADR 0027](../adr/0027-synthetic-diagnostic-ui.md) implementa a jornada de RUN-19 e suas regressões visuais; [validação](synthetic-diagnostic-ui-validation.md), com CI de navegador pendente na abertura da entrega. RUN-20 (OTLP específico) continua planejado. A descrição de um aceite não equivale à sua aprovação; recortes históricos ao final preservam os limites de cada etapa.
 
 ## Matriz de comportamento e risco
 
