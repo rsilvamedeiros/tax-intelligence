@@ -1,6 +1,6 @@
-# Primeira vertical: persistência sintética, transporte de diagnóstico pendente
+# Primeira vertical: BFF sintético, interface de diagnóstico pendente
 
-Etapa atual: API autenticada de diagnóstico do [ADR 0025](../adr/0025-synthetic-diagnostic-http.md), com [provas HTTP/PostgreSQL](../engineering/synthetic-diagnostic-http-validation.md). BFF e interface do diagnóstico ainda faltam para a jornada completa. As descrições de recortes anteriores abaixo são históricas.
+Etapa atual: BFF de diagnóstico do [ADR 0026](../adr/0026-synthetic-diagnostic-bff.md), com [validação](../engineering/synthetic-diagnostic-bff-validation.md). API integrada na PR #30. Interface e prova OTLP específica ainda faltam para a jornada completa. Descrições dos recortes anteriores abaixo são históricas.
 
 Persistência implementada nesta etapa no [ADR 0024](../adr/0024-synthetic-diagnostic-persistence.md): snapshot público, transação, RLS/grants e auditoria exercitados em PostgreSQL real. [Evidências](../engineering/synthetic-diagnostic-persistence-validation.md). O recorte do ADR 0023 e a proposta original abaixo são históricos; runtime, HTTP, BFF/UI e OTLP específicos permanecem pendentes.
 

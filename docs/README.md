@@ -1,5 +1,8 @@
 # Documentação TAX INTELLIGENCE
 
+- [BFF de diagnóstico sintético](engineering/synthetic-diagnostic-bff-validation.md)
+- [ADR 0026](adr/0026-synthetic-diagnostic-bff.md)
+
 - [API de diagnóstico sintético](engineering/synthetic-diagnostic-http-validation.md)
 - [ADR 0025](adr/0025-synthetic-diagnostic-http.md)
 
