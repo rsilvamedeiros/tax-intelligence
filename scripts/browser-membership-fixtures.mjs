@@ -22,6 +22,8 @@ export async function createBrowserMembershipFixture(issuer, subject) {
   async function cleanup() {
     try {
       for (const table of [
+        'audit_compliance.synthetic_diagnostic_creations',
+        'tax_intelligence.synthetic_diagnostic_runs',
         'fiscal_compliance.synthetic_lines',
         'fiscal_compliance.synthetic_documents',
         'audit_compliance.synthetic_batch_creations',
@@ -95,6 +97,19 @@ export async function createBrowserMembershipFixture(issuer, subject) {
       await owner.pool.query(
         `GRANT INSERT(tenant_id,actor_id,batch_id,request_id) ON audit_compliance.synthetic_batch_creations TO ${role}`,
       );
+    } else if (kind === 'diagnostic') {
+      await owner.pool.query(
+        `GRANT USAGE ON SCHEMA identity_access,organization_access,fiscal_compliance,tax_intelligence,audit_compliance TO ${role}`,
+      );
+      await owner.pool.query(
+        `GRANT SELECT ON identity_access.actors,organization_access.memberships,fiscal_compliance.synthetic_batches,fiscal_compliance.synthetic_documents,fiscal_compliance.synthetic_lines TO ${role}`,
+      );
+      await owner.pool.query(
+        `GRANT SELECT,INSERT ON tax_intelligence.synthetic_diagnostic_runs TO ${role}`,
+      );
+      await owner.pool.query(
+        `GRANT INSERT(tenant_id,actor_id,execution_id,request_id) ON audit_compliance.synthetic_diagnostic_creations TO ${role}`,
+      );
     } else {
       await owner.pool.query(`GRANT USAGE ON SCHEMA auth_bff TO ${role}`);
       await owner.pool.query(
@@ -110,6 +125,7 @@ export async function createBrowserMembershipFixture(issuer, subject) {
     const apiUrl = await runtimeRole('api');
     const bffUrl = await runtimeRole('bff');
     const batchUrl = await runtimeRole('batch');
+    const diagnosticUrl = await runtimeRole('diagnostic');
     await owner.pool.query(
       'INSERT INTO identity_access.actors(id,issuer,subject) VALUES($1,$2,$3),($4,$2,$5),($6,$2,$7)',
       [
@@ -136,7 +152,7 @@ export async function createBrowserMembershipFixture(issuer, subject) {
         ],
       );
     }
-    return { ids, actors, apiUrl, bffUrl, batchUrl, cleanup };
+    return { ids, actors, apiUrl, bffUrl, batchUrl, diagnosticUrl, cleanup };
   } catch (error) {
     await cleanup();
     throw error;

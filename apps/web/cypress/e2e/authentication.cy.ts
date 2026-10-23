@@ -1,4 +1,5 @@
 import { exerciseSyntheticBatchBff } from '../support/synthetic-batch';
+import { exerciseSyntheticDiagnosticBff } from '../support/synthetic-diagnostic';
 import {
   exerciseSyntheticBatchUi,
   verifyReadOnlyBatchUi,
@@ -98,6 +99,14 @@ describe('Real Keycloak BFF login', () => {
         exerciseSyntheticBatchBff(body.csrfToken, ids[0]!, ids[2]!).as(
           'syntheticBatchId',
         );
+        cy.get<string>('@syntheticBatchId').then((batchId) => {
+          exerciseSyntheticDiagnosticBff(
+            body.csrfToken,
+            ids[0]!,
+            ids[2]!,
+            batchId,
+          ).as('syntheticDiagnosticId');
+        });
         const collection = `/api/organizations/${ids[0]}/memberships`;
         const member = `${collection}/${actors[1]}`;
         const headers = {
@@ -255,6 +264,24 @@ describe('Real Keycloak BFF login', () => {
           .should('equal', 403);
         mutate('PATCH', `${collection}/${actors[2]}`, 'viewer', 403);
         const batches = `/api/organizations/${ids[0]}/synthetic-document-batches`;
+        const diagnostics = `/api/organizations/${ids[0]}/synthetic-diagnostic-executions`;
+        cy.get<string>('@syntheticDiagnosticId').then((id) => {
+          cy.request({ url: `${diagnostics}/${id}`, log: false })
+            .its('status')
+            .should('equal', 200);
+        });
+        cy.get<string>('@syntheticBatchId').then((batchId) => {
+          cy.request({
+            method: 'POST',
+            url: diagnostics,
+            headers,
+            body: { batchId },
+            failOnStatusCode: false,
+            log: false,
+          })
+            .its('status')
+            .should('equal', 403);
+        });
         cy.get<string>('@syntheticBatchId').then((id) => {
           cy.request({ url: `${batches}/${id}`, log: false })
             .its('status')
@@ -313,6 +340,26 @@ describe('Real Keycloak BFF login', () => {
       log: false,
     }).then(({ organizationIds: ids }) => {
       const path = `/api/organizations/${ids[0]}/synthetic-document-batches`;
+      const diagnostics = `/api/organizations/${ids[0]}/synthetic-diagnostic-executions`;
+      cy.request({
+        method: 'POST',
+        url: diagnostics,
+        headers: { Origin: 'http://127.0.0.1:3000' },
+        body: {},
+        failOnStatusCode: false,
+        log: false,
+      })
+        .its('status')
+        .should('equal', 401);
+      cy.get<string>('@syntheticDiagnosticId').then((id) => {
+        cy.request({
+          url: `${diagnostics}/${id}`,
+          failOnStatusCode: false,
+          log: false,
+        })
+          .its('status')
+          .should('equal', 401);
+      });
       cy.request({
         method: 'POST',
         url: path,

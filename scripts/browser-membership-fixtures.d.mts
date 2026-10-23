@@ -3,8 +3,11 @@ export function createBrowserMembershipFixture(
   subject: string,
 ): Promise<{
   ids: string[];
+  actors: string[];
   apiUrl: string;
   bffUrl: string;
+  batchUrl: string;
+  diagnosticUrl: string;
   cleanup(): Promise<void>;
 }>;
 export function revokeBrowserMembership(
