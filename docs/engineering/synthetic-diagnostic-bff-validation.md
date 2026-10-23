@@ -17,9 +17,15 @@ Dois ciclos Red/Green observados: stub retornava 503 em vez de criar com 201; ap
 - `pnpm test:integration`: 144 testes/dez suítes em PostgreSQL 18.1 isolado. Verificação adicional executou a fixture compartilhada de navegador com novo login exclusivo autenticado: store/serviço reais criaram e repetiram a execução, cleanup removeu resultados/eventos/roles próprios. Essa composição não é browser nem autenticação OIDC.
 - Jornada Keycloak/Chrome local não executada: Docker e Java não foram encontrados no PATH. CI de identity-provider foi estendido para provar login real → lote → BFF de diagnóstico → replay/evidência → negação de tenant/CSRF → viewer consulta e não recebe replay → logout nega operações. Login de diagnóstico restrito separado de controle, lote e sessão; somente TEST_DATABASE_URL `_test`. Cleanup inclui as duas relações novas antes de excluir o lote e seus vínculos.
 
-Links de 114 documentos/16 manifests aprovados; diff sem erros de whitespace. Formato inicialmente identificou as duas rotas novas, corrigidas pelo formatter antes da repetição. Cleanup confirmou ausência de roles descartáveis (incluindo navegador), lotes, execuções, eventos e funções de falha; cluster iniciado nesta etapa encerrado. CI e revisão externa pendentes na abertura da PR.
+Links de 114 documentos/16 manifests aprovados; diff sem erros de whitespace. Formato inicialmente identificou as duas rotas novas, corrigidas pelo formatter antes da repetição. Cleanup confirmou ausência de roles descartáveis (incluindo navegador), lotes, execuções, eventos e funções de falha; cluster iniciado nesta etapa encerrado. Resultados remotos e revisão externa registrados abaixo.
 
 Autorrevisão de sessão/transporte, cancelamento, credenciais e grants de fixture sem achado bloqueante identificado. Autorrevisão não equivale à revisão externa ou aceite humano de segurança. Não publicar aprovação automática de isolamento.
+
+## CI e revisão externa
+
+PR #31 aberta em main, fora de draft, sem merge automático. Em e21395f, [CI](https://github.com/rsilvamedeiros/tax-intelligence/actions/runs/39955412194) aprovou 144 testes/dez suítes PostgreSQL 17.11 e jornadas compiladas existentes de lote/serviço/API. Os oito checks, incluindo GitGuardian, passaram nesse head. Identity-provider passou com Cypress 16.1.1, Chrome 155 headless e `authentication.cy.ts` (um teste composto): o helper de diagnóstico criado nesta entrega foi executado na sessão real, incluindo criação/replay/detalhe, CSRF/tenant negados, viewer read/write denial e operações negadas após logout. Execução local sem browser não foi reclassificada como E2E.
+
+CodeRabbit não iniciou revisão automática pela política do serviço para repositório com menos de dez estrelas; revisão completa foi solicitada manualmente. Seu status verde inicial não equivalia a review produzido. Review 5628454190 concluído em e21395f, abrangendo 20 arquivos: dois achados menores documentais em AGENTS e arquitetura, sem achado de código/segurança publicado. Complemento corrige etapas antigas apresentadas como próximas, restringe pendências à interface/regras reais e registra a prova do CI. Não alegar revisão externa do commit documental posterior; aceite humano permanece necessário.
 
 ## Limites e próximo ponto de decisão
 
