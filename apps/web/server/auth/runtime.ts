@@ -8,6 +8,7 @@ import { createTokenReader } from './session-token';
 import { createOrganizationHandlers } from '../organizations/handlers';
 import { createMembershipHandlers } from '../organizations/membership-handlers';
 import { createSyntheticBatchHandlers } from '../fiscal-compliance/handlers';
+import { createSyntheticDiagnosticHandlers } from '../tax-intelligence/handlers';
 
 type Handlers = ReturnType<typeof createAuthHandlers>;
 const runtimeGlobal = globalThis as typeof globalThis & {
@@ -16,6 +17,7 @@ const runtimeGlobal = globalThis as typeof globalThis & {
     organizations: ReturnType<typeof createOrganizationHandlers>;
     memberships: ReturnType<typeof createMembershipHandlers>;
     syntheticBatches: ReturnType<typeof createSyntheticBatchHandlers>;
+    syntheticDiagnostics: ReturnType<typeof createSyntheticDiagnosticHandlers>;
   };
 };
 function runtime() {
@@ -81,11 +83,17 @@ function runtime() {
     readSession: createTokenReader(store),
     upstream,
   });
+  const syntheticDiagnostics = createSyntheticDiagnosticHandlers({
+    origin: config.origin,
+    readSession: createTokenReader(store),
+    upstream,
+  });
   runtimeGlobal.taxBffRuntime = {
     auth: handlers,
     organizations,
     memberships,
     syntheticBatches,
+    syntheticDiagnostics,
   };
   return runtimeGlobal.taxBffRuntime;
 }
@@ -119,6 +127,30 @@ export async function handleSyntheticBatches(
   } catch {
     return Response.json(
       { message: 'Lote sintético indisponível' },
+      {
+        status: 503,
+        headers: {
+          'Cache-Control': 'no-store',
+          'Referrer-Policy': 'no-referrer',
+        },
+      },
+    );
+  }
+}
+export async function handleSyntheticDiagnostics(
+  action: keyof ReturnType<typeof createSyntheticDiagnosticHandlers>,
+  request: Request,
+  organizationId: string,
+  executionId?: string,
+) {
+  try {
+    const handlers = runtime().syntheticDiagnostics;
+    return action === 'create'
+      ? await handlers.create(request, organizationId)
+      : await handlers.get(request, organizationId, executionId ?? '');
+  } catch {
+    return Response.json(
+      { message: 'Diagnóstico sintético indisponível' },
       {
         status: 503,
         headers: {

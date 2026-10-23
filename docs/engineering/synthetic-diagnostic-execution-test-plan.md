@@ -1,6 +1,8 @@
 # Plano de TDD — Execução registrada do diagnóstico sintético
 
-Etapa HTTP do [ADR 0025](../adr/0025-synthetic-diagnostic-http.md) exercita RUN-17/18 por contrato e API compilada/PostgreSQL; [evidências](synthetic-diagnostic-http-validation.md). RUN-19 (BFF/UI) e RUN-20 (OTLP específico) continuam pendentes.
+Recorte BFF do [ADR 0026](../adr/0026-synthetic-diagnostic-bff.md): partes de RUN-19 implementadas em handlers/rotas e jornada de sessão existente; [evidências](synthetic-diagnostic-bff-validation.md). Interface de diagnóstico e RUN-20 de OTLP específico permanecem pendentes.
+
+Etapa HTTP do [ADR 0025](../adr/0025-synthetic-diagnostic-http.md) exercita RUN-17/18 por contrato e API compilada/PostgreSQL; [evidências](synthetic-diagnostic-http-validation.md). BFF de RUN-19 acrescentado no ADR 0026; interface de RUN-19 e RUN-20 (OTLP específico) continuam pendentes.
 
 Persistência implementada nesta etapa no [ADR 0024](../adr/0024-synthetic-diagnostic-persistence.md): snapshot público, transação, RLS/grants e auditoria exercitados em PostgreSQL real. [Evidências](../engineering/synthetic-diagnostic-persistence-validation.md). O recorte do ADR 0023 e a proposta original abaixo são históricos; runtime, HTTP, BFF/UI e OTLP específicos permanecem pendentes.
 

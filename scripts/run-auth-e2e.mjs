@@ -114,6 +114,7 @@ try {
       PORT: '3001',
       DATABASE_URL: membership.apiUrl,
       SYNTHETIC_BATCH_DATABASE_URL: membership.batchUrl,
+      SYNTHETIC_DIAGNOSTIC_DATABASE_URL: membership.diagnosticUrl,
     },
     stdio: 'ignore',
   });

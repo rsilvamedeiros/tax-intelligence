@@ -1,6 +1,6 @@
 # Tax Intelligence
 
-Status: núcleo sintético DEMO-TOTAL-001 do [ADR 0022](../adr/0022-synthetic-diagnostic-core.md), persistência do [ADR 0024](../adr/0024-synthetic-diagnostic-persistence.md) e POST/GET autenticados do [ADR 0025](../adr/0025-synthetic-diagnostic-http.md) implementados por etapas. API na PR #30, dependente da persistência da #29, ainda sem integração em main. BFF/UI e regras tributárias reais indisponíveis. [Evidências HTTP/PostgreSQL](../engineering/synthetic-diagnostic-http-validation.md).
+Status: núcleo, casos de uso, persistência e API do diagnóstico sintético integrados até a PR #30. BFF pela sessão existente implementado nesta entrega do [ADR 0026](../adr/0026-synthetic-diagnostic-bff.md), ainda em revisão. Interface de diagnóstico e regras tributárias reais indisponíveis. [Evidências](../engineering/synthetic-diagnostic-bff-validation.md).
 
 ## Objetivo e responsabilidades
 
