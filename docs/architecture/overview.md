@@ -1,5 +1,7 @@
 # Arquitetura da fundação
 
+O [ADR 0028](../adr/0028-synthetic-diagnostic-telemetry.md) mantém spans HTTP opt-in com rota/status e acrescenta traceId válido ao log para correlação. Prova compilada API/RSA/PostgreSQL com collector JSON local; sem novos spans de domínio ou propagação distribuída web/API. [Evidências e limites](../engineering/synthetic-diagnostic-telemetry-validation.md).
+
 Interface sintética do [ADR 0027](../adr/0027-synthetic-diagnostic-ui.md) compõe lote e diagnóstico em workspace por organização/sessão/papel. Repetição explícita conserva body natural; React exibe evidência da API sem cálculo. [Validação](../engineering/synthetic-diagnostic-ui-validation.md). Entrega em branch, sem integração em main; recortes anteriores abaixo são históricos.
 
 BFF de diagnóstico do [ADR 0026](../adr/0026-synthetic-diagnostic-bff.md) usa contratos, sessão existente e transporte HTTP. Sem ampliar acesso SQL da web; API revalida autorização. [Evidências](../engineering/synthetic-diagnostic-bff-validation.md). Interface acrescentada pelo ADR 0027; recortes abaixo registram etapas anteriores.

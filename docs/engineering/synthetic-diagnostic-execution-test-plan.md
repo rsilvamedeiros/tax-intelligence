@@ -1,8 +1,10 @@
 # Plano de TDD — Execução registrada do diagnóstico sintético
 
-Atualizado em 23/10/2026. Contratos/casos de uso do ADR 0023, PostgreSQL do ADR 0024, HTTP do ADR 0025 e BFF do ADR 0026 possuem [evidências por etapa](synthetic-diagnostic-bff-validation.md). Interface do [ADR 0027](../adr/0027-synthetic-diagnostic-ui.md) implementa a jornada de RUN-19 e suas regressões visuais; [validação](synthetic-diagnostic-ui-validation.md), com CI de navegador pendente na abertura da entrega. RUN-20 (OTLP específico) continua planejado. A descrição de um aceite não equivale à sua aprovação; recortes históricos ao final preservam os limites de cada etapa.
+Atualizado em 23/10/2026. Contratos/casos de uso do ADR 0023, PostgreSQL do ADR 0024, HTTP do ADR 0025 e BFF do ADR 0026 possuem [evidências por etapa](synthetic-diagnostic-bff-validation.md). Interface do [ADR 0027](../adr/0027-synthetic-diagnostic-ui.md) implementa RUN-19 com jornada real aprovada no CI; [validação](synthetic-diagnostic-ui-validation.md). RUN-20 possui prova local no ADR 0028, com CI/revisão pendentes na preparação. A descrição de um aceite não equivale à sua aprovação; recortes históricos ao final preservam os limites de cada etapa.
 
 ## Matriz de comportamento e risco
+
+Atualização RUN-19/RUN-20: jornada UI real aprovada no CI da PR #32. Prova OTLP específica do [ADR 0028](../adr/0028-synthetic-diagnostic-telemetry.md) aprovada localmente com API/RSA/PostgreSQL, correlação request/log/trace, whitelist e sentinelas. [Evidências e limites de aceite](synthetic-diagnostic-telemetry-validation.md); CI e revisão desta nova etapa pendentes na preparação.
 
 | ID     | Aceite observável                                                                                                                                            | Fronteira                                            |
 | ------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------ | ---------------------------------------------------- |
@@ -24,8 +26,8 @@ Atualizado em 23/10/2026. Contratos/casos de uso do ADR 0023, PostgreSQL do ADR 
 | RUN-16 | Lock, statement, transação e aquisição de conexão respeitam limites do ADR futuro, retornando falha sanitizada sem pendência transacional                    | PostgreSQL + aplicação compilada                     |
 | RUN-17 | Configuração ausente não usa pool administrativo/BFF/lote; configuração inválida não vaza URL; shutdown encerra só pool próprio                              | Runtime em etapa própria                             |
 | RUN-18 | POST sem corpo/query, 201/200, 401/403/404/503, UUID/contrato fechado, no-store e request ID; nenhuma evidência em erro/log                                  | HTTP real na etapa de exposição                      |
-| RUN-19 | BFF/UI não recebe token/SQL; CSRF/Origin, leitura sem permissão, logout/troca de organização e recuperação após falha incerta                                | Etapa posterior de navegador real                    |
-| RUN-20 | Exportação OTLP correlaciona nova operação sem documentos, valores, credenciais ou identidade externa em atributos/logs                                      | Smoke específico das futuras rotas                   |
+| RUN-19 | BFF/UI não recebe token/SQL; CSRF/Origin, leitura sem permissão, logout/troca de organização e recuperação após falha incerta                                | Navegador real do ADR 0027                           |
+| RUN-20 | Exportação OTLP correlaciona nova operação sem documentos, valores, credenciais ou identidade externa em atributos/logs                                      | API/RSA/PostgreSQL/OTLP do ADR 0028                  |
 
 ## Execução incremental proposta
 

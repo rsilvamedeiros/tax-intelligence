@@ -1,0 +1,38 @@
+# Validação — Telemetria do diagnóstico sintético
+
+Data: 23/10/2026. Recorte do [ADR 0028](../adr/0028-synthetic-diagnostic-telemetry.md), dependente da interface da PR #32, aberta no início. PR #31 integrada. Evidências locais abaixo; CI e revisão externa ainda pendentes na preparação desta entrega.
+
+## Mudança e TDD observado
+
+O log HTTP acrescenta traceId somente para contexto válido do SDK. Atributos do span continuam exclusivamente rota template e status; nenhum novo acesso SQL ou dado de negócio na telemetria. Sem SDK, traceId não aparece.
+
+`pnpm --filter @tax/api test --runTestsByPath src/app.spec.ts`: Red com 1 falha/12 aprovados, exclusivamente pela ausência do traceId esperado; após implementação mínima, 13 aprovados. O teste existente sem SDK foi ampliado para exigir ausência de traceId. A prova de exportação valida instrumentação preexistente e a correlação nova; não se apresenta como novo TDD de toda a instrumentação.
+
+## Prova integrada real
+
+`pnpm test:integration:synthetic-diagnostic-http`, com TEST_DATABASE_URL `_test`, PostgreSQL 18.1 local, login temporário NOINHERIT/NOBYPASSRLS, API compilada, JWT RSA e JWKS local, passou. Collector HTTP JSON somente em loopback, porta efêmera, exportação opt-in e polling limitado a 10 segundos. Cleanup encerra processo/collector e remove fixtures/role.
+
+Cada requisição registrada exige exatamente um log pelo request ID retornado e exatamente um span exportado pelo traceId. JSON OTLP é decodificado: nome, rota template esperada, status HTTP, status ERROR em 503, whitelist de atributos e ausência de eventos/links. Resource/scope são inspecionados: nome de serviço, whitelist de metadados padrão do SDK e ausência de atributos no scope. Metadados técnicos padrão de host/processo não equivalem a uma política de retenção/acesso aprovada para produção.
+
+Fluxo real preservado: POST concorrente 201/200 com um resultado/evento, consulta 200, ausência/tenant/papel 401/403/404, credencial com grant excessivo 503, recuperação e revogação. A whitelist impede valores/documentos nos logs e atributos de requisição; sentinelas confirmam ausência de token, senha, identidade externa, atores, organizações, lote, execução, referência, URL, query e body em todo o JSON exportado e logs capturados. IDs técnicos de trace/request continuam permitidos.
+
+## Verificações locais
+
+Lint e tipos aprovados; 928 testes de aplicação com cobertura (154 contratos, 364 API, 175 componentes web, 235 BFF), sem reduzir limiares. 144 testes PostgreSQL em 10 suítes aprovados. Build completo e smokes reais de OTLP/autenticação aprovados; auditoria sem vulnerabilidades conhecidas. Checagem de cleanup confirmou ausência de roles, lotes, execuções/eventos e funções temporárias. Links/formato e revisão final são registrados após o fechamento documental.
+
+Navegador/Keycloak local não executado nesta etapa: Docker/Java não estão disponíveis no PATH. A evidência de navegador da interface continua na [validação do ADR 0027](synthetic-diagnostic-ui-validation.md); nova execução deve vir do CI, sem atribuir o teste local API/RSA a um browser real.
+
+## Matriz de aceite da vertical demonstrativa
+
+Fechamento local: 118 Markdown e 16 manifests validados; `pnpm format:check`, `pnpm lint`, `pnpm typecheck`, `pnpm test`, cobertura serializada, build, smokes, integração e audit aprovados. Skill code-review aplicada em autorrevisão estática, segurança e arquitetura: sem achado bloqueante identificado. Isso não constitui revisão independente nem aceite humano. Nenhuma dependência, migration ou permissão de runtime foi alterada.
+
+| Critério                                              | Evidência disponível                                         | Limite / decisão restante                                                             |
+| ----------------------------------------------------- | ------------------------------------------------------------ | ------------------------------------------------------------------------------------- |
+| Login, organização, lote e diagnóstico pela interface | Jornada real Keycloak/Chrome/PostgreSQL da PR #32            | PR #32 aberta no início; integração e aceite humano separados                         |
+| Resultado exato, persistência, replay e auditoria     | Núcleo, casos de uso e PostgreSQL dos ADRs 0022–0025         | Somente regra/fixtures demonstrativas                                                 |
+| Recuperação após efeito incerto e limpeza de contexto | UI/BFF e jornada real do ADR 0027                            | Não comprova homologação fiscal                                                       |
+| Autorização/isolamento sintético                      | Negativas de tenant/papel e RLS nas seis relações sintéticas | Controle e futuros dados reais sem RLS implementado                                   |
+| RUN-20: exportação da operação sem payload sensível   | Prova local API/RSA/PostgreSQL/collector desta entrega       | CI/revisão pendentes; sem trace distribuído web/API                                   |
+| Operação e primeira vertical fiscal real              | Não implementadas                                            | Fontes, vigência, autorização, segurança e revisão especializada exigem etapa própria |
+
+A evidência técnica sintética pode ser apresentada para aceite após integração/revisão. Não declara aprovação humana nem prontidão de produção. Próximo ponto de decisão: revisão do aceite demonstrativo e definição documental de uma fonte/contexto real autorizado, antes de implementar importação ou regra fiscal.
