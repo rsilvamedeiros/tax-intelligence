@@ -14,6 +14,8 @@ Histórico da persistência: [ADR 0024](docs/adr/0024-synthetic-diagnostic-persi
 
 ## Arquitetura e código
 
+Próxima etapa solicitada: prova OTLP do diagnóstico conforme [ADR 0028](docs/adr/0028-synthetic-diagnostic-telemetry.md), dependente da interface da PR #32. Permite correlação traceId/log HTTP e collector local nos testes API/RSA/PostgreSQL existentes. Sem propagação distribuída web/API, atributos de negócio, collector externo, dados reais, deploy ou merge automático. PR #31 integrada; #32 aberta no início desta etapa.
+
 Etapa atual autorizada pelo pedido seguinte: interface de diagnóstico sintético conforme [ADR 0027](docs/adr/0027-synthetic-diagnostic-ui.md), em branch dependente da PR #31, aberta no início. Permite criação/replay/consulta pelo BFF, evidência recebida da API e recuperação explícita por lote conhecido, com testes de contexto, acessibilidade e navegador real no CI. Sem cálculo em React, nova API/permissão, storage de dados no browser, dados reais, deploy ou merge automático.
 
 Histórico do BFF: [ADR 0026](docs/adr/0026-synthetic-diagnostic-bff.md) implementado na PR #31, com sessão existente, Origin/CSRF, limites e jornada real de navegador. Não incluiu interface naquela entrega. Limites das entregas anteriores abaixo descrevem seus recortes históricos.
