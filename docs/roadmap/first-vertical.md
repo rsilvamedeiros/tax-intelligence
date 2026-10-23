@@ -1,5 +1,7 @@
 # Primeira vertical: prova OTLP sintética e revisão do aceite
 
+Atualização de continuidade: PR #32 integrada; #33 retirada de draft e direcionada a main nesta etapa. Próxima investigação documental no [ADR 0029](../adr/0029-nfe-source-discovery.md): candidata XML NF-e, com [fonte oficial e gates](../integrations/nfe-xml-assessment.md), RFC e plano de testes. Sem declarar aceite humano, fonte definitiva ou autorização de dados reais.
+
 Etapa atual: prova OTLP do [ADR 0028](../adr/0028-synthetic-diagnostic-telemetry.md), com [validação e matriz de aceite](../engineering/synthetic-diagnostic-telemetry-validation.md). Lote tem contrato/persistência/API/BFF/UI nos ADRs 0017–0021; diagnóstico tem núcleo/casos de uso/persistência/API/BFF/UI nos ADRs 0022–0027. PR #31 integrada e interface da PR #32 aberta no início desta entrega. Repetição natural e evidência não têm validade fiscal. Prova OTLP local e CI aprovados; revisão externa pendente pela quota. Integração das entregas e aceite humano permanecem separados.
 
 Fluxo da [RFC 0003](../rfc/0003-synthetic-document-intake.md): criação e consulta na API, BFF e interface, com RLS/auditoria nas tabelas sintéticas. [Plano TDD parcialmente executado](../engineering/synthetic-document-intake-test-plan.md); jornada de diagnóstico implementada por etapas exige prova OTLP específica e revisão do aceite antes de declarar a vertical completa. A PR #19 concluiu apenas a prova RLS isolada.

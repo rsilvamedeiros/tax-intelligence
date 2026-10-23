@@ -1,5 +1,7 @@
 # Roadmap e backlog priorizado
 
+Estado atual em 23/10/2026: interface diagnóstica da PR #32 integrada; prova OTLP da PR #33 com oito checks aprovados, agora direcionada para main e pronta para revisão, sem merge automático. Próximo módulo documental: [ADR 0029](../adr/0029-nfe-source-discovery.md), [dossiê da candidata NF-e](../integrations/nfe-xml-assessment.md) e [RFC 0004](../rfc/0004-nfe-xml-intake.md). Fonte definitiva/parser/dados reais permanecem pendentes de autorização e schemas fixados. Os parágrafos seguintes preservam recortes históricos; estado consolidado em [status do projeto](../engineering/project-status.md).
+
 Atualização do [ADR 0018](../adr/0018-synthetic-document-persistence.md): persistência e autorização transacional do lote sintético implementadas, incluindo RLS nas novas tabelas e auditoria atômica. [Evidências](../engineering/synthetic-document-persistence-validation.md). Próximo módulo: pool dedicado na composição da API e POST/GET com negativos HTTP. Interface, diagnóstico e dados reais continuam posteriores.
 
 Etapa anterior: [ADR 0017](../adr/0017-synthetic-document-contract.md), contrato runtime/OpenAPI e comando canônico do lote sintético implementados após a PR #20. [Evidências](../engineering/synthetic-document-contract-validation.md). A persistência foi implementada na etapa atual do ADR 0018; rotas, diagnóstico e interface continuam posteriores. Entradas abaixo preservam o percurso anterior.
